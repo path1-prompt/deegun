@@ -8,6 +8,25 @@
             font-family: 'Srisakdi', cursive;
             font-size:x-large
         }
+ .qr-container {
+            background: linear-gradient(135deg, #ff4b2b, #ff416c);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 65, 108, 0.5);
+            text-align: center;
+        }
+
+        .qr-container img {
+            width: 200px;
+            height: 200px;
+            border-radius: 10px;
+            border: 5px solid #fff;
+        }
+
+        .qr-container h2 {
+            color: white;
+            margin-top: 10px;
+        }
         </style>
 
     <title>ดู ดวง ชะตา ปี เดือน วัน กำเนิด ว่า จะ ดี แล ร้าย</title>
@@ -20,9 +39,9 @@
             <option value="1">วัน อาทิตย์</option>
             <option value="2">วัน จันทร์</option>
             <option value="3">วัน อังคาร</option>
-            <option value="4">วัน พุฒ</option>
-            <option value="5">วัน พฤหัศบดิ์</option>
-            <option value="6">วัน สุกร์</option>
+            <option value="4">วัน พุธิ</option>
+            <option value="5">วัน พฤหัสบดี</option>
+            <option value="6">วัน ศุกร์</option>
             <option value="7">วัน เสาร์</option>
           </select> 
           เดือน: <select id="month" class="month" style="font-size:30px;width:80px;height:40px">
@@ -313,5 +332,9 @@ if (year === 'กุล' && month === '5' || year === 'กุล' && month === '
 document.querySelector('.cal').addEventListener("click", ()=>cal())
 
 </script>
+   <div class="qr-container">
+        <h2>ร่วมบริจาคให้ผู้สร้าง</h2>
+        <a href="https://ibb.co/DfgBXwxs"><img src="https://i.ibb.co/DfgBXwxs/004999142583276-20250205-193902.jpg" alt="004999142583276-20250205-193902" border="0"></a>
+    </div>
 </body>
 </html>
