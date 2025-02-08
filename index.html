@@ -3,201 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ดูดวงไพ่</title>
-    <style>
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        body {
-            text-align: center;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #1b0030, #3a0ca3, #560bad, #7209b7);
-            background-size: 300% 300%;
-            animation: gradientMove 10s infinite linear;
-            color: white;
-            margin: 0;
-            padding: 0;
-        }
-
-        #form-container, #main-container, #result-container {
-            display: none;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 15px;
-            box-shadow: 0 0 20px #ff00ff;
-            width: 90%;
-            max-width: 500px;
-            margin: 30px auto;
-        }
-
-        input, select, button {
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            border: none;
-            font-size: 18px;
-            text-align: center;
-        }
-
-        button {
-            background: linear-gradient(45deg, #ff00ff, #d100d1);
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-        }
-
-        button:hover {
-            transform: scale(1.1);
-        }
-
-        .card {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 10px;
-            margin: 5px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .card img {
-            width: 80px;
-            height: 120px;
-            border-radius: 5px;
-        }
-
-        .card:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 10px #ff00ff;
-        }
-
-        #qr-container {
-            margin-top: 20px;
-        }
-
-        #qr-container img {
-            width: 150px;
-        }
-
-        h1, h2 {
-            font-size: 2em;
-        }
-
-        h3 {
-            font-size: 1.5em;
-        }
-    </style>
+    <title>เว็บไซต์ดูดวงไพ่ 70 ใบ</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- หน้าแรกกรอกชื่อและอายุ -->
+    <div class="container">
+        <div class="form-container" id="start-form">
+            <h2>กรอกข้อมูลของคุณ</h2>
+            <label for="name">ชื่อเล่น:</label>
+            <input type="text" id="name" required>
+            <label for="age">อายุ:</label>
+            <input type="number" id="age" required min="10">
+            <button onclick="startReading()">ยืนยัน</button>
+        </div>
 
-    <!-- หน้า UI กรอกข้อมูล -->
-    <div id="form-container">
-        <h1>🔮 กรอกข้อมูลเพื่อดูดวง 🔮</h1>
-        <input type="text" id="nickname" placeholder="ชื่อเล่น" required>
-        <input type="number" id="age" placeholder="อายุ" required>
-        <select id="topic">
-            <option value="4">ความรัก (4 ใบ)</option>
-            <option value="3">การงาน (3 ใบ)</option>
-            <option value="3">การเงิน (3 ใบ)</option>
-            <option value="3">การเรียน (3 ใบ)</option>
-            <option value="3">อดีต-ปัจจุบัน-อนาคต (3 ใบ)</option>
-            <option value="7">โชคชะตา (7 ใบ)</option>
-            <option value="5">ความฝัน (5 ใบ)</option>
-        </select>
-        <button onclick="startReading()">ยืนยัน</button>
-    </div>
+        <!-- เลือกประเภทและจำนวนไพ่ -->
+        <div class="selection-container" id="selection-form" style="display:none;">
+            <h2>เลือกประเภทเรื่องที่ต้องการดู</h2>
+            <select id="cardType">
+                <option value="love">ความรัก (4 ไพ่)</option>
+                <option value="career">การงาน (3 ไพ่)</option>
+                <option value="finance">การเงิน (3 ไพ่)</option>
+                <option value="study">การเรียน (3 ไพ่)</option>
+                <option value="pastPresentFuture">อดีต อนาคต ปัจจุบัน (3 ไพ่)</option>
+                <option value="destiny">โชคชะตา (7 ไพ่)</option>
+                <option value="dream">ความฝัน (5 ไพ่)</option>
+            </select>
+            <button onclick="shuffleCards()">สับไพ่</button>
+        </div>
 
-    <!-- หน้าเลือกไพ่ -->
-    <div id="main-container">
-        <h2>✨ สับไพ่ ✨</h2>
-        <button onclick="shuffleCards()">สับไพ่</button>
-        <div id="deck"></div>
-        <h3>เลือกไพ่ของคุณ</h3>
-        <div id="chosen-cards"></div>
-    </div>
+        <!-- แสดงผลไพ่และเวลา -->
+<div class="result-container" id="result-form" style="display:none;">
+    <h2>ผลการดูดวง</h2>
+    <div id="cards"></div>
+    <p id="date-time"></p> <!-- แสดงเวลาและวันที่ -->
+    <button onclick="confirmReading()">ยืนยัน</button>
+</div>
 
-    <!-- หน้าผลลัพธ์ -->
-    <div id="result-container">
-        <h2>🔮 คำทำนาย 🔮</h2>
-        <div id="result"></div>
-        <button onclick="finishReading()">ยืนยัน</button>
-        <div id="qr-container">
-            <p>ถ้าตรงหรือไม่ตรงยังไงสามารถสนับสนุนเป็นกำลังใจได้แล้วแต่จิตศรัทธาของตัวลูกด้วยเอง☺</p>
-            <img src="QR_CODE_IMAGE_URL" alt="QR Code">
-            <p>ขอบขอบพระคุณเป็นอย่างยิ่ง😊</p>
+        <!-- QR และข้อความสนับสนุน -->
+        <div id="support-container" style="display:none;">
+            <h2>ขอบคุณที่ใช้บริการ</h2>
+            <p>ถ้าตรงหรือไม่ตรงยังไงสามารถสนับสนุนเป็นกำลังใจได้แล้วแต่จิตศรัทธาของตัวลูกด้วยเอง☺ ขอบคุณมากๆ ครับ 😊</p>
+            <img id="qr-code" src="QR-code-placeholder.png" alt="QR Code">
         </div>
     </div>
 
-    <script>
-        let deck = [];
-        let chosenCards = [];
-        const cards = [
-            { name: "ไพ่ที่ 1", image: "URL_ไพ่" },
-            { name: "ไพ่ที่ 2", image: "URL_ไพ่" },
-            { name: "ไพ่ที่ 3", image: "URL_ไพ่" },
-            { name: "ไพ่ที่ 4", image: "URL_ไพ่" },
-            { name: "ไพ่ที่ 5", image: "URL_ไพ่" },
-            { name: "ไพ่ที่ 6", image: "URL_ไพ่" },
-            { name: "ไพ่ที่ 7", image: "URL_ไพ่" }
-        ];
-
-        function startReading() {
-            let age = parseInt(document.getElementById("age").value);
-            let nickname = document.getElementById("nickname").value;
-            if (age < 10) {
-                alert("ขออภัย! เฉพาะผู้ที่มีอายุ 10 ปีขึ้นไปเท่านั้น");
-                return;
-            }
-            if (!nickname || !age) {
-                alert("กรุณากรอกข้อมูลให้ครบถ้วน");
-                return;
-            }
-            deck = [...cards];
-            document.getElementById("form-container").style.display = "none";
-            document.getElementById("main-container").style.display = "block";
-        }
-
-        function shuffleCards() {
-            let age = parseInt(document.getElementById("age").value);
-            for (let i = 0; i < age; i++) {
-                deck.sort(() => Math.random() - 0.5);
-            }
-            displayDeck();
-        }
-
-        function displayDeck() {
-            let deckContainer = document.getElementById("deck");
-            deckContainer.innerHTML = "";
-            deck.forEach((card, index) => {
-                let cardElem = document.createElement("div");
-                cardElem.classList.add("card");
-                cardElem.innerHTML = `<img src="${card.image}" alt="${card.name}">`;
-                cardElem.onclick = () => chooseCard(index);
-                deckContainer.appendChild(cardElem);
-            });
-        }
-
-        function chooseCard(index) {
-            if (chosenCards.length < parseInt(document.getElementById("topic").value)) {
-                chosenCards.push(deck[index]);
-                document.getElementById("chosen-cards").innerHTML += `<img src="${deck[index].image}" width="80px">`;
-            }
-            if (chosenCards.length == parseInt(document.getElementById("topic").value)) {
-                document.getElementById("main-container").style.display = "none";
-                document.getElementById("result-container").style.display = "block";
-                document.getElementById("result").innerHTML = chosenCards.map(card => `<p>${card.name}: คำทำนายที่เกี่ยวข้อง</p>`).join("");
-            }
-        }
-
-        function finishReading() {
-            location.reload();
-        }
-    </script>
-
+    <script src="script.js"></script>
 </body>
 </html>
