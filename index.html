@@ -21,11 +21,14 @@
             color: white;
             margin: 0;
             padding: 0;
+            overflow-x: hidden;
         }
 
         h1 {
             color: #f8f0fc;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px #ff00ff;
+            font-size: 28px;
+            margin: 20px 0;
         }
 
         button {
@@ -39,6 +42,9 @@
             cursor: pointer;
             transition: all 0.3s ease-in-out;
             outline: none;
+            width: 80%;
+            max-width: 300px;
+            margin-bottom: 20px;
         }
 
         button:hover {
@@ -52,10 +58,13 @@
             border-radius: 15px;
             box-shadow: 0 0 20px #ff00ff;
             display: inline-block;
+            width: 100%;
+            max-width: 400px;
         }
 
         #card-image {
-            width: 200px;
+            width: 100%;
+            max-width: 200px;
             height: auto;
             border: 2px solid #f72585;
             border-radius: 10px;
@@ -63,20 +72,49 @@
         }
 
         #card-name {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             color: #f8f0fc;
         }
 
         #card-description {
-            font-size: 16px;
+            font-size: 14px;
             color: #f3d9fa;
         }
 
         #timestamp, #luck {
-            font-size: 14px;
+            font-size: 12px;
             margin-top: 10px;
             color: #ffccff;
+        }
+
+        /* Media Queries สำหรับหน้าจอมือถือ */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
+
+            #card-container {
+                width: 90%;
+                margin: 0 auto;
+            }
+
+            #card-name {
+                font-size: 16px;
+            }
+
+            #card-description {
+                font-size: 12px;
+            }
+
+            #timestamp, #luck {
+                font-size: 12px;
+            }
         }
     </style>
 </head>
