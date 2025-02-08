@@ -5,6 +5,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ดูดวงไพ่</title>
     <style>
+  /* ส่วนของช่องทางติดต่อ */
+#contact {
+    margin-top: 30px;
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 0 20px #ff00ff;
+    display: inline-block;
+    width: 90%;
+    max-width: 400px;
+}
+
+#contact h2 {
+    color: #f8f0fc;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px #ff00ff;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+/* ปุ่มโซเชียล */
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    border-radius: 30px;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    text-decoration: none;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+/* เอฟเฟกต์นีออน */
+.social-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: 0.5s;
+}
+
+.social-btn:hover::before {
+    left: 100%;
+}
+
+/* เอฟเฟกต์เมื่อโฮเวอร์ */
+.social-btn:hover {
+    transform: scale(1.1);
+}
+
+/* สไตล์เฉพาะ Facebook */
+.facebook {
+    background: linear-gradient(45deg, #1877F2, #1355A5);
+}
+
+.facebook img {
+    width: 30px;
+    height: 30px;
+}
+
+/* สไตล์เฉพาะ Instagram */
+.instagram {
+    background: linear-gradient(45deg, #E1306C, #F56040, #FCAF45);
+}
+
+.instagram img {
+    width: 30px;
+    height: 30px;
+}
         /* พื้นหลังไล่สีเคลื่อนไหว */
         @keyframes gradientMove {
             0% { background-position: 0% 50%; }
@@ -30,6 +113,13 @@
             font-size: 28px;
             margin: 20px 0;
         }
+        h3 { 
+          color: #212121;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px #ff00ff;
+            font-size: 15px;
+            margin: 20px 0;
+        }
+        
 
         button {
             background: linear-gradient(45deg, #ff00ff, #d100d1);
@@ -116,34 +206,48 @@
                 font-size: 12px;
             }
         }
+            
     </style>
 </head>
 <body>
 
     <h1>🔮 ทำนายไผ่🔮</h1>
-    <p>อ.ธนพร ไชยวุฒิ</p>
-    <button onclick="drawCard()">✨ สุ่มไพ่ ✨</button>
+    <h3>อ.ธนพร ไชยวุฒิ</h3>
+    <button onclick="drawCard()">✨ สับไผ่ ✨</button>
 
     <div id="card-container">
-        <img id="card-image" src="cards/back.png" alt="ไพ่" />
+        <img id="card-image" src="https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png" alt="ไพ่" />
         <p id="card-name">คลิกปุ่มเพื่อสุ่มไพ่</p>
         <p id="card-description"></p>
         <p id="timestamp">🕒 เวลาสุ่ม: -</p>
         <p id="luck">🔮 ความเป็นไปได้: -</p>
     </div>
+  <div id="contact">
+    <h2>📱 ติดต่อเรา 📱</h2>
+    <div class="social-links">
+        <a href="https://www.facebook.com/todoroki.shoto.875143" target="_blank" class="social-btn facebook">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png" alt="Facebook">
+            <span>Facebook</span>
+        </a>
+        <a href="https://www.instagram.com/p13_.pang?igsh=cTZyOWsxNmw2aGdt" target="_blank" class="social-btn instagram">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Instagram_logo_2022.svg" alt="Instagram">
+            <span>Instagram</span>
+        </a>
+    </div>
+</div>
 
     <script>
         const cards = [
-            { name: "ไพ่ที่ 1", image: "cards/card1.png", description: "คำทำนายของไพ่ที่ 1" },
-            { name: "ไพ่ที่ 2", image: "cards/card2.png", description: "คำทำนายของไพ่ที่ 2" },
-            { name: "ไพ่ที่ 3", image: "cards/card3.png", description: "คำทำนายของไพ่ที่ 3" },
-            { name: "ไพ่ที่ 4", image: "cards/card4.png", description: "คำทำนายของไพ่ที่ 4" },
-            { name: "ไพ่ที่ 5", image: "cards/card5.png", description: "คำทำนายของไพ่ที่ 5" },
-            { name: "ไพ่ที่ 6", image: "cards/card6.png", description: "คำทำนายของไพ่ที่ 6" },
-            { name: "ไพ่ที่ 7", image: "cards/card7.png", description: "คำทำนายของไพ่ที่ 7" },
-            { name: "ไพ่ที่ 8", image: "cards/card8.png", description: "คำทำนายของไพ่ที่ 8" },
-            { name: "ไพ่ที่ 9", image: "cards/card9.png", description: "คำทำนายของไพ่ที่ 9" },
-            { name: "ไพ่ที่ 10", image: "cards/card10.png", description: "คำทำนายของไพ่ที่ 10" },
+            { name: "ไพ่ที่ 1", image: "https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png", description: "คำทำนายของไพ่ที่ 1" },
+            { name: "ไพ่ที่ 2", image: "https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png", description: "คำทำนายของไพ่ที่ 2" },
+            { name: "ไพ่ที่ 3", image: "https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png", description: "คำทำนายของไพ่ที่ 3" },
+            { name: "ไพ่ที่ 4", image: "https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png", description: "คำทำนายของไพ่ที่ 4" },
+            { name: "ไพ่ที่ 5", image: "https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png", description: "คำทำนายของไพ่ที่ 5" },
+            { name: "ไพ่ที่ 6", image: "https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png", description: "คำทำนายของไพ่ที่ 6" },
+            { name: "ไพ่ที่ 7", image: "https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png", description: "คำทำนายของไพ่ที่ 7" },
+            { name: "ไพ่ที่ 8", image: "https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png", description: "คำทำนายของไพ่ที่ 8" },
+            { name: "ไพ่ที่ 9", image: "https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png", description: "คำทำนายของไพ่ที่ 9" },
+            { name: "ไพ่ที่ 10", image: "https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png", description: "คำทำนายของไพ่ที่ 10" },
             // เพิ่มไพ่ให้ครบ 70 ใบ...
         ];
 
