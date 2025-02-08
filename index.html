@@ -5,90 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ดูดวงไพ่</title>
     <style>
-  /* ส่วนของช่องทางติดต่อ */
-#contact {
-    margin-top: 30px;
-    text-align: center;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    box-shadow: 0 0 20px #ff00ff;
-    display: inline-block;
-    width: 90%;
-    max-width: 400px;
-}
-
-#contact h2 {
-    color: #f8f0fc;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px #ff00ff;
-    font-size: 22px;
-    margin-bottom: 15px;
-}
-
-/* ปุ่มโซเชียล */
-.social-links {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
-
-.social-btn {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 20px;
-    border-radius: 30px;
-    color: white;
-    font-weight: bold;
-    font-size: 16px;
-    text-decoration: none;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-    transition: all 0.3s ease-in-out;
-    position: relative;
-    overflow: hidden;
-}
-
-/* เอฟเฟกต์นีออน */
-.social-btn::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.2);
-    transition: 0.5s;
-}
-
-.social-btn:hover::before {
-    left: 100%;
-}
-
-/* เอฟเฟกต์เมื่อโฮเวอร์ */
-.social-btn:hover {
-    transform: scale(1.1);
-}
-
-/* สไตล์เฉพาะ Facebook */
-.facebook {
-    background: linear-gradient(45deg, #1877F2, #1355A5);
-}
-
-.facebook img {
-    width: 30px;
-    height: 30px;
-}
-
-/* สไตล์เฉพาะ Instagram */
-.instagram {
-    background: linear-gradient(45deg, #E1306C, #F56040, #FCAF45);
-}
-
-.instagram img {
-    width: 30px;
-    height: 30px;
-}
-        /* พื้นหลังไล่สีเคลื่อนไหว */
         @keyframes gradientMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -98,186 +14,188 @@
         body {
             text-align: center;
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #3a0ca3, #7209b7, #560bad, #b5179e);
+            background: linear-gradient(135deg, #1b0030, #3a0ca3, #560bad, #7209b7);
             background-size: 300% 300%;
             animation: gradientMove 10s infinite linear;
             color: white;
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
         }
 
-        h1 {
-            color: #f8f0fc;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px #ff00ff;
-            font-size: 28px;
-            margin: 20px 0;
+        #form-container, #main-container, #result-container {
+            display: none;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 0 20px #ff00ff;
+            width: 90%;
+            max-width: 500px;
+            margin: 30px auto;
         }
-        h3 { 
-          color: #212121;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px #ff00ff;
-            font-size: 15px;
-            margin: 20px 0;
+
+        input, select, button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: none;
+            font-size: 18px;
+            text-align: center;
         }
-        
 
         button {
             background: linear-gradient(45deg, #ff00ff, #d100d1);
             color: white;
-            font-size: 18px;
             font-weight: bold;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 25px;
             cursor: pointer;
             transition: all 0.3s ease-in-out;
-            outline: none;
-            width: 80%;
-            max-width: 300px;
-            margin-bottom: 20px;
         }
 
         button:hover {
             transform: scale(1.1);
         }
 
-        #card-container {
-            margin-top: 20px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            box-shadow: 0 0 20px #ff00ff;
+        .card {
             display: inline-block;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        #card-image {
-            width: 100%;
-            max-width: 200px;
-            height: auto;
-            border: 2px solid #f72585;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            margin-bottom: 10px;
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+            transition: 0.3s;
         }
 
-        #card-name {
-            font-size: 18px;
-            font-weight: bold;
-            color: #f8f0fc;
+        .card img {
+            width: 80px;
+            height: 120px;
+            border-radius: 5px;
         }
 
-        #card-description {
-            font-size: 14px;
-            color: #f3d9fa;
+        .card:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px #ff00ff;
         }
 
-        #timestamp, #luck {
-            font-size: 12px;
-            margin-top: 10px;
-            color: #ffccff;
+        #qr-container {
+            margin-top: 20px;
         }
 
-        /* Media Queries สำหรับหน้าจอมือถือ */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 24px;
-            }
-
-            button {
-                font-size: 16px;
-                padding: 10px 20px;
-            }
-
-            #card-container {
-                width: 90%;
-                margin: 0 auto;
-            }
-
-            #card-name {
-                font-size: 16px;
-            }
-
-            #card-description {
-                font-size: 12px;
-            }
-
-            #timestamp, #luck {
-                font-size: 12px;
-            }
+        #qr-container img {
+            width: 150px;
         }
-            
+
+        h1, h2 {
+            font-size: 2em;
+        }
+
+        h3 {
+            font-size: 1.5em;
+        }
     </style>
 </head>
 <body>
 
-    <h1>🔮 ทำนายไผ่🔮</h1>
-    <h3>อ.ธนพร ไชยวุฒิ</h3>
-    <button onclick="drawCard()">✨ สับไผ่ ✨</button>
+    <!-- หน้า UI กรอกข้อมูล -->
+    <div id="form-container">
+        <h1>🔮 กรอกข้อมูลเพื่อดูดวง 🔮</h1>
+        <input type="text" id="nickname" placeholder="ชื่อเล่น" required>
+        <input type="number" id="age" placeholder="อายุ" required>
+        <select id="topic">
+            <option value="4">ความรัก (4 ใบ)</option>
+            <option value="3">การงาน (3 ใบ)</option>
+            <option value="3">การเงิน (3 ใบ)</option>
+            <option value="3">การเรียน (3 ใบ)</option>
+            <option value="3">อดีต-ปัจจุบัน-อนาคต (3 ใบ)</option>
+            <option value="7">โชคชะตา (7 ใบ)</option>
+            <option value="5">ความฝัน (5 ใบ)</option>
+        </select>
+        <button onclick="startReading()">ยืนยัน</button>
+    </div>
 
-    <div id="card-container">
-        <img id="card-image" src="https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png" alt="ไพ่" />
-        <p id="card-name">คลิกปุ่มเพื่อสุ่มไพ่</p>
-        <p id="card-description"></p>
-        <p id="timestamp">🕒 เวลาสุ่ม: -</p>
-        <p id="luck">🔮 ความเป็นไปได้: -</p>
+    <!-- หน้าเลือกไพ่ -->
+    <div id="main-container">
+        <h2>✨ สับไพ่ ✨</h2>
+        <button onclick="shuffleCards()">สับไพ่</button>
+        <div id="deck"></div>
+        <h3>เลือกไพ่ของคุณ</h3>
+        <div id="chosen-cards"></div>
     </div>
-  <div id="contact">
-    <h2>📱 ติดต่อเรา 📱</h2>
-    <div class="social-links">
-        <a href="https://www.facebook.com/todoroki.shoto.875143" target="_blank" class="social-btn facebook">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png" alt="Facebook">
-            <span>Facebook</span>
-        </a>
-        <a href="https://www.instagram.com/p13_.pang?igsh=cTZyOWsxNmw2aGdt" target="_blank" class="social-btn instagram">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Instagram_logo_2022.svg" alt="Instagram">
-            <span>Instagram</span>
-        </a>
+
+    <!-- หน้าผลลัพธ์ -->
+    <div id="result-container">
+        <h2>🔮 คำทำนาย 🔮</h2>
+        <div id="result"></div>
+        <button onclick="finishReading()">ยืนยัน</button>
+        <div id="qr-container">
+            <p>ถ้าตรงหรือไม่ตรงยังไงสามารถสนับสนุนเป็นกำลังใจได้แล้วแต่จิตศรัทธาของตัวลูกด้วยเอง☺</p>
+            <img src="QR_CODE_IMAGE_URL" alt="QR Code">
+            <p>ขอบขอบพระคุณเป็นอย่างยิ่ง😊</p>
+        </div>
     </div>
-</div>
 
     <script>
+        let deck = [];
+        let chosenCards = [];
         const cards = [
-            { name: "ไพ่ที่ 1", image: "https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png", description: "คำทำนายของไพ่ที่ 1" },
-            { name: "ไพ่ที่ 2", image: "https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png", description: "คำทำนายของไพ่ที่ 2" },
-            { name: "ไพ่ที่ 3", image: "https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png", description: "คำทำนายของไพ่ที่ 3" },
-            { name: "ไพ่ที่ 4", image: "https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png", description: "คำทำนายของไพ่ที่ 4" },
-            { name: "ไพ่ที่ 5", image: "https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png", description: "คำทำนายของไพ่ที่ 5" },
-            { name: "ไพ่ที่ 6", image: "https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png", description: "คำทำนายของไพ่ที่ 6" },
-            { name: "ไพ่ที่ 7", image: "https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png", description: "คำทำนายของไพ่ที่ 7" },
-            { name: "ไพ่ที่ 8", image: "https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png", description: "คำทำนายของไพ่ที่ 8" },
-            { name: "ไพ่ที่ 9", image: "https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png", description: "คำทำนายของไพ่ที่ 9" },
-            { name: "ไพ่ที่ 10", image: "https://www.tripetchinsurance.com/wp-content/uploads/2024/09/Screenshot-2567-09-13-at-09.12.51.png", description: "คำทำนายของไพ่ที่ 10" },
-            // เพิ่มไพ่ให้ครบ 70 ใบ...
+            { name: "ไพ่ที่ 1", image: "URL_ไพ่" },
+            { name: "ไพ่ที่ 2", image: "URL_ไพ่" },
+            { name: "ไพ่ที่ 3", image: "URL_ไพ่" },
+            { name: "ไพ่ที่ 4", image: "URL_ไพ่" },
+            { name: "ไพ่ที่ 5", image: "URL_ไพ่" },
+            { name: "ไพ่ที่ 6", image: "URL_ไพ่" },
+            { name: "ไพ่ที่ 7", image: "URL_ไพ่" }
         ];
 
-        function drawCard() {
-            const randomIndex = Math.floor(Math.random() * cards.length);
-            const selectedCard = cards[randomIndex];
-
-            // แสดงข้อมูลไพ่
-            document.getElementById("card-image").src = selectedCard.image;
-            document.getElementById("card-name").textContent = selectedCard.name;
-            document.getElementById("card-description").textContent = selectedCard.description;
-
-            // บันทึกเวลาสุ่มไพ่
-            const now = new Date();
-            const timeString = now.toLocaleTimeString("th-TH", { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            document.getElementById("timestamp").textContent = `🕒 เวลาสุ่ม: ${timeString}`;
-
-            // คำนวณ "ความเป็นไปได้" เป็นเปอร์เซ็นต์
-            const luckPercentage = Math.floor(Math.random() * 101);
-            let luckMessage = `🔮 ความเป็นไปได้: ${luckPercentage}%`;
-
-            if (luckPercentage >= 80) {
-                luckMessage += " (โชคดีมาก!) 🎉";
-            } else if (luckPercentage >= 50) {
-                luckMessage += " (พอไปได้ 🙂)";
-            } else {
-                luckMessage += " (ควรระวังนะ 😟)";
+        function startReading() {
+            let age = parseInt(document.getElementById("age").value);
+            let nickname = document.getElementById("nickname").value;
+            if (age < 10) {
+                alert("ขออภัย! เฉพาะผู้ที่มีอายุ 10 ปีขึ้นไปเท่านั้น");
+                return;
             }
+            if (!nickname || !age) {
+                alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+                return;
+            }
+            deck = [...cards];
+            document.getElementById("form-container").style.display = "none";
+            document.getElementById("main-container").style.display = "block";
+        }
 
-            document.getElementById("luck").textContent = luckMessage;
+        function shuffleCards() {
+            let age = parseInt(document.getElementById("age").value);
+            for (let i = 0; i < age; i++) {
+                deck.sort(() => Math.random() - 0.5);
+            }
+            displayDeck();
+        }
+
+        function displayDeck() {
+            let deckContainer = document.getElementById("deck");
+            deckContainer.innerHTML = "";
+            deck.forEach((card, index) => {
+                let cardElem = document.createElement("div");
+                cardElem.classList.add("card");
+                cardElem.innerHTML = `<img src="${card.image}" alt="${card.name}">`;
+                cardElem.onclick = () => chooseCard(index);
+                deckContainer.appendChild(cardElem);
+            });
+        }
+
+        function chooseCard(index) {
+            if (chosenCards.length < parseInt(document.getElementById("topic").value)) {
+                chosenCards.push(deck[index]);
+                document.getElementById("chosen-cards").innerHTML += `<img src="${deck[index].image}" width="80px">`;
+            }
+            if (chosenCards.length == parseInt(document.getElementById("topic").value)) {
+                document.getElementById("main-container").style.display = "none";
+                document.getElementById("result-container").style.display = "block";
+                document.getElementById("result").innerHTML = chosenCards.map(card => `<p>${card.name}: คำทำนายที่เกี่ยวข้อง</p>`).join("");
+            }
+        }
+
+        function finishReading() {
+            location.reload();
         }
     </script>
 
