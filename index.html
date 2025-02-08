@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ดูดวงไพ่ 70 ใบ</title>
+    <style>
+        /* พื้นหลังไล่สีเคลื่อนไหว */
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #3a0ca3, #7209b7, #560bad, #b5179e);
+            background-size: 300% 300%;
+            animation: gradientMove 10s infinite linear;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #f8f0fc;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px #ff00ff;
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff00ff, #d100d1);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            outline: none;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+        }
+
+        #card-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 0 20px #ff00ff;
+            display: inline-block;
+        }
+
+        #card-image {
+            width: 200px;
+            height: auto;
+            border: 2px solid #f72585;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        #card-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #f8f0fc;
+        }
+
+        #card-description {
+            font-size: 16px;
+            color: #f3d9fa;
+        }
+
+        #timestamp, #luck {
+            font-size: 14px;
+            margin-top: 10px;
+            color: #ffccff;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🔮 ดูดวงไพ่ 70 ใบ 🔮</h1>
+    <button onclick="drawCard()">✨ สุ่มไพ่ ✨</button>
+
+    <div id="card-container">
+        <img id="card-image" src="cards/back.png" alt="ไพ่" />
+        <p id="card-name">คลิกปุ่มเพื่อสุ่มไพ่</p>
+        <p id="card-description"></p>
+        <p id="timestamp">🕒 เวลาสุ่ม: -</p>
+        <p id="luck">🔮 ความเป็นไปได้: -</p>
+    </div>
+
+    <script>
+        const cards = [
+            { name: "ไพ่ที่ 1", image: "cards/card1.png", description: "คำทำนายของไพ่ที่ 1" },
+            { name: "ไพ่ที่ 2", image: "cards/card2.png", description: "คำทำนายของไพ่ที่ 2" },
+            { name: "ไพ่ที่ 3", image: "cards/card3.png", description: "คำทำนายของไพ่ที่ 3" },
+            { name: "ไพ่ที่ 4", image: "cards/card4.png", description: "คำทำนายของไพ่ที่ 4" },
+            { name: "ไพ่ที่ 5", image: "cards/card5.png", description: "คำทำนายของไพ่ที่ 5" },
+            { name: "ไพ่ที่ 6", image: "cards/card6.png", description: "คำทำนายของไพ่ที่ 6" },
+            { name: "ไพ่ที่ 7", image: "cards/card7.png", description: "คำทำนายของไพ่ที่ 7" },
+            { name: "ไพ่ที่ 8", image: "cards/card8.png", description: "คำทำนายของไพ่ที่ 8" },
+            { name: "ไพ่ที่ 9", image: "cards/card9.png", description: "คำทำนายของไพ่ที่ 9" },
+            { name: "ไพ่ที่ 10", image: "cards/card10.png", description: "คำทำนายของไพ่ที่ 10" },
+            // เพิ่มไพ่ให้ครบ 70 ใบ...
+        ];
+
+        function drawCard() {
+            const randomIndex = Math.floor(Math.random() * cards.length);
+            const selectedCard = cards[randomIndex];
+
+            // แสดงข้อมูลไพ่
+            document.getElementById("card-image").src = selectedCard.image;
+            document.getElementById("card-name").textContent = selectedCard.name;
+            document.getElementById("card-description").textContent = selectedCard.description;
+
+            // บันทึกเวลาสุ่มไพ่
+            const now = new Date();
+            const timeString = now.toLocaleTimeString("th-TH", { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            document.getElementById("timestamp").textContent = `🕒 เวลาสุ่ม: ${timeString}`;
+
+            // คำนวณ "ความเป็นไปได้" เป็นเปอร์เซ็นต์
+            const luckPercentage = Math.floor(Math.random() * 101);
+            let luckMessage = `🔮 ความเป็นไปได้: ${luckPercentage}%`;
+
+            if (luckPercentage >= 80) {
+                luckMessage += " (โชคดีมาก!) 🎉";
+            } else if (luckPercentage >= 50) {
+                luckMessage += " (พอไปได้ 🙂)";
+            } else {
+                luckMessage += " (ควรระวังนะ 😟)";
+            }
+
+            document.getElementById("luck").textContent = luckMessage;
+        }
+    </script>
+
+</body>
+</html>
