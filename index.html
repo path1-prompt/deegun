@@ -18,7 +18,7 @@
             background: linear-gradient(135deg, #ff0000, #cc0000, #660000);
             background-size: 300% 300%;
             animation: gradientMove 10s infinite linear;
-            color: black;
+            color: white;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
@@ -187,65 +187,63 @@
             }
         }
 
-        /* Popup กำลังสับไพ่ */
-        #shuffling-popup {
+        /* ปุ่ม Popup ช่องทางติดต่อ */
+        #contact-popup {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: none;
-            justify-content: center;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(255, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        #contact-popup:hover {
+            transform: scale(1.1);
+        }
+
+        #contact-popup-icons {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            color: white;
+            width: 100px;
         }
 
-        #shuffling-popup-content {
-            text-align: center;
-        }
-
-        #shuffling-gif {
-            width: 200px;
-            height: auto;
-            margin-bottom: 20px;
+        #contact-popup-icons img {
+            width: 30px;
+            height: 30px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Popup กำลังสับไพ่ -->
-    <div id="shuffling-popup">
-        <div id="shuffling-popup-content">
-            <img id="shuffling-gif" src="shuffling.gif" alt="กำลังสับไพ่">
-            <p>กำลังสับไพ่ โปรดรอสักครู่...</p>
+    <!-- Popup ช่องทางติดต่อ -->
+    <div id="contact-popup" onclick="showContactInfo()">
+        <div id="contact-popup-icons">
+            <img src="facebook-logo.png" alt="Facebook" />
+            <img src="instagram-logo.png" alt="Instagram" />
         </div>
     </div>
 
-    <!-- Popup Form -->
-    <div id="popup">
-        <div id="popup-content">
-            <h2>กรอกข้อมูลส่วนตัวก่อนเริ่มดูดวง</h2>
-            <label for="name">ชื่อเล่น:</label>
-            <input type="text" id="name" placeholder="กรุณากรอกชื่อเล่น" required>
-
-            <label for="age">อายุ:</label>
-            <input type="number" id="age" placeholder="กรุณากรอกอายุ" required>
-
-            <label for="category">ประเภทที่อยากดู:</label>
-            <select id="category" required>
-                <option value="ความรัก">ความรัก</option>
-                <option value="การงาน">การงาน</option>
-                <option value="การเงิน">การเงิน</option>
-                <option value="การเรียน">การเรียน</option>
-                <option value="อดีต อนาคต ปัจจุบัน">อดีต อนาคต ปัจจุบัน</option>
-                <option value="โชคชะตา">โชคชะตา</option>
-                <option value="ความฝัน">ความฝัน</option>
-            </select>
-
-            <button id="confirmBtn" onclick="confirmInfo()">ยืนยันข้อมูล</button>
-        </div>
+    <!-- ช่องทางการติดต่อ -->
+    <div id="contact-info" style="display:none; position: fixed; bottom: 100px; right: 20px; background-color: rgba(0, 0, 0, 0.7); padding: 20px; border-radius: 10px; box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);">
+        <p style="color: white;">ติดตามเราได้ที่:</p>
+        <a href="https://facebook.com/yourpage" target="_blank" style="color: #fff; text-decoration: none; margin-right: 10px;">Facebook</a>
+        <a href="https://instagram.com/yourprofile" target="_blank" style="color: #fff; text-decoration: none;">Instagram</a>
     </div>
+
+    <script>
+        function showContactInfo() {
+            const contactInfo = document.getElementById("contact-info");
+            if (contactInfo.style.display === "none" || contactInfo.style.display === "") {
+                contactInfo.style.display = "block";
+            } else {
+                contactInfo.style.display = "none";
+            }
+        }
+    </script>
 
     <!-- Main Content -->
     <h1>🔮 ดูดวงไพ่ 78 ใบ 🔮</h1>
@@ -263,34 +261,16 @@
         const cards = [
             { name: "ไพ่ที่ 1", image: "cards/card1.png", description: "คำทำนายของไพ่ที่ 1" },
             { name: "ไพ่ที่ 2", image: "cards/card2.png", description: "คำทำนายของไพ่ที่ 2" },
-            // ... เพิ่มไพ่ 78 ใบที่เหลือ
+            // เพิ่มไพ่ 78 ใบที่เหลือ
         ];
 
-        function confirmInfo() {
-            const age = document.getElementById('age').value;
-            if (age < 10) {
-                alert("คุณต้องมีอายุ 10 ปีขึ้นไปเพื่อดูดวง");
-                return;
-            }
-            document.getElementById('popup').style.display = 'none';
-        }
-
         function shuffleCard() {
-            // แสดง popup ขณะสับไพ่
-            document.getElementById('shuffling-popup').style.display = 'flex';
-
-            // สุ่มการ์ดหลังจาก 10 วินาที
-            setTimeout(function() {
-                const card = cards[Math.floor(Math.random() * cards.length)];
-                document.getElementById('card-name').textContent = card.name;
-                document.getElementById('card-image').src = card.image;
-                document.getElementById('card-description').textContent = card.description;
-                document.getElementById('timestamp').textContent = `🕒 เวลาสุ่ม: ${new Date().toLocaleString()}`;
-                document.getElementById('luck').textContent = `🔮 ความเป็นไปได้: 70%`;
-                
-                // ซ่อน popup หลังจากสับไพ่เสร็จ
-                document.getElementById('shuffling-popup').style.display = 'none';
-            }, 10000); // 10 วินาที
+            const card = cards[Math.floor(Math.random() * cards.length)];
+            document.getElementById('card-name').textContent = card.name;
+            document.getElementById('card-image').src = card.image;
+            document.getElementById('card-description').textContent = card.description;
+            document.getElementById('timestamp').textContent = `🕒 เวลาสุ่ม: ${new Date().toLocaleString()}`;
+            document.getElementById('luck').textContent = `🔮 ความเป็นไปได้: 70%`;
         }
     </script>
 
