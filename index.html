@@ -1,278 +1,371 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ดูดวงไพ่ 78 ใบ</title>
-    <style>
-        /* พื้นหลังไล่สีเคลื่อนไหว (แดง-ดำ) */
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        body {
-            text-align: center;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #ff0000, #cc0000, #660000);
-            background-size: 300% 300%;
-            animation: gradientMove 10s infinite linear;
-            color: white;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
-
-        h1 {
-            color: #fff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px #ff0000;
-            font-size: 30px;
-            margin: 20px 0;
-        }
-
-        button {
-            background: linear-gradient(45deg, #ff0000, #cc0000);
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-            outline: none;
-            width: 80%;
-            max-width: 300px;
-            margin-bottom: 20px;
-        }
-
-        button:hover {
-            transform: scale(1.1);
-        }
-
-        #card-container {
-            margin-top: 20px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            box-shadow: 0 0 20px #ff0000;
-            display: inline-block;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        #card-image {
-            width: 100%;
-            max-width: 200px;
-            height: auto;
-            border: 2px solid #ff0000;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-
-        #card-name {
-            font-size: 18px;
-            font-weight: bold;
-            color: #fff;
-        }
-
-        #card-description {
-            font-size: 14px;
-            color: #f3d9fa;
-        }
-
-        #timestamp, #luck {
-            font-size: 12px;
-            margin-top: 10px;
-            color: #ffccff;
-        }
-
-        /* Popup Form */
-        #popup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-
-        #popup-content {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: left;
-            width: 90%;
-            max-width: 400px;
-        }
-
-        #popup-content input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 10px;
-            border: 1px solid #ff0000;
-            color: white;
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        #popup-content button {
-            background: linear-gradient(45deg, #ff0000, #cc0000);
-            padding: 12px;
-            border-radius: 25px;
-            width: 100%;
-            color: white;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-        }
-
-        /* เอฟเฟกต์เครื่องสั่น */
-        .shake {
-            animation: shake 0.5s;
-        }
-
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            50% { transform: translateX(10px); }
-            75% { transform: translateX(-10px); }
-            100% { transform: translateX(0); }
-        }
-
-        /* ไฟวิ่งรอบๆ */
-        .flashing-border {
-            border: 2px solid #ff0000;
-            box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000, 0 0 40px #ff0000;
-            animation: flashBorder 1s infinite;
-        }
-
-        @keyframes flashBorder {
-            0% { box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000, 0 0 40px #ff0000; }
-            50% { box-shadow: 0 0 10px #660000, 0 0 20px #660000, 0 0 30px #660000, 0 0 40px #660000; }
-            100% { box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000, 0 0 40px #ff0000; }
-        }
-
-        /* Media Queries สำหรับหน้าจอมือถือ */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 24px;
-            }
-
-            button {
-                font-size: 16px;
-                padding: 10px 20px;
-            }
-
-            #card-container {
-                width: 90%;
-                margin: 0 auto;
-            }
-
-            #card-name {
-                font-size: 16px;
-            }
-
-            #card-description {
-                font-size: 12px;
-            }
-
-            #timestamp, #luck {
-                font-size: 12px;
-            }
-        }
-
-        /* ปุ่ม Popup ช่องทางติดต่อ */
-        #contact-popup {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: rgba(255, 0, 0, 0.8);
-            padding: 15px;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
-            transition: all 0.3s ease;
-        }
-
-        #contact-popup:hover {
-            transform: scale(1.1);
-        }
-
-        #contact-popup-icons {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100px;
-        }
-
-        #contact-popup-icons img {
-            width: 30px;
-            height: 30px;
-        }
-    </style>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="ดูเพิ่มเติมport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css" integrity="sha384-/frq1SRXYH/bSyou/HUp/hib7RVN1TawQYja658FEOodR/FQBKVqT9Ol+Oz3Olq5" crossorigin="anonymous"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+    <title>Welcome_mywebsite</title>
 </head>
 <body>
-
-    <!-- Popup ช่องทางติดต่อ -->
-    <div id="contact-popup" onclick="showContactInfo()">
-        <div id="contact-popup-icons">
-            <img src="facebook-logo.png" alt="Facebook" />
-            <img src="instagram-logo.png" alt="Instagram" />
+    <!-- start menu -->
+    <div class="bg-warning p-3 navbar navbar-expand-sm ">
+        <div class="container ms-auto">
+            <a href="#" class="navbar-brand text-white">ติดต่อเรา <i class="fa-solid fa-comment-dots"></i></i></a>
+                <ul class="navbar-nav ">
+                    <li class="nav-item"><a href="#" class="nav-link text-white" data-bs-toggle="modal" data-bs-target="#mymodal"><i class="fa-solid fa-person-circle-plus"></i> สมัครสมาชิก </a></li>
+                    <li class="nav-item"><a href="#" class="nav-link text-white" data-bs-toggle="modal" data-bs-target="#mymodal-2"><i class="fa-solid fa-user-doctor"></i> เข้าสู่ระบบ</a></li>
+            </div>
         </div>
     </div>
+    <!-- end menu -->
 
-    <!-- ช่องทางการติดต่อ -->
-    <div id="contact-info" style="display:none; position: fixed; bottom: 100px; right: 20px; background-color: rgba(0, 0, 0, 0.7); padding: 20px; border-radius: 10px; box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);">
-        <p style="color: white;">ติดตามเราได้ที่:</p>
-        <a href="https://facebook.com/yourpage" target="_blank" style="color: #fff; text-decoration: none; margin-right: 10px;">Facebook</a>
-        <a href="https://instagram.com/yourprofile" target="_blank" style="color: #fff; text-decoration: none;">Instagram</a>
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light p-4 sticky-top">
+        <div class="container ">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/ZDF_logo%21_Logo_2021.svg/640px-ZDF_logo%21_Logo_2021.svg.png" class="img-logo" alt="" class="img-list">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">หน้าแรก</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">สุ่มของรางวัล</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">เติมเงิน</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  ไอดีเกม
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <li><a class="dropdown-item" href="#">ยศบั้ง+</a></li>
+                  <li><a class="dropdown-item" href="#">ยศดอก+</a></li>
+                  <li><a class="dropdown-item" href="#">ยศดาว+</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">ไอเท็มโค้ด</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  บัตรเติมเงิน
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <li><a class="dropdown-item" href="#">ทรูมันนี่</a></li>
+                  <li><a class="dropdown-item" href="#">บัตรการีน่า</a></li>
+                  <li><a class="dropdown-item" href="#">บัตรเติมเงืนมือถือ</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">ติดต่อ</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">เครดิต</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">เติมเงิน</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    <!-- end navbar -->
+
+    <!-- start carousel -->
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="https://scontent.fubp1-1.fna.fbcdn.net/v/t39.30808-6/278069477_1041069669817325_5384080894473393086_n.jpg?_nc_cat=103&ccb=1-5&_nc_sid=09cbfe&_nc_eui2=AeH0ukzuGmhG7CXIukLdjMLvG5puLNL1Hycbmm4s0vUfJ_cA_xER_B667Rk6n6jQnXf7a7_qmdrpgCywFO9F3-kH&_nc_ohc=YV49Cfv51HcAX83ZB4o&_nc_ht=scontent.fubp1-1.fna&oh=00_AT9DeElKr2wpfbzbaXQ0yVLn5TswZHfu07by1szfk96E8Q&oe=6276F1E5                 " class="img-fluid w-100 img-carouel" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="img/slide-2.jpg"  class="img-fluid w-100 img-carouel" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="img/slide-3.jpg" class="img-fluid w-100 img-carouel" alt="...">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    <!-- end carousel -->
+
+    <!-- start body-list -->
+    <div class="album py-5 " id="bg">
+        <div class="container">
+    
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            <div class="col">
+              <div class="card shadow-sm ">
+                  <img src="img/list-1.jpg" alt="" class="img-list">
+                <div class="card-body">
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">ดูเพิ่มเติม</button>
+
+                    </div>
+                    <small class="text-muted">สถานะ : ว่าง</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card shadow-sm ">
+                  <img src="img/list-2.jpg" alt="" class="img-list">
+                <div class="card-body">
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">ดูเพิ่มเติม</button>
+                    </div>
+                    <small class="text-muted">สถานะ : ว่าง</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card shadow-sm ">
+                  <img src="img/list-3.jpg"   alt="" class="img-list">
+                <div class="card-body">
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">ดูเพิ่มเติม</button>
+                    </div>
+                    <small class="text-muted">สถานะ : ว่าง</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+    
+            <div class="col">
+              <div class="card shadow-sm ">
+                  <img src="img/list-4.jpg" alt="" class="img-list">
+                <div class="card-body">
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">ดูเพิ่มเติม</button>
+                    </div>
+                    <small class="text-muted">สถานะ : ว่าง</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card shadow-sm ">
+                  <img src="img/list-5.jpg" alt="" class="img-list">
+                <div class="card-body">
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">ดูเพิ่มเติม</button>
+                    </div>
+                    <small class="text-muted">สถานะ : ว่าง</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card shadow-sm ">
+                  <img src="img/list-6.jpg" alt="" class="img-list">
+                <div class="card-body">
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">ดูเพิ่มเติม</button>
+                    </div>
+                    <small class="text-muted">สถานะ : ว่าง</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+    
+            <div class="col">
+              <div class="card shadow-sm ">
+                  <img src="img/list-7.jpg" alt="" class="img-list">
+                <div class="card-body">
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">ดูเพิ่มเติม</button>
+                    </div>
+                    <small class="text-muted">สถานะ : ว่าง</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card shadow-sm ">
+                  <img src="img/list-8.jfif" alt="" class="img-list">
+                <div class="card-body">
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">ดูเพิ่มเติม</button>
+                    </div>
+                    <small class="text-muted">สถานะ : ว่าง</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card shadow-sm ">
+                  <img src="img/list-9.jpg" alt="" class="img-list">
+                <div class="card-body">
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">ดูเพิ่มเติม</button>
+                    </div>
+                    <small class="text-muted">สถานะ : ว่าง</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+                <div class="card shadow-sm ">
+                    <img src="img/list-10.png" alt="" class="img-list">
+                  <div class="card-body">
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">ดูเพิ่มเติม</button>
+                      </div>
+                      <small class="text-muted">สถานะ : ว่าง</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card shadow-sm ">
+                    <img src="img/list-11.jfif" alt="" class="img-list">
+                  <div class="card-body">
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">ดูเพิ่มเติม</button>
+                      </div>
+                      <small class="text-muted">สถานะ : ว่าง</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card shadow-sm ">
+                    <img src="img/list-12.jpg" alt="" class="img-list">
+                  <div class="card-body">
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">ดูเพิ่มเติม</button>
+                      </div>
+                      <small class="text-muted">สถานะ : ว่าง</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+              <!-- start page -->
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination" style="justify-content: center;margin-top: 30px;">
+                        <li class="page-item"><a class="page-link" href="#">ก่อนหน้า</a></li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">ถัดไป</a></li>
+                    </ul>
+                </nav>
+    <!-- end page -->
+        </div>
+      </div>
+    <!-- end body-list -->
+
+
+    <!-- start footer -->
+    <footer class="container mt-5 footer">
+        <p class="float-end"><a href="#">กลับไปบนสุดเว็ป</a></p>
+        <p>© 2017–2021 ซื้อขายแลกเปลี่ยน สุ่มของรางวัล. · <a href="#">ซื้อขายเกม</a> · <a href="#">ใด้ที่นี้</a></p>
+      </footer>
+    <!-- end footer -->
+
+    <!-- start modal-สมัครสมาชิก -->
+    <div class="modal fade" id="mymodal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">สมัครสมาชิก</h5>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body ">
+                    <form action="" >
+                        <div class="form-group mb-2">
+                            <label for="">email</label>
+                            <input type="email" name="" id="" placeholder="ป้อนอีเมลของคุณ" class="form-control">
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="">User</label>
+                            <input type="text" name="" id="" placeholder="เสนอหัวข้องานของคุณ" class="form-control">
+                        </div>
+                        <div class="form-cgroup mb-2">
+                            <label for="">Password</label>
+                            <input type="password" name="password" class="form-control" placeholder="กรอกรหัสผ่าน 7-12 ตัว">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger btn-sm" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button class="btn btn-success btn-sm">สมัคร</button>
+                </div>
+            </div>
+        </div>
     </div>
+    <!-- end modal -->
 
-    <script>
-        function showContactInfo() {
-            const contactInfo = document.getElementById("contact-info");
-            if (contactInfo.style.display === "none" || contactInfo.style.display === "") {
-                contactInfo.style.display = "block";
-            } else {
-                contactInfo.style.display = "none";
-            }
-        }
-    </script>
-
-    <!-- Main Content -->
-    <h1>🔮 ดูดวงไพ่ 78 ใบ 🔮</h1>
-    <button onclick="shuffleCard()">✨ สับไพ่ ✨</button>
-
-    <div id="card-container">
-        <img id="card-image" src="cards/back.png" alt="ไพ่" />
-        <p id="card-name">คลิกปุ่มเพื่อสุ่มไพ่</p>
-        <p id="card-description"></p>
-        <p id="timestamp">🕒 เวลาสุ่ม: -</p>
-        <p id="luck">🔮 ความเป็นไปได้: -</p>
-    </div>
-
-    <script>
-        const cards = [
-            { name: "ไพ่ที่ 1", image: "cards/card1.png", description: "คำทำนายของไพ่ที่ 1" },
-            { name: "ไพ่ที่ 2", image: "cards/card2.png", description: "คำทำนายของไพ่ที่ 2" },
-            // เพิ่มไพ่ 78 ใบที่เหลือ
-        ];
-
-        function shuffleCard() {
-            const card = cards[Math.floor(Math.random() * cards.length)];
-            document.getElementById('card-name').textContent = card.name;
-            document.getElementById('card-image').src = card.image;
-            document.getElementById('card-description').textContent = card.description;
-            document.getElementById('timestamp').textContent = `🕒 เวลาสุ่ม: ${new Date().toLocaleString()}`;
-            document.getElementById('luck').textContent = `🔮 ความเป็นไปได้: 70%`;
-        }
-    </script>
-
+        <!-- start modal-เข้าสู่ระบบ -->
+        <div class="modal fade" id="mymodal-2">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">เข้าสู่ระบบ</h5>
+                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body ">
+                        <form action="" >
+                            <div class="form-group mb-2">
+                                <label for="">User</label>
+                                <input type="text" name="" id="" placeholder="เสนอหัวข้องานของคุณ" class="form-control">
+                            </div>
+                            <div class="form-cgroup mb-2">
+                                <label for="">Password</label>
+                                <input type="password" name="password" class="form-control" placeholder="กรอกรหัสผ่าน 7-12 ตัว">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger btn-sm" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button class="btn btn-success btn-sm">เข้าสู่ระบบ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end modal -->
 </body>
 </html>
