@@ -3,52 +3,296 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>สับไผ่ อ.ธนพร</title>
-    <link rel="stylesheet" href="style.css">
+    <title>ดูดวงไพ่ 78 ใบ</title>
+    <style>
+        /* พื้นหลังไล่สีเคลื่อนไหว (แดง-ดำ) */
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff0000, #cc0000, #660000);
+            background-size: 300% 300%;
+            animation: gradientMove 10s infinite linear;
+            color: black;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px #ff0000;
+            font-size: 30px;
+            margin: 20px 0;
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff0000, #cc0000);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            outline: none;
+            width: 80%;
+            max-width: 300px;
+            margin-bottom: 20px;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+        }
+
+        #card-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 0 20px #ff0000;
+            display: inline-block;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        #card-image {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            border: 2px solid #ff0000;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        #card-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        #card-description {
+            font-size: 14px;
+            color: #f3d9fa;
+        }
+
+        #timestamp, #luck {
+            font-size: 12px;
+            margin-top: 10px;
+            color: #ffccff;
+        }
+
+        /* Popup Form */
+        #popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        #popup-content {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: left;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        #popup-content input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 1px solid #ff0000;
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        #popup-content button {
+            background: linear-gradient(45deg, #ff0000, #cc0000);
+            padding: 12px;
+            border-radius: 25px;
+            width: 100%;
+            color: white;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* เอฟเฟกต์เครื่องสั่น */
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* ไฟวิ่งรอบๆ */
+        .flashing-border {
+            border: 2px solid #ff0000;
+            box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000, 0 0 40px #ff0000;
+            animation: flashBorder 1s infinite;
+        }
+
+        @keyframes flashBorder {
+            0% { box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000, 0 0 40px #ff0000; }
+            50% { box-shadow: 0 0 10px #660000, 0 0 20px #660000, 0 0 30px #660000, 0 0 40px #660000; }
+            100% { box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000, 0 0 40px #ff0000; }
+        }
+
+        /* Media Queries สำหรับหน้าจอมือถือ */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
+
+            #card-container {
+                width: 90%;
+                margin: 0 auto;
+            }
+
+            #card-name {
+                font-size: 16px;
+            }
+
+            #card-description {
+                font-size: 12px;
+            }
+
+            #timestamp, #luck {
+                font-size: 12px;
+            }
+        }
+
+        /* Popup กำลังสับไพ่ */
+        #shuffling-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        #shuffling-popup-content {
+            text-align: center;
+        }
+
+        #shuffling-gif {
+            width: 200px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    <!-- หน้าแรกกรอกชื่อและอายุ -->
-    <div class="container">
-        <div class="form-container" id="start-form">
-            <h2>กรอกข้อมูลของคุณ</h2>
-            <label for="name">ชื่อเล่น:</label>
-            <input type="text" id="name" required>
-            <label for="age">อายุ:</label>
-            <input type="number" id="age" required min="10">
-            <button onclick="startReading()">ยืนยัน</button>
-        </div>
 
-        <!-- เลือกประเภทและจำนวนไพ่ -->
-        <div class="selection-container" id="selection-form" style="display:none;">
-            <h2>เลือกประเภทเรื่องที่ต้องการดู</h2>
-            <select id="cardType">
-                <option value="love">ความรัก (4 ไพ่)</option>
-                <option value="career">การงาน (3 ไพ่)</option>
-                <option value="finance">การเงิน (3 ไพ่)</option>
-                <option value="study">การเรียน (3 ไพ่)</option>
-                <option value="pastPresentFuture">อดีต อนาคต ปัจจุบัน (3 ไพ่)</option>
-                <option value="destiny">โชคชะตา (7 ไพ่)</option>
-                <option value="dream">ความฝัน (5 ไพ่)</option>
-            </select>
-            <button onclick="shuffleCards()">สับไพ่</button>
-        </div>
-
-        <!-- แสดงผลไพ่และเวลา -->
-<div class="result-container" id="result-form" style="display:none;">
-    <h2>ผลการดูดวง</h2>
-    <div id="cards"></div>
-    <p id="date-time"></p> <!-- แสดงเวลาและวันที่ -->
-    <button onclick="confirmReading()">ยืนยัน</button>
-</div>
-
-        <!-- QR และข้อความสนับสนุน -->
-        <div id="support-container" style="display:none;">
-            <h2>ขอบคุณที่ใช้บริการ</h2>
-            <p>ถ้าตรงหรือไม่ตรงยังไงสามารถสนับสนุนเป็นกำลังใจได้แล้วแต่จิตศรัทธาของตัวลูกด้วยเอง☺ ขอบคุณมากๆ ครับ 😊</p>
-            <img id="qr-code" src="QR-code-placeholder.png" alt="QR Code">
+    <!-- Popup กำลังสับไพ่ -->
+    <div id="shuffling-popup">
+        <div id="shuffling-popup-content">
+            <img id="shuffling-gif" src="shuffling.gif" alt="กำลังสับไพ่">
+            <p>กำลังสับไพ่ โปรดรอสักครู่...</p>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Popup Form -->
+    <div id="popup">
+        <div id="popup-content">
+            <h2>กรอกข้อมูลส่วนตัวก่อนเริ่มดูดวง</h2>
+            <label for="name">ชื่อเล่น:</label>
+            <input type="text" id="name" placeholder="กรุณากรอกชื่อเล่น" required>
+
+            <label for="age">อายุ:</label>
+            <input type="number" id="age" placeholder="กรุณากรอกอายุ" required>
+
+            <label for="category">ประเภทที่อยากดู:</label>
+            <select id="category" required>
+                <option value="ความรัก">ความรัก</option>
+                <option value="การงาน">การงาน</option>
+                <option value="การเงิน">การเงิน</option>
+                <option value="การเรียน">การเรียน</option>
+                <option value="อดีต อนาคต ปัจจุบัน">อดีต อนาคต ปัจจุบัน</option>
+                <option value="โชคชะตา">โชคชะตา</option>
+                <option value="ความฝัน">ความฝัน</option>
+            </select>
+
+            <button id="confirmBtn" onclick="confirmInfo()">ยืนยันข้อมูล</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <h1>🔮 ดูดวงไพ่ 78 ใบ 🔮</h1>
+    <button onclick="shuffleCard()">✨ สับไพ่ ✨</button>
+
+    <div id="card-container">
+        <img id="card-image" src="cards/back.png" alt="ไพ่" />
+        <p id="card-name">คลิกปุ่มเพื่อสุ่มไพ่</p>
+        <p id="card-description"></p>
+        <p id="timestamp">🕒 เวลาสุ่ม: -</p>
+        <p id="luck">🔮 ความเป็นไปได้: -</p>
+    </div>
+
+    <script>
+        const cards = [
+            { name: "ไพ่ที่ 1", image: "cards/card1.png", description: "คำทำนายของไพ่ที่ 1" },
+            { name: "ไพ่ที่ 2", image: "cards/card2.png", description: "คำทำนายของไพ่ที่ 2" },
+            // ... เพิ่มไพ่ 78 ใบที่เหลือ
+        ];
+
+        function confirmInfo() {
+            const age = document.getElementById('age').value;
+            if (age < 10) {
+                alert("คุณต้องมีอายุ 10 ปีขึ้นไปเพื่อดูดวง");
+                return;
+            }
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        function shuffleCard() {
+            // แสดง popup ขณะสับไพ่
+            document.getElementById('shuffling-popup').style.display = 'flex';
+
+            // สุ่มการ์ดหลังจาก 10 วินาที
+            setTimeout(function() {
+                const card = cards[Math.floor(Math.random() * cards.length)];
+                document.getElementById('card-name').textContent = card.name;
+                document.getElementById('card-image').src = card.image;
+                document.getElementById('card-description').textContent = card.description;
+                document.getElementById('timestamp').textContent = `🕒 เวลาสุ่ม: ${new Date().toLocaleString()}`;
+                document.getElementById('luck').textContent = `🔮 ความเป็นไปได้: 70%`;
+                
+                // ซ่อน popup หลังจากสับไพ่เสร็จ
+                document.getElementById('shuffling-popup').style.display = 'none';
+            }, 10000); // 10 วินาที
+        }
+    </script>
+
 </body>
 </html>
