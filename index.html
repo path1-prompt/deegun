@@ -7,318 +7,77 @@
   <!-- jsPDF Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Sarabun&display=swap');
-
-    /* Animated Background Gradient */
-    @keyframes bgAnimation {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    
-    /* Glowing Animation for Popup */
-    @keyframes glowPulse {
-      0% { box-shadow: 0 0 10px #ff66ff, 0 0 20px #ff66ff; }
-      50% { box-shadow: 0 0 20px #ff99ff, 0 0 30px #ff99ff; }
-      100% { box-shadow: 0 0 10px #ff66ff, 0 0 20px #ff66ff; }
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Sarabun', sans-serif;
-      background: linear-gradient(270deg, #2d0036, #000000, #2d0036);
-      background-size: 600% 600%;
-      animation: bgAnimation 20s ease infinite;
-      color: #fff;
-      overflow-x: hidden;
-    }
-
-    .container {
-      max-width: 420px;
-      margin: 80px auto 0;
-      padding: 20px;
-      background: rgba(40, 0, 50, 0.85);
-      box-shadow: 0 0 20px #aa00ff;
-      border-radius: 15px;
-      transform: translateY(20px);
-      opacity: 0;
-      animation: fadeIn 1s forwards;
-      position: relative;
-    }
-    @keyframes fadeIn {
-      to { transform: translateY(0); opacity: 1; }
-    }
-    
-    h2 {
-      text-align: center;
-      color: #ffccff;
-      margin-bottom: 10px;
-    }
-    label {
-      display: block;
-      margin-top: 10px;
-      color: #ffd6ff;
-    }
-    input, select, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      transition: all 0.3s ease;
-    }
-    input:focus, select:focus {
-      outline: none;
-      box-shadow: 0 0 8px #ff77ff;
-    }
-    input, select {
-      background-color: #fff;
-      color: #000;
-    }
-    button {
-      background: #9900cc;
-      color: #fff;
-      margin-top: 15px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #aa00ff;
-      transform: scale(1.02);
-    }
-    
-    /* Popup Modal with Magical Glow */
-    .popup, .admin-popup {
-      display: none;
-      position: fixed;
-      z-index: 999;
-      background: rgba(45, 0, 54, 0.95);
-      width: 90%;
-      max-width: 400px;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.8);
-      border-radius: 10px;
-      padding: 20px;
-      opacity: 0;
-      transition: all 0.4s ease;
-    }
-    .popup.show, .admin-popup.show {
-      display: block;
-      transform: translate(-50%, -50%) scale(1);
-      opacity: 1;
-      animation: glowPulse 2s infinite;
-    }
-    .popup h3, .admin-popup h3 {
-      text-align: center;
-      color: #ffd6ff;
-      margin-top: 0;
-    }
-    .popup p, .admin-popup p {
-      margin: 8px 0;
-    }
-    .popup .note, .admin-popup .note {
-      font-size: 14px;
-      color: #ffccff;
-      margin-top: 10px;
-      text-align: center;
-    }
-    .popup button, .admin-popup button {
-      background: #8800cc;
-      margin-top: 10px;
-      border: none;
-      border-radius: 6px;
-      width: 100%;
-      padding: 10px;
-      color: #fff;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .popup button:hover, .admin-popup button:hover {
-      background: #aa00ff;
-    }
-    
-    /* Admin Section */
-    .admin-section {
-      max-width: 420px;
-      margin: 20px auto;
-      padding: 20px;
-      background: rgba(40, 0, 50, 0.85);
-      box-shadow: 0 0 20px #aa00ff;
-      border-radius: 15px;
-      display: none;
-    }
-    .admin-section h2 {
-      text-align: center;
-      color: #ffccff;
-    }
-    .admin-section table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .admin-section th, .admin-section td {
-      border: 1px solid #fff;
-      padding: 8px;
-      text-align: center;
-      font-size: 14px;
-    }
-    .admin-section th {
-      background: #660099;
-    }
-    
-    /* Magical Animal Animation */
-    .magic-animal {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      width: 80px;
-      height: 80px;
-      z-index: 1000;
-      animation: floatAnimal 3s ease-in-out infinite, pulsate 2s ease-in-out infinite;
-    }
-    .magic-animal::before, .magic-animal::after {
-      content: '';
-      position: absolute;
-      border-radius: 50%;
-      background: radial-gradient(circle at center, #ff77ff 0%, #6e00aa 70%, #2d0036 100%);
-    }
-    .magic-animal::before {
-      width: 60px;
-      height: 60px;
-      top: 10px;
-      left: 10px;
-      box-shadow: 0 0 15px #ff55ff;
-    }
-    .magic-animal::after {
-      width: 30px;
-      height: 30px;
-      bottom: 0;
-      right: 0;
-      box-shadow: 0 0 10px #ff55ff;
-    }
-    @keyframes floatAnimal {
-      0% { transform: translate(0, 0) rotate(0deg); }
-      50% { transform: translate(-10px, 10px) rotate(10deg); }
-      100% { transform: translate(0, 0) rotate(0deg); }
-    }
-    @keyframes pulsate {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
-    }
-    @media screen and (max-width: 480px) {
-      .container {
-        margin-top: 100px;
-      }
-    }
+    /* Your CSS Styles Here */
+    /* Keep your existing styles for animations, containers, etc. */
   </style>
 </head>
 <body>
-  <!-- Magical Animal -->
-  <div class="magic-animal"></div>
-
-  <!-- Main Booking Container -->
-  <div class="container" id="mainContainer">
-    <h2>จองคิวดูดวง</h2>
-    <form id="bookingForm">
-      <label>ชื่อเล่น:</label>
-      <input type="text" id="name" required>
-      <label>อายุ:</label>
-      <input type="number" id="age" required min="1">
-      <label>หมวดหมู่:</label>
-      <select id="category">
-        <option>ดูดวงส่วนตัว</option>
-        <option>โชคชะตา</option>
-        <option>ความฝัน</option>
-        <option>อดีตและอนาคต</option>
-        <option>ความรัก</option>
-        <option>การงาน</option>
-        <option>การเงิน</option>
-        <option>การเรียน</option>
-        <option>สุขภาพ</option>
-      </select>
-      <label>เลือกวัน:</label>
-      <input type="date" id="date" required>
-      <button type="submit">จองคิว</button>
-    </form>
-    <button id="adminLink" style="margin-top:15px; background:#550088;">สำหรับแอดมิน</button>
-  </div>
-
-  <!-- Popup for the ticket -->
-  <div class="popup" id="popup">
-    <div id="ticketData"></div>
-    <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
-  </div>
-
-  <!-- Admin Login Popup -->
-  <div class="admin-popup" id="adminPopup">
-    <h3>เข้าสู่ระบบแอดมิน</h3>
-    <input type="password" id="adminPassword" placeholder="รหัสผ่านแอดมิน" style="margin-top:10px;">
-    <button onclick="checkAdmin()">เข้าสู่ระบบ</button>
-  </div>
-
-  <!-- Admin Section -->
-  <div class="admin-section" id="adminSection">
-    <h2>ข้อมูลใบคิวทั้งหมด</h2>
-    <table id="adminTable">
-      <thead>
-        <tr>
-          <th>ชื่อ</th>
-          <th>อายุ</th>
-          <th>หมวดหมู่</th>
-          <th>วันที่</th>
-          <th>คิว</th>
-          <th>เลขอ้างอิง</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- ข้อมูลจะถูกเติมโดย JavaScript -->
-      </tbody>
-    </table>
-    <button onclick="closeAdmin()">ปิดหน้าดูข้อมูล</button>
-  </div>
+  <!-- Your HTML content including form, popup, admin section here -->
 
   <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyASsOEUsECZHN5Bf-Be4TD_MXwJwh9gE68",
+      authDomain: "horoscopequeue.firebaseapp.com",
+      projectId: "horoscopequeue",
+      storageBucket: "horoscopequeue.appspot.com",
+      messagingSenderId: "276093348293",
+      appId: "1:276093348293:web:ac75808f868eaf29b943ac",
+      measurementId: "G-ENN31BYZGS"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
     const queueDB = {}; // เก็บข้อมูลคิวใน session นี้
     let currentTicket = null; // เก็บใบคิวล่าสุด
 
-    document.getElementById("bookingForm").addEventListener("submit", function(e) {
+    document.getElementById("bookingForm").addEventListener("submit", async function(e) {
       e.preventDefault();
       const name = document.getElementById("name").value.trim();
       const age = document.getElementById("age").value.trim();
       const category = document.getElementById("category").value;
       let date = document.getElementById("date").value;
       if (!name || !age || !category || !date) return;
+
+      // If the selected date already has 5 bookings, move to the next day
       if (!queueDB[date]) { queueDB[date] = []; }
-      // หากวันที่มีคิว >= 5 ให้เลื่อนไปวันถัดไป
       while (queueDB[date].length >= 5) {
         const nextDay = new Date(date);
         nextDay.setDate(nextDay.getDate() + 1);
         date = nextDay.toISOString().split('T')[0];
         if (!queueDB[date]) { queueDB[date] = []; }
       }
+      
       const queueNumber = queueDB[date].length + 1;
       const referenceId = Math.random().toString(36).substring(2, 10).toUpperCase();
       const ticket = { name, age, category, date, queueNumber, referenceId };
-      queueDB[date].push(ticket);
-      currentTicket = ticket;
-      
-      const ticketHTML = `
-        <h3>ใบคิวดูดวง</h3>
-        <p><b>ชื่อ:</b> ${ticket.name}</p>
-        <p><b>อายุ:</b> ${ticket.age}</p>
-        <p><b>หมวดหมู่:</b> ${ticket.category}</p>
-        <p><b>ลำดับคิว:</b> ${ticket.queueNumber}</p>
-        <p><b>วันที่ดูดวง:</b> ${ticket.date}</p>
-        <p><b>เลขอ้างอิง:</b> ${ticket.referenceId}</p>
-        <button onclick="downloadPDF()">ดาวน์โหลด PDF</button>
-        <button onclick="goInstagram()">ส่งผลทาง IG</button>
-      `;
-      document.getElementById("ticketData").innerHTML = ticketHTML;
-      document.getElementById("popup").classList.add("show");
+
+      // Save the ticket to Firestore
+      try {
+        await addDoc(collection(db, "tickets"), ticket);
+        queueDB[date].push(ticket);
+        currentTicket = ticket;
+
+        const ticketHTML = `
+          <h3>ใบคิวดูดวง</h3>
+          <p><b>ชื่อ:</b> ${ticket.name}</p>
+          <p><b>อายุ:</b> ${ticket.age}</p>
+          <p><b>หมวดหมู่:</b> ${ticket.category}</p>
+          <p><b>ลำดับคิว:</b> ${ticket.queueNumber}</p>
+          <p><b>วันที่ดูดวง:</b> ${ticket.date}</p>
+          <p><b>เลขอ้างอิง:</b> ${ticket.referenceId}</p>
+          <button onclick="downloadPDF()">ดาวน์โหลด PDF</button>
+          <button onclick="goInstagram()">ส่งผลทาง IG</button>
+        `;
+        document.getElementById("ticketData").innerHTML = ticketHTML;
+        document.getElementById("popup").classList.add("show");
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
     });
 
     function downloadPDF() {
@@ -363,111 +122,30 @@ Reference No: ${currentTicket.referenceId}`;
     }
 
     // แสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
-    function showAdminSection() {
+    async function showAdminSection() {
+      const querySnapshot = await getDocs(collection(db, "tickets"));
       const adminTableBody = document.getElementById("adminTable").querySelector("tbody");
       adminTableBody.innerHTML = "";
-      for (const date in queueDB) {
-        queueDB[date].forEach(ticket => {
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td>${ticket.name}</td>
-            <td>${ticket.age}</td>
-            <td>${ticket.category}</td>
-            <td>${ticket.date}</td>
-            <td>${ticket.queueNumber}</td>
-            <td>${ticket.referenceId}</td>
-          `;
-          adminTableBody.appendChild(row);
-        });
-      }
+
+      querySnapshot.forEach((doc) => {
+        const ticket = doc.data();
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${ticket.name}</td>
+          <td>${ticket.age}</td>
+          <td>${ticket.category}</td>
+          <td>${ticket.date}</td>
+          <td>${ticket.queueNumber}</td>
+          <td>${ticket.referenceId}</td>
+        `;
+        adminTableBody.appendChild(row);
+      });
       document.getElementById("adminSection").style.display = "block";
     }
 
     function closeAdmin() {
       document.getElementById("adminSection").style.display = "none";
     }
-    // Import the necessary Firebase SDKs
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
-
-// Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyASsOEUsECZHN5Bf-Be4TD_MXwJwh9gE68",
-  authDomain: "horoscopequeue.firebaseapp.com",
-  projectId: "horoscopequeue",
-  storageBucket: "horoscopequeue.appspot.com",
-  messagingSenderId: "276093348293",
-  appId: "1:276093348293:web:ac75808f868eaf29b943ac",
-  measurementId: "G-ENN31BYZGS"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-document.getElementById("bookingForm").addEventListener("submit", async function(e) {
-  e.preventDefault();
-  const name = document.getElementById("name").value.trim();
-  const age = document.getElementById("age").value.trim();
-  const category = document.getElementById("category").value;
-  let date = document.getElementById("date").value;
-  if (!name || !age || !category || !date) return;
-  if (!queueDB[date]) { queueDB[date] = []; }
-  
-  // หากวันที่มีคิว >= 5 ให้เลื่อนไปวันถัดไป
-  while (queueDB[date].length >= 5) {
-    const nextDay = new Date(date);
-    nextDay.setDate(nextDay.getDate() + 1);
-    date = nextDay.toISOString().split('T')[0];
-    if (!queueDB[date]) { queueDB[date] = []; }
-  }
-  const queueNumber = queueDB[date].length + 1;
-  const referenceId = Math.random().toString(36).substring(2, 10).toUpperCase();
-  const ticket = { name, age, category, date, queueNumber, referenceId };
-  
-  // Save the ticket to Firestore
-  try {
-    await addDoc(collection(db, "tickets"), ticket);
-    queueDB[date].push(ticket);
-    currentTicket = ticket;
-    // Display the ticket in the popup
-    const ticketHTML = `
-      <h3>ใบคิวดูดวง</h3>
-      <p><b>ชื่อ:</b> ${ticket.name}</p>
-      <p><b>อายุ:</b> ${ticket.age}</p>
-      <p><b>หมวดหมู่:</b> ${ticket.category}</p>
-      <p><b>ลำดับคิว:</b> ${ticket.queueNumber}</p>
-      <p><b>วันที่ดูดวง:</b> ${ticket.date}</p>
-      <p><b>เลขอ้างอิง:</b> ${ticket.referenceId}</p>
-      <button onclick="downloadPDF()">ดาวน์โหลด PDF</button>
-      <button onclick="goInstagram()">ส่งผลทาง IG</button>
-    `;
-    document.getElementById("ticketData").innerHTML = ticketHTML;
-    document.getElementById("popup").classList.add("show");
-  } catch (e) {
-    console.error("Error adding document: ", e);
-  }
-});
-// แสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
-async function showAdminSection() {
-  const querySnapshot = await getDocs(collection(db, "tickets"));
-  const adminTableBody = document.getElementById("adminTable").querySelector("tbody");
-  adminTableBody.innerHTML = "";
-
-  querySnapshot.forEach((doc) => {
-    const ticket = doc.data();
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${ticket.name}</td>
-      <td>${ticket.age}</td>
-      <td>${ticket.category}</td>
-      <td>${ticket.date}</td>
-      <td>${ticket.queueNumber}</td>
-      <td>${ticket.referenceId}</td>
-    `;
-    adminTableBody.appendChild(row);
-  });
-  document.getElementById("adminSection").style.display = "block";
-}
   </script>
 </body>
 </html>
