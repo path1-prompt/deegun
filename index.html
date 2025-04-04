@@ -284,40 +284,52 @@
     let currentTicket = null; // เก็บใบคิวล่าสุด
 
     document.getElementById("bookingForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const name = document.getElementById("name").value.trim();
-      const age = document.getElementById("age").value.trim();
-      const category = document.getElementById("category").value;
-      let date = document.getElementById("date").value;
-      if (!name || !age || !category || !date) return;
-      if (!queueDB[date]) { queueDB[date] = []; }
-      // หากวันที่มีคิว >= 5 ให้เลื่อนไปวันถัดไป
-      while (queueDB[date].length >= 5) {
-        const nextDay = new Date(date);
-        nextDay.setDate(nextDay.getDate() + 1);
-        date = nextDay.toISOString().split('T')[0];
-        if (!queueDB[date]) { queueDB[date] = []; }
-      }
-      const queueNumber = queueDB[date].length + 1;
-      const referenceId = Math.random().toString(36).substring(2, 10).toUpperCase();
-      const ticket = { name, age, category, date, queueNumber, referenceId };
-      queueDB[date].push(ticket);
-      currentTicket = ticket;
-      
-      const ticketHTML = `
-        <h3>ใบคิวดูดวง</h3>
-        <p><b>ชื่อ:</b> ${ticket.name}</p>
-        <p><b>อายุ:</b> ${ticket.age}</p>
-        <p><b>หมวดหมู่:</b> ${ticket.category}</p>
-        <p><b>ลำดับคิว:</b> ${ticket.queueNumber}</p>
-        <p><b>วันที่ดูดวง:</b> ${ticket.date}</p>
-        <p><b>เลขอ้างอิง:</b> ${ticket.referenceId}</p>
-        <button onclick="downloadPDF()">ดาวน์โหลด PDF</button>
-        <button onclick="goInstagram()">ส่งผลทาง IG</button>
-      `;
-      document.getElementById("ticketData").innerHTML = ticketHTML;
-      document.getElementById("popup").classList.add("show");
-    });
+  e.preventDefault();
+  const name = document.getElementById("name").value.trim();
+  const age = document.getElementById("age").value.trim();
+  const category = document.getElementById("category").value;
+  let date = document.getElementById("date").value;
+  if (!name || !age || !category || !date) return;
+
+  if (!queueDB[date]) { queueDB[date] = []; }
+
+  // หากวันที่มีคิว >= 5 ให้เลื่อนไปวันถัดไป
+  while (queueDB[date].length >= 5) {
+    const nextDay = new Date(date);
+    nextDay.setDate(nextDay.getDate() + 1);
+    date = nextDay.toISOString().split('T')[0];
+    if (!queueDB[date]) { queueDB[date] = []; }
+  }
+
+  // เพิ่มใบคิวแบบยังไม่มี queueNumber และ referenceId
+  queueDB[date].push({ name, age, category, date, queueNumber: 0, referenceId: "" });
+
+  // จัดลำดับคิวใหม่ทั้งหมดในวันนั้น
+  queueDB[date] = queueDB[date].map((t, index) => {
+    return {
+      ...t,
+      queueNumber: index + 1,
+      referenceId: t.referenceId || Math.random().toString(36).substring(2, 10).toUpperCase()
+    };
+  });
+
+  const ticket = queueDB[date][queueDB[date].length - 1];
+  currentTicket = ticket;
+
+  const ticketHTML = `
+    <h3>ใบคิวดูดวง</h3>
+    <p><b>ชื่อ:</b> ${ticket.name}</p>
+    <p><b>อายุ:</b> ${ticket.age}</p>
+    <p><b>หมวดหมู่:</b> ${ticket.category}</p>
+    <p><b>ลำดับคิว:</b> ${ticket.queueNumber}</p>
+    <p><b>วันที่ดูดวง:</b> ${ticket.date}</p>
+    <p><b>เลขอ้างอิง:</b> ${ticket.referenceId}</p>
+    <button onclick="downloadPDF()">ดาวน์โหลด PDF</button>
+    <button onclick="goInstagram()">ส่งผลทาง IG</button>
+  `;
+  document.getElementById("ticketData").innerHTML = ticketHTML;
+  document.getElementById("popup").classList.add("show");
+});
 
     function downloadPDF() {
       if (!currentTicket) return;
