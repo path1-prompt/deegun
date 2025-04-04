@@ -230,9 +230,28 @@
         margin-top: 100px;
       }
     }
+    .logo-glow {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  box-shadow:
+    0 0 15px #ff66ff,
+    0 0 30px #aa00ff,
+    0 10px 20px rgba(0, 0, 0, 0.4);
+  border: 3px solid #ffccff;
+  background-color: #fff;
+  padding: 4px;
+  z-index: 10000;
+  animation: glowPulse 2.5s infinite;
+  object-fit: cover;
+}
   </style>
 </head>
 <body>
+  <img src="IMG_0920.JPG" alt="โลโก้" class="logo-glow">
   <!-- Magical Animal -->
   <div class="magic-animal"></div>
 
