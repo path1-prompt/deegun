@@ -383,25 +383,30 @@ Reference No: ${currentTicket.referenceId}`;
     }
 
     // แสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
-    function showAdminSection() {
-      const adminTableBody = document.getElementById("adminTable").querySelector("tbody");
-      adminTableBody.innerHTML = "";
-      for (const date in queueDB) {
-        queueDB[date].forEach(ticket => {
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td>${ticket.name}</td>
-            <td>${ticket.age}</td>
-            <td>${ticket.category}</td>
-            <td>${ticket.date}</td>
-            <td>${ticket.queueNumber}</td>
-            <td>${ticket.referenceId}</td>
-          `;
-          adminTableBody.appendChild(row);
-        });
-      }
-      document.getElementById("adminSection").style.display = "block";
-    }
+    async function showAdminSection() {
+  const adminTableBody = document.getElementById("adminTable").querySelector("tbody");
+  adminTableBody.innerHTML = "";
+
+  try {
+    const snapshot = await db.collection("queues").orderBy("date", "desc").get();
+    snapshot.forEach(doc => {
+      const ticket = doc.data();
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${ticket.name}</td>
+        <td>${ticket.age}</td>
+        <td>${ticket.category}</td>
+        <td>${ticket.date}</td>
+        <td>${ticket.queueNumber}</td>
+        <td>${ticket.referenceId}</td>
+      `;
+      adminTableBody.appendChild(row);
+    });
+    document.getElementById("adminSection").style.display = "block";
+  } catch (error) {
+    alert("เกิดข้อผิดพลาดในการโหลดข้อมูล: " + error.message);
+  }
+}
 
     function closeAdmin() {
       document.getElementById("adminSection").style.display = "none";
