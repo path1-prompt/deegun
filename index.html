@@ -15,6 +15,13 @@
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
+    
+    /* Glowing Animation for Popup */
+    @keyframes glowPulse {
+      0% { box-shadow: 0 0 10px #ff66ff, 0 0 20px #ff66ff; }
+      50% { box-shadow: 0 0 20px #ff99ff, 0 0 30px #ff99ff; }
+      100% { box-shadow: 0 0 10px #ff66ff, 0 0 20px #ff66ff; }
+    }
 
     body {
       margin: 0;
@@ -38,23 +45,20 @@
       opacity: 0;
       animation: fadeIn 1s forwards;
     }
-
     @keyframes fadeIn {
       to { transform: translateY(0); opacity: 1; }
     }
-
+    
     h2 {
       text-align: center;
       color: #ffccff;
       margin-bottom: 10px;
     }
-
     label {
       display: block;
       margin-top: 10px;
       color: #ffd6ff;
     }
-
     input, select, button {
       width: 100%;
       padding: 10px;
@@ -64,30 +68,26 @@
       font-size: 16px;
       transition: all 0.3s ease;
     }
-
     input:focus, select:focus {
       outline: none;
       box-shadow: 0 0 8px #ff77ff;
     }
-
     input, select {
       background-color: #fff;
       color: #000;
     }
-
     button {
       background: #9900cc;
       color: #fff;
       margin-top: 15px;
       cursor: pointer;
     }
-
     button:hover {
       background: #aa00ff;
       transform: scale(1.02);
     }
-
-    /* Popup Modal with Fade In */
+    
+    /* Popup Modal with Magical Glow */
     .popup {
       display: none;
       position: fixed;
@@ -99,28 +99,24 @@
       left: 50%;
       transform: translate(-50%, -50%) scale(0.8);
       border-radius: 10px;
-      box-shadow: 0 0 25px rgba(136,0,204,0.8);
       padding: 20px;
       opacity: 0;
       transition: all 0.4s ease;
     }
-
     .popup.show {
       display: block;
       transform: translate(-50%, -50%) scale(1);
       opacity: 1;
+      animation: glowPulse 2s infinite;
     }
-
     .popup h3 {
       text-align: center;
       color: #ffd6ff;
       margin-top: 0;
     }
-
     .popup p {
       margin: 8px 0;
     }
-
     .popup button {
       background: #8800cc;
       margin-top: 10px;
@@ -130,12 +126,12 @@
       padding: 10px;
       color: #fff;
       font-weight: bold;
+      cursor: pointer;
     }
-
     .popup button:hover {
       background: #aa00ff;
     }
-
+    
     /* Magical Animal Animation */
     .magic-animal {
       position: absolute;
@@ -146,14 +142,12 @@
       z-index: 1000;
       animation: floatAnimal 3s ease-in-out infinite, pulsate 2s ease-in-out infinite;
     }
-
     .magic-animal::before, .magic-animal::after {
       content: '';
       position: absolute;
       border-radius: 50%;
       background: radial-gradient(circle at center, #ff77ff 0%, #6e00aa 70%, #2d0036 100%);
     }
-
     .magic-animal::before {
       width: 60px;
       height: 60px;
@@ -161,7 +155,6 @@
       left: 10px;
       box-shadow: 0 0 15px #ff55ff;
     }
-
     .magic-animal::after {
       width: 30px;
       height: 30px;
@@ -169,19 +162,16 @@
       right: 0;
       box-shadow: 0 0 10px #ff55ff;
     }
-
     @keyframes floatAnimal {
       0% { transform: translate(0, 0) rotate(0deg); }
       50% { transform: translate(-10px, 10px) rotate(10deg); }
       100% { transform: translate(0, 0) rotate(0deg); }
     }
-
     @keyframes pulsate {
       0% { transform: scale(1); }
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-
     @media screen and (max-width: 480px) {
       .container {
         margin-top: 100px;
@@ -225,6 +215,7 @@
 
   <script>
     const queueDB = {}; // เก็บข้อมูลคิวแบบ local (ใน session นี้)
+    let currentTicket = null; // เก็บข้อมูลใบคิวปัจจุบัน
 
     document.getElementById("bookingForm").addEventListener("submit", function(e) {
       e.preventDefault();
@@ -245,6 +236,8 @@
       const referenceId = Math.random().toString(36).substring(2, 10).toUpperCase();
       const ticket = { name, age, category, date, queueNumber, referenceId };
       queueDB[date].push(ticket);
+      currentTicket = ticket; // เก็บข้อมูลใบคิวปัจจุบัน
+
       const ticketHTML = `
         <h3>ใบคิวดูดวง</h3>
         <p><b>ชื่อ:</b> ${ticket.name}</p>
@@ -257,21 +250,29 @@
         <button onclick="goInstagram()">ส่งผลทาง IG</button>
       `;
       document.getElementById("ticketData").innerHTML = ticketHTML;
-      const popup = document.getElementById("popup");
-      popup.classList.add("show");
+      document.getElementById("popup").classList.add("show");
     });
 
     function downloadPDF() {
+      if (!currentTicket) return;
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-      const text = document.getElementById("ticketData").innerText;
-      const lines = text.split("\n");
+      // สร้างข้อความภาษาอังกฤษสำหรับใบคิว
+      const englishText = 
+`Ticket for Fortune Telling
+Name: ${currentTicket.name}
+Age: ${currentTicket.age}
+Category: ${currentTicket.category}
+Queue No: ${currentTicket.queueNumber}
+Appointment Date: ${currentTicket.date}
+Reference No: ${currentTicket.referenceId}`;
+      const lines = englishText.split("\n");
       let y = 20;
       lines.forEach(line => {
         doc.text(line, 10, y);
         y += 10;
       });
-      doc.save("ใบคิวดูดวง.pdf");
+      doc.save("Ticket.pdf");
     }
 
     function goInstagram() {
