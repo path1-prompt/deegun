@@ -4,24 +4,43 @@
   <meta charset="UTF-8">
   <title>ระบบจองคิวดูดวง</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- jsPDF Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Sarabun&display=swap');
 
+    /* Animated Background Gradient */
+    @keyframes bgAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
     body {
       margin: 0;
+      padding: 0;
       font-family: 'Sarabun', sans-serif;
-      background: linear-gradient(to bottom, #2d0036, #000000);
+      background: linear-gradient(270deg, #2d0036, #000000, #2d0036);
+      background-size: 600% 600%;
+      animation: bgAnimation 20s ease infinite;
       color: #fff;
       overflow-x: hidden;
     }
 
     .container {
       max-width: 420px;
-      margin: 80px auto 0 auto;
+      margin: 80px auto 0;
       padding: 20px;
-      background: rgba(40, 0, 50, 0.8);
-      box-shadow: 0 0 10px #aa00ff;
+      background: rgba(40, 0, 50, 0.85);
+      box-shadow: 0 0 20px #aa00ff;
       border-radius: 15px;
+      transform: translateY(20px);
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+
+    @keyframes fadeIn {
+      to { transform: translateY(0); opacity: 1; }
     }
 
     h2 {
@@ -43,6 +62,12 @@
       border: none;
       border-radius: 8px;
       font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      box-shadow: 0 0 8px #ff77ff;
     }
 
     input, select {
@@ -55,34 +80,45 @@
       color: #fff;
       margin-top: 15px;
       cursor: pointer;
-      transition: 0.3s;
     }
 
     button:hover {
       background: #aa00ff;
+      transform: scale(1.02);
     }
 
-    /* Popup Modal */
+    /* Popup Modal with Fade In */
     .popup {
       display: none;
       position: fixed;
       z-index: 999;
-      background: #2d0036;
-      color: #fff;
+      background: rgba(45, 0, 54, 0.95);
       width: 90%;
       max-width: 400px;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%) scale(0.8);
       border-radius: 10px;
-      box-shadow: 0 0 15px #8800cc;
+      box-shadow: 0 0 25px rgba(136,0,204,0.8);
       padding: 20px;
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+
+    .popup.show {
+      display: block;
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
     }
 
     .popup h3 {
       text-align: center;
       color: #ffd6ff;
       margin-top: 0;
+    }
+
+    .popup p {
+      margin: 8px 0;
     }
 
     .popup button {
@@ -94,7 +130,6 @@
       padding: 10px;
       color: #fff;
       font-weight: bold;
-      cursor: pointer;
     }
 
     .popup button:hover {
@@ -109,10 +144,9 @@
       width: 80px;
       height: 80px;
       z-index: 1000;
-      animation: floatAnimal 3s ease-in-out infinite;
+      animation: floatAnimal 3s ease-in-out infinite, pulsate 2s ease-in-out infinite;
     }
 
-    /* ตัวสัตว์เป็นการสาธิต ใช้ pseudo-element เป็นหู/หางแบบง่าย ๆ */
     .magic-animal::before, .magic-animal::after {
       content: '';
       position: absolute;
@@ -120,7 +154,6 @@
       background: radial-gradient(circle at center, #ff77ff 0%, #6e00aa 70%, #2d0036 100%);
     }
 
-    /* ตัวกลม */
     .magic-animal::before {
       width: 60px;
       height: 60px;
@@ -129,7 +162,6 @@
       box-shadow: 0 0 15px #ff55ff;
     }
 
-    /* หางหรือหู */
     .magic-animal::after {
       width: 30px;
       height: 30px;
@@ -144,7 +176,12 @@
       100% { transform: translate(0, 0) rotate(0deg); }
     }
 
-    /* Smaller screens */
+    @keyframes pulsate {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
     @media screen and (max-width: 480px) {
       .container {
         margin-top: 100px;
@@ -153,7 +190,6 @@
   </style>
 </head>
 <body>
-
   <!-- Magical Animal -->
   <div class="magic-animal"></div>
 
@@ -162,10 +198,8 @@
     <form id="bookingForm">
       <label>ชื่อเล่น:</label>
       <input type="text" id="name" required>
-
       <label>อายุ:</label>
       <input type="number" id="age" required min="1">
-
       <label>หมวดหมู่:</label>
       <select id="category">
         <option>ดูดวงส่วนตัว</option>
@@ -178,10 +212,8 @@
         <option>การเรียน</option>
         <option>สุขภาพ</option>
       </select>
-
       <label>เลือกวัน:</label>
       <input type="date" id="date" required>
-
       <button type="submit">จองคิว</button>
     </form>
   </div>
@@ -192,46 +224,27 @@
   </div>
 
   <script>
-    const queueDB = {}; // เก็บข้อมูลคิวในหน้านี้ (local)
+    const queueDB = {}; // เก็บข้อมูลคิวแบบ local (ใน session นี้)
 
     document.getElementById("bookingForm").addEventListener("submit", function(e) {
       e.preventDefault();
-
       const name = document.getElementById("name").value.trim();
       const age = document.getElementById("age").value.trim();
       const category = document.getElementById("category").value;
       let date = document.getElementById("date").value;
-
       if (!name || !age || !category || !date) return;
-
-      // ถ้าวันนี้ยังไม่เคยมีคิว ให้กำหนด array ว่าง
-      if (!queueDB[date]) {
-        queueDB[date] = [];
-      }
-
+      if (!queueDB[date]) { queueDB[date] = []; }
       // ถ้าวันนี้เต็ม 5 คิว => เลื่อนไปวันถัดไป
       while (queueDB[date].length >= 5) {
         const nextDay = new Date(date);
         nextDay.setDate(nextDay.getDate() + 1);
         date = nextDay.toISOString().split('T')[0];
-        if (!queueDB[date]) {
-          queueDB[date] = [];
-        }
+        if (!queueDB[date]) { queueDB[date] = []; }
       }
-
-      // ลำดับคิว
       const queueNumber = queueDB[date].length + 1;
-      // สร้างเลขอ้างอิงสุ่ม
       const referenceId = Math.random().toString(36).substring(2, 10).toUpperCase();
-
-      const ticket = {
-        name, age, category, date, queueNumber, referenceId
-      };
-
-      // บันทึกลง queueDB
+      const ticket = { name, age, category, date, queueNumber, referenceId };
       queueDB[date].push(ticket);
-
-      // แสดงใบคิวใน popup
       const ticketHTML = `
         <h3>ใบคิวดูดวง</h3>
         <p><b>ชื่อ:</b> ${ticket.name}</p>
@@ -244,19 +257,21 @@
         <button onclick="goInstagram()">ส่งผลทาง IG</button>
       `;
       document.getElementById("ticketData").innerHTML = ticketHTML;
-
-      // แสดง popup
-      document.getElementById("popup").style.display = "block";
+      const popup = document.getElementById("popup");
+      popup.classList.add("show");
     });
 
     function downloadPDF() {
-      // สร้าง blob ข้อมูลจากข้อความ
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
       const text = document.getElementById("ticketData").innerText;
-      const blob = new Blob([text], { type: "application/pdf" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "ใบคิวดูดวง.pdf";
-      link.click();
+      const lines = text.split("\n");
+      let y = 20;
+      lines.forEach(line => {
+        doc.text(line, 10, y);
+        y += 10;
+      });
+      doc.save("ใบคิวดูดวง.pdf");
     }
 
     function goInstagram() {
