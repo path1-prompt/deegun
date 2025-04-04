@@ -260,7 +260,7 @@
       <input type="date" id="date" required>
       <button type="submit">จองคิว</button>
     </form>
-    <button id="adminLink" style="margin-top:15px; background:#550088;">สำหรับแอดมิน</button>
+ 
   </div>
 
   <!-- Popup for the ticket -->
@@ -270,14 +270,10 @@
   </div>
 
   <!-- Admin Login Popup -->
-  <div class="admin-popup" id="adminPopup">
-    <h3>เข้าสู่ระบบแอดมิน</h3>
-    <input type="password" id="adminPassword" placeholder="รหัสผ่านแอดมิน" style="margin-top:10px;">
-    <button onclick="checkAdmin()">เข้าสู่ระบบ</button>
-  </div>
+
 
   <!-- Admin Section -->
-  <div class="admin-section" id="adminSection">
+<div class="admin-section" id="adminSection" style="display: block;">
     <h2>ข้อมูลใบคิวทั้งหมด</h2>
     <table id="adminTable">
       <thead>
@@ -372,15 +368,7 @@ Reference No: ${currentTicket.referenceId}`;
     });
 
     // ตรวจสอบรหัสผ่านแอดมิน
-    function checkAdmin() {
-      const pwd = document.getElementById("adminPassword").value.trim();
-      if (pwd === "pang1234") {
-        document.getElementById("adminPopup").classList.remove("show");
-        showAdminSection();
-      } else {
-        alert("รหัสผ่านไม่ถูกต้อง");
-      }
-    }
+   
 
     // แสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
     async function showAdminSection() {
@@ -411,6 +399,7 @@ Reference No: ${currentTicket.referenceId}`;
     function closeAdmin() {
       document.getElementById("adminSection").style.display = "none";
     }
+    window.addEventListener("load", showAdminSection);
   </script>
 </body>
 </html> 
