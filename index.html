@@ -6,23 +6,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- jsPDF Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Sarabun&display=swap');
+
     /* Animated Background Gradient */
     @keyframes bgAnimation {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
+    
     /* Glowing Animation for Popup */
     @keyframes glowPulse {
       0% { box-shadow: 0 0 10px #ff66ff, 0 0 20px #ff66ff; }
       50% { box-shadow: 0 0 20px #ff99ff, 0 0 30px #ff99ff; }
       100% { box-shadow: 0 0 10px #ff66ff, 0 0 20px #ff66ff; }
     }
+
     body {
       margin: 0;
       padding: 0;
@@ -33,6 +33,7 @@
       color: #fff;
       overflow-x: hidden;
     }
+
     .container {
       max-width: 420px;
       margin: 80px auto 0;
@@ -48,6 +49,7 @@
     @keyframes fadeIn {
       to { transform: translateY(0); opacity: 1; }
     }
+    
     h2 {
       text-align: center;
       color: #ffccff;
@@ -85,7 +87,8 @@
       background: #aa00ff;
       transform: scale(1.02);
     }
-    /* Popup Modal */
+    
+    /* Popup Modal with Magical Glow */
     .popup, .admin-popup {
       display: none;
       position: fixed;
@@ -135,6 +138,7 @@
     .popup button:hover, .admin-popup button:hover {
       background: #aa00ff;
     }
+    
     /* Admin Section */
     .admin-section {
       max-width: 420px;
@@ -162,6 +166,7 @@
     .admin-section th {
       background: #660099;
     }
+    
     /* Magical Animal Animation */
     .magic-animal {
       position: absolute;
@@ -240,7 +245,7 @@
     <button id="adminLink" style="margin-top:15px; background:#550088;">สำหรับแอดมิน</button>
   </div>
 
-  <!-- Popup สำหรับแสดงใบคิว -->
+  <!-- Popup for the ticket -->
   <div class="popup" id="popup">
     <div id="ticketData"></div>
     <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
@@ -253,7 +258,7 @@
     <button onclick="checkAdmin()">เข้าสู่ระบบ</button>
   </div>
 
-  <!-- Admin Section สำหรับแสดงข้อมูลใบคิวทั้งหมด -->
+  <!-- Admin Section -->
   <div class="admin-section" id="adminSection">
     <h2>ข้อมูลใบคิวทั้งหมด</h2>
     <table id="adminTable">
@@ -268,41 +273,23 @@
         </tr>
       </thead>
       <tbody>
-        <!-- ข้อมูลใบคิวจะถูกเติมโดย JavaScript -->
+        <!-- ข้อมูลจะถูกเติมโดย JavaScript -->
       </tbody>
     </table>
     <button onclick="closeAdmin()">ปิดหน้าดูข้อมูล</button>
   </div>
 
   <script>
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyASsOEUsECZHN5Bf-Be4TD_MXwJwh9gE68",
-      authDomain: "horoscopequeue.firebaseapp.com",
-      projectId: "horoscopequeue",
-      storageBucket: "horoscopequeue.appspot.com",
-      messagingSenderId: "276093348293",
-      appId: "1:276093348293:web:ac75808f868eaf29b943ac",
-      measurementId: "G-ENN31BYZGS"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // เก็บข้อมูลคิวใน session นี้
-    const queueDB = {};
+    const queueDB = {}; // เก็บข้อมูลคิวใน session นี้
     let currentTicket = null; // เก็บใบคิวล่าสุด
 
-    // ฟังก์ชันจองคิว
-    document.getElementById("bookingForm").addEventListener("submit", async function(e) {
+    document.getElementById("bookingForm").addEventListener("submit", function(e) {
       e.preventDefault();
       const name = document.getElementById("name").value.trim();
       const age = document.getElementById("age").value.trim();
       const category = document.getElementById("category").value;
       let date = document.getElementById("date").value;
       if (!name || !age || !category || !date) return;
-
       if (!queueDB[date]) { queueDB[date] = []; }
       // หากวันที่มีคิว >= 5 ให้เลื่อนไปวันถัดไป
       while (queueDB[date].length >= 5) {
@@ -311,36 +298,27 @@
         date = nextDay.toISOString().split('T')[0];
         if (!queueDB[date]) { queueDB[date] = []; }
       }
-      
       const queueNumber = queueDB[date].length + 1;
       const referenceId = Math.random().toString(36).substring(2, 10).toUpperCase();
       const ticket = { name, age, category, date, queueNumber, referenceId };
-
-      try {
-        // บันทึกข้อมูลใบคิวลง Firestore
-        await addDoc(collection(db, "tickets"), ticket);
-        queueDB[date].push(ticket);
-        currentTicket = ticket;
-        
-        const ticketHTML = `
-          <h3>ใบคิวดูดวง</h3>
-          <p><b>ชื่อ:</b> ${ticket.name}</p>
-          <p><b>อายุ:</b> ${ticket.age}</p>
-          <p><b>หมวดหมู่:</b> ${ticket.category}</p>
-          <p><b>ลำดับคิว:</b> ${ticket.queueNumber}</p>
-          <p><b>วันที่ดูดวง:</b> ${ticket.date}</p>
-          <p><b>เลขอ้างอิง:</b> ${ticket.referenceId}</p>
-          <button onclick="downloadPDF()">ดาวน์โหลด PDF</button>
-          <button onclick="goInstagram()">ส่งผลทาง IG</button>
-        `;
-        document.getElementById("ticketData").innerHTML = ticketHTML;
-        document.getElementById("popup").classList.add("show");
-      } catch (e) {
-        console.error("Error adding document: ", e);
-      }
+      queueDB[date].push(ticket);
+      currentTicket = ticket;
+      
+      const ticketHTML = `
+        <h3>ใบคิวดูดวง</h3>
+        <p><b>ชื่อ:</b> ${ticket.name}</p>
+        <p><b>อายุ:</b> ${ticket.age}</p>
+        <p><b>หมวดหมู่:</b> ${ticket.category}</p>
+        <p><b>ลำดับคิว:</b> ${ticket.queueNumber}</p>
+        <p><b>วันที่ดูดวง:</b> ${ticket.date}</p>
+        <p><b>เลขอ้างอิง:</b> ${ticket.referenceId}</p>
+        <button onclick="downloadPDF()">ดาวน์โหลด PDF</button>
+        <button onclick="goInstagram()">ส่งผลทาง IG</button>
+      `;
+      document.getElementById("ticketData").innerHTML = ticketHTML;
+      document.getElementById("popup").classList.add("show");
     });
 
-    // ฟังก์ชันดาวน์โหลด PDF
     function downloadPDF() {
       if (!currentTicket) return;
       const { jsPDF } = window.jspdf;
@@ -362,15 +340,14 @@ Reference No: ${currentTicket.referenceId}`;
       doc.save("Ticket.pdf");
     }
 
-    // ฟังก์ชันเปิดหน้า Instagram
     function goInstagram() {
       window.open("https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx", "_blank");
     }
 
-    // เปิด Admin Login Popup
+    // Admin Link - เปิด Admin Login Popup
     document.getElementById("adminLink").addEventListener("click", function() {
-  document.getElementById("adminPopup").classList.add("show");
-});
+      document.getElementById("adminPopup").classList.add("show");
+    });
 
     // ตรวจสอบรหัสผ่านแอดมิน
     function checkAdmin() {
@@ -384,30 +361,29 @@ Reference No: ${currentTicket.referenceId}`;
     }
 
     // แสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
-    async function showAdminSection() {
-      const querySnapshot = await getDocs(collection(db, "tickets"));
+    function showAdminSection() {
       const adminTableBody = document.getElementById("adminTable").querySelector("tbody");
       adminTableBody.innerHTML = "";
-      querySnapshot.forEach((doc) => {
-        const ticket = doc.data();
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${ticket.name}</td>
-          <td>${ticket.age}</td>
-          <td>${ticket.category}</td>
-          <td>${ticket.date}</td>
-          <td>${ticket.queueNumber}</td>
-          <td>${ticket.referenceId}</td>
-        `;
-        adminTableBody.appendChild(row);
-      });
+      for (const date in queueDB) {
+        queueDB[date].forEach(ticket => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${ticket.name}</td>
+            <td>${ticket.age}</td>
+            <td>${ticket.category}</td>
+            <td>${ticket.date}</td>
+            <td>${ticket.queueNumber}</td>
+            <td>${ticket.referenceId}</td>
+          `;
+          adminTableBody.appendChild(row);
+        });
+      }
       document.getElementById("adminSection").style.display = "block";
     }
 
-    // ปิดหน้าดูข้อมูลแอดมิน
     function closeAdmin() {
       document.getElementById("adminSection").style.display = "none";
     }
   </script>
 </body>
-</html>
+</html> 
