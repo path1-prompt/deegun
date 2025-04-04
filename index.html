@@ -1,181 +1,178 @@
+ขออภัยในความไม่สะดวกที่เกิดขึ้น เนื่องจากข้อจำกัดในระบบ ฉันไม่สามารถสร้างไฟล์ HTML ที่สามารถดาวน์โหลดได้โดยตรง แต่ฉันสามารถให้โค้ด HTML ที่คุณสามารถคัดลอกและบันทึกเป็นไฟล์ HTML ได้ด้วยตนเอง
+
+ขั้นตอนการใช้งาน:
+	1.	คัดลอกโค้ดด้านล่างทั้งหมด
+	2.	เปิดโปรแกรมแก้ไขข้อความ เช่น Notepad หรือ TextEdit
+	3.	วางโค้ดที่คัดลอกลงในโปรแกรม
+	4.	บันทึกไฟล์ด้วยนามสกุล .html เช่น booking.html
+	5.	เปิดไฟล์ที่บันทึกด้วยเว็บเบราว์เซอร์ เช่น Chrome หรือ Firefox
+
+โค้ด HTML:
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OptiTac - Tactical Gear</title>
+    <title>ระบบจองคิวดูดวง</title>
     <style>
-        /* General styles */
         body {
+            font-family: 'Tahoma', sans-serif;
+            background-color: #2c003e;
+            color: #ffffff;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #1c1c1c;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-image: url('background.jpg'); /* ใส่ภาพพื้นหลัง */
-            background-size: cover;
-            background-position: center;
         }
         .container {
-            text-align: center;
             width: 90%;
-            max-width: 800px;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.7);
-            position: relative;
-        }
-        .logo {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 100px;
-        }
-        h1 {
-            font-size: 40px;
-            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.8);
-            margin-bottom: 15px;
-        }
-        p {
-            font-size: 18px;
-            margin-bottom: 30px;
-            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
-        }
-        .product-img {
-            width: 100%;
-            max-width: 380px;
-            border: 5px solid #333;
-            border-radius: 15px;
-            margin: 20px 0;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
-        }
-        .price {
-            font-size: 22px;
-            margin-top: 10px;
-            color: #ffcc00;
-            font-weight: bold;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        input, button {
-            width: 90%;
-            padding: 15px;
-            margin: 10px 0;
-            font-size: 16px;
-            border-radius: 8px;
-            border: 1px solid #444;
-            background-color: #333;
-            color: white;
-        }
-        button {
-            cursor: pointer;
-            background-color: #007bff;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .qr-code {
-            margin-top: 30px;
-            text-align: center;
-        }
-        .qr-code img {
-            width: 160px;
-            margin: 10px 0;
-        }
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.8);
+            max-width: 400px;
+            margin: 50px auto;
+            background-color: #3e004f;
             padding: 20px;
             border-radius: 10px;
-            color: white;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+        h2, label {
+            color: #d1a3ff;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 5px;
+        }
+        input, select {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        button {
+            background-color: #6a0dad;
+            color: #ffffff;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #520b8d;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+        }
+        .modal-content {
+            background-color: #3e004f;
+            margin: 15% auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
             text-align: center;
-            width: 300px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.6);
         }
-        .popup.active {
-            display: block;
+        .modal-content h2, .modal-content p {
+            color: #d1a3ff;
         }
-        .popup button {
-            background-color: #ff0000;
+        .modal-content button, .modal-content a {
             margin-top: 10px;
         }
-        .button-container {
-            margin-top: 20px;
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover, .close:focus {
+            color: #fff;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
 
-    <!-- โลโก้ร้าน -->
+<div class="container">
+    <h2>ระบบจองคิวดูดวง</h2>
+    <form id="bookingForm">
+        <label for="nickname">ชื่อเล่น:</label>
+        <input type="text" id="nickname" name="nickname" required>
 
+        <label for="age">อายุ:</label>
+        <input type="number" id="age" name="age" required>
 
-    <div class="container">
-    
-        <p>กรอกข้อมูลการสั่งซื้อ</p>
-<p>Tactical Jacket</p>
-        <a href="https://www.facebook.com/share/1KXxdLTJG4/?mibextid=wwXIfr" target="_blank">คลิกที่นี่เพื่อไปยังหน้าเพจ</a>
-        <!-- ราคา -->
-        <p class="price">ราคา: 390 บาท</p>
+        <label for="category">หมวดหมู่:</label>
+        <select id="category" name="category" required>
+            <option value="ดูดวงส่วนตัว">ดูดวงส่วนตัว</option>
+            <option value="โชคชะตา">โชคชะตา</option>
+            <option value="ความฝัน">ความฝัน</option>
+            <option value="อดีตและอนาคต">อดีตและอนาคต</option>
+            <option value="ความรัก">ความรัก</option>
+            <option value="การงาน">การงาน</option>
+            <option value="การเงิน">การเงิน</option>
+            <option value="การเรียน">การเรียน</option>
+            <option value="สุขภาพ">สุขภาพ</option>
+        </select>
 
-        <!-- ฟอร์มกรอกข้อมูล -->
-        <div id="order-form">
-            <div class="form-group">
-                <input type="text" id="name" placeholder="ชื่อ-นามสกุล" required>
-            </div>
-            <div class="form-group">
-                <input type="text" id="address" placeholder="ที่อยู่จัดส่ง" required>
-            </div>
-            <div class="form-group">
-                <input type="text" id="order-number" placeholder="กรอกเลขรายการ" required>
-            </div>
-            <div class="button-container">
-                <button onclick="submitOrder()">ยืนยันการสั่งซื้อ</button>
-            </div>
-        </div>
+        <label for="appointmentDate">วันที่ต้องการจอง:</label>
+        <input type="date" id="appointmentDate" name="appointmentDate" required>
 
-        <!-- QR Code -->
-        <div class="qr-code">
-            <img src="IMG_0753.jpeg" alt="QR Code สำหรับการโอนเงิน">
-            <p>สแกน QR Code เพื่อโอนเงิน</p>
-        </div>
+        <button type="submit">จองคิว</button>
+    </form>
+</div>
+
+<div id="ticketModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>ใบคิวของคุณ</h2>
+        <p id="ticketDetails"></p>
+        <button id="downloadPdf">ดาวน์โหลด PDF</button>
+        <a href="https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx" target="_blank">
+            <button>ไปยัง Instagram</button>
+        </a>
     </div>
+</div>
 
-    <!-- Popup -->
-    <div class="popup" id="error-popup">
-        <p>ลองทำรายการใหม่อีกครั้ง เลขรายการไม่ถูกต้อง</p>
-        <button onclick="closePopup()">ปิด</button>
-    </div>
+<script>
+    document.getElementById('bookingForm').onsubmit = function(event) {
+        event.preventDefault();
 
-    <script>
-        function showOrderForm() {
-            document.getElementById('order-form').style.display = 'block';
+        const nickname = document.getElementById('nickname').value;
+        const age = document.getElementById('age').value;
+        const category = document.getElementById('category').value;
+        const appointmentDate = document.getElementById('appointmentDate').value;
+
+        const queueNumber = Math.floor(Math.random() * 1000) + 1;
+        const referenceNumber = Math.random().toString(36).substr(2, 9).toUpperCase();
+
+        const ticketDetails = `
+            ชื่อ: ${nickname}<br>
+            อายุ: ${age}<br>
+            หมวดหมู่: ${category}<br>
+            วันที่จอง: ${appointmentDate}<br>
+            ลำดับคิว: ${queueNumber}<br>
+            เลขอ้างอิง: ${referenceNumber}
+        `;
+
+        document.getElementById('ticketDetails').innerHTML = ticketDetails;
+        document.getElementById('ticketModal').style.display = 'block';
+    };
+
+    document.querySelector('.close').onclick = function() {
+        document.getElementById('ticketModal').style.display = 'none';
+    };
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('ticketModal')) {
+            document.getElementById('ticketModal').style.display = 'none';
         }
+    };
 
-        function submitOrder() {
-            const orderNumber = document.getElementById('order-number').value;
-            const validOrderNumber = "123456"; // เลขรายการตัวอย่าง
-
-            if (orderNumber === validOrderNumber) {
-                alert("การสั่งซื้อสำเร็จ");
-            } else {
-                document.getElementById('error-popup').classList.add('active');
-            }
-        }
-
-        function closePopup() {
-            document.getElementById('error-popup').classList.remove('active');
-        }
-    </script>
-</body>
-</html>
+    document.getElementById('downloadPdf').onclick = function() {
+        const element = document.createElement('a');
+        const ticketContent = document.getElementById('ticketDetails').innerText;
+ 
