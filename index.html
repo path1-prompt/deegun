@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>ระบบจองคิวดูดวง</title>
+  <title>ระบบจองคิวดูดวง & หน้าแอดมิน</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- jsPDF Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -44,6 +44,7 @@
       transform: translateY(20px);
       opacity: 0;
       animation: fadeIn 1s forwards;
+      position: relative;
     }
     @keyframes fadeIn {
       to { transform: translateY(0); opacity: 1; }
@@ -88,7 +89,7 @@
     }
     
     /* Popup Modal with Magical Glow */
-    .popup {
+    .popup, .admin-popup {
       display: none;
       position: fixed;
       z-index: 999;
@@ -103,21 +104,27 @@
       opacity: 0;
       transition: all 0.4s ease;
     }
-    .popup.show {
+    .popup.show, .admin-popup.show {
       display: block;
       transform: translate(-50%, -50%) scale(1);
       opacity: 1;
       animation: glowPulse 2s infinite;
     }
-    .popup h3 {
+    .popup h3, .admin-popup h3 {
       text-align: center;
       color: #ffd6ff;
       margin-top: 0;
     }
-    .popup p {
+    .popup p, .admin-popup p {
       margin: 8px 0;
     }
-    .popup button {
+    .popup .note, .admin-popup .note {
+      font-size: 14px;
+      color: #ffccff;
+      margin-top: 10px;
+      text-align: center;
+    }
+    .popup button, .admin-popup button {
       background: #8800cc;
       margin-top: 10px;
       border: none;
@@ -128,8 +135,36 @@
       font-weight: bold;
       cursor: pointer;
     }
-    .popup button:hover {
+    .popup button:hover, .admin-popup button:hover {
       background: #aa00ff;
+    }
+    
+    /* Admin Section */
+    .admin-section {
+      max-width: 420px;
+      margin: 20px auto;
+      padding: 20px;
+      background: rgba(40, 0, 50, 0.85);
+      box-shadow: 0 0 20px #aa00ff;
+      border-radius: 15px;
+      display: none;
+    }
+    .admin-section h2 {
+      text-align: center;
+      color: #ffccff;
+    }
+    .admin-section table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .admin-section th, .admin-section td {
+      border: 1px solid #fff;
+      padding: 8px;
+      text-align: center;
+      font-size: 14px;
+    }
+    .admin-section th {
+      background: #660099;
     }
     
     /* Magical Animal Animation */
@@ -183,7 +218,8 @@
   <!-- Magical Animal -->
   <div class="magic-animal"></div>
 
-  <div class="container">
+  <!-- Main Booking Container -->
+  <div class="container" id="mainContainer">
     <h2>จองคิวดูดวง</h2>
     <form id="bookingForm">
       <label>ชื่อเล่น:</label>
@@ -206,16 +242,46 @@
       <input type="date" id="date" required>
       <button type="submit">จองคิว</button>
     </form>
+    <button id="adminLink" style="margin-top:15px; background:#550088;">สำหรับแอดมิน</button>
   </div>
 
   <!-- Popup for the ticket -->
   <div class="popup" id="popup">
     <div id="ticketData"></div>
+    <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
+  </div>
+
+  <!-- Admin Login Popup -->
+  <div class="admin-popup" id="adminPopup">
+    <h3>เข้าสู่ระบบแอดมิน</h3>
+    <input type="password" id="adminPassword" placeholder="รหัสผ่านแอดมิน" style="margin-top:10px;">
+    <button onclick="checkAdmin()">เข้าสู่ระบบ</button>
+  </div>
+
+  <!-- Admin Section -->
+  <div class="admin-section" id="adminSection">
+    <h2>ข้อมูลใบคิวทั้งหมด</h2>
+    <table id="adminTable">
+      <thead>
+        <tr>
+          <th>ชื่อ</th>
+          <th>อายุ</th>
+          <th>หมวดหมู่</th>
+          <th>วันที่</th>
+          <th>คิว</th>
+          <th>เลขอ้างอิง</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- ข้อมูลจะถูกเติมโดย JavaScript -->
+      </tbody>
+    </table>
+    <button onclick="closeAdmin()">ปิดหน้าดูข้อมูล</button>
   </div>
 
   <script>
-    const queueDB = {}; // เก็บข้อมูลคิวแบบ local (ใน session นี้)
-    let currentTicket = null; // เก็บข้อมูลใบคิวปัจจุบัน
+    const queueDB = {}; // เก็บข้อมูลคิวใน session นี้
+    let currentTicket = null; // เก็บใบคิวล่าสุด
 
     document.getElementById("bookingForm").addEventListener("submit", function(e) {
       e.preventDefault();
@@ -225,7 +291,7 @@
       let date = document.getElementById("date").value;
       if (!name || !age || !category || !date) return;
       if (!queueDB[date]) { queueDB[date] = []; }
-      // ถ้าวันนี้เต็ม 5 คิว => เลื่อนไปวันถัดไป
+      // หากวันที่มีคิว >= 5 ให้เลื่อนไปวันถัดไป
       while (queueDB[date].length >= 5) {
         const nextDay = new Date(date);
         nextDay.setDate(nextDay.getDate() + 1);
@@ -236,8 +302,8 @@
       const referenceId = Math.random().toString(36).substring(2, 10).toUpperCase();
       const ticket = { name, age, category, date, queueNumber, referenceId };
       queueDB[date].push(ticket);
-      currentTicket = ticket; // เก็บข้อมูลใบคิวปัจจุบัน
-
+      currentTicket = ticket;
+      
       const ticketHTML = `
         <h3>ใบคิวดูดวง</h3>
         <p><b>ชื่อ:</b> ${ticket.name}</p>
@@ -257,7 +323,6 @@
       if (!currentTicket) return;
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-      // สร้างข้อความภาษาอังกฤษสำหรับใบคิว
       const englishText = 
 `Ticket for Fortune Telling
 Name: ${currentTicket.name}
@@ -277,6 +342,47 @@ Reference No: ${currentTicket.referenceId}`;
 
     function goInstagram() {
       window.open("https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx", "_blank");
+    }
+
+    // Admin Link - เปิด Admin Login Popup
+    document.getElementById("adminLink").addEventListener("click", function() {
+      document.getElementById("adminPopup").classList.add("show");
+    });
+
+    // ตรวจสอบรหัสผ่านแอดมิน
+    function checkAdmin() {
+      const pwd = document.getElementById("adminPassword").value.trim();
+      if (pwd === "pang1234") {
+        document.getElementById("adminPopup").classList.remove("show");
+        showAdminSection();
+      } else {
+        alert("รหัสผ่านไม่ถูกต้อง");
+      }
+    }
+
+    // แสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
+    function showAdminSection() {
+      const adminTableBody = document.getElementById("adminTable").querySelector("tbody");
+      adminTableBody.innerHTML = "";
+      for (const date in queueDB) {
+        queueDB[date].forEach(ticket => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${ticket.name}</td>
+            <td>${ticket.age}</td>
+            <td>${ticket.category}</td>
+            <td>${ticket.date}</td>
+            <td>${ticket.queueNumber}</td>
+            <td>${ticket.referenceId}</td>
+          `;
+          adminTableBody.appendChild(row);
+        });
+      }
+      document.getElementById("adminSection").style.display = "block";
+    }
+
+    function closeAdmin() {
+      document.getElementById("adminSection").style.display = "none";
     }
   </script>
 </body>
