@@ -1,169 +1,267 @@
-
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบจองคิวดูดวง</title>
-    <style>
-        body {
-            font-family: 'Tahoma', sans-serif;
-            background-color: #2c003e;
-            color: #ffffff;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 90%;
-            max-width: 400px;
-            margin: 50px auto;
-            background-color: #3e004f;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
-        }
-        h2, label {
-            color: #d1a3ff;
-        }
-        input, select, button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            border: none;
-            border-radius: 5px;
-        }
-        input, select {
-            background-color: #ffffff;
-            color: #000000;
-        }
-        button {
-            background-color: #6a0dad;
-            color: #ffffff;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #520b8d;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-        }
-        .modal-content {
-            background-color: #3e004f;
-            margin: 15% auto;
-            padding: 20px;
-            width: 80%;
-            max-width: 400px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
-            text-align: center;
-        }
-        .modal-content h2, .modal-content p {
-            color: #d1a3ff;
-        }
-        .modal-content button, .modal-content a {
-            margin-top: 10px;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close:hover, .close:focus {
-            color: #fff;
-            text-decoration: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>ระบบจองคิวดูดวง</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Sarabun&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Sarabun', sans-serif;
+      background: linear-gradient(to bottom, #2d0036, #000000);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 420px;
+      margin: 80px auto 0 auto;
+      padding: 20px;
+      background: rgba(40, 0, 50, 0.8);
+      box-shadow: 0 0 10px #aa00ff;
+      border-radius: 15px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #ffccff;
+      margin-bottom: 10px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      color: #ffd6ff;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    input, select {
+      background-color: #fff;
+      color: #000;
+    }
+
+    button {
+      background: #9900cc;
+      color: #fff;
+      margin-top: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #aa00ff;
+    }
+
+    /* Popup Modal */
+    .popup {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      background: #2d0036;
+      color: #fff;
+      width: 90%;
+      max-width: 400px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 10px;
+      box-shadow: 0 0 15px #8800cc;
+      padding: 20px;
+    }
+
+    .popup h3 {
+      text-align: center;
+      color: #ffd6ff;
+      margin-top: 0;
+    }
+
+    .popup button {
+      background: #8800cc;
+      margin-top: 10px;
+      border: none;
+      border-radius: 6px;
+      width: 100%;
+      padding: 10px;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .popup button:hover {
+      background: #aa00ff;
+    }
+
+    /* Magical Animal Animation */
+    .magic-animal {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 80px;
+      height: 80px;
+      z-index: 1000;
+      animation: floatAnimal 3s ease-in-out infinite;
+    }
+
+    /* ตัวสัตว์เป็นการสาธิต ใช้ pseudo-element เป็นหู/หางแบบง่าย ๆ */
+    .magic-animal::before, .magic-animal::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, #ff77ff 0%, #6e00aa 70%, #2d0036 100%);
+    }
+
+    /* ตัวกลม */
+    .magic-animal::before {
+      width: 60px;
+      height: 60px;
+      top: 10px;
+      left: 10px;
+      box-shadow: 0 0 15px #ff55ff;
+    }
+
+    /* หางหรือหู */
+    .magic-animal::after {
+      width: 30px;
+      height: 30px;
+      bottom: 0;
+      right: 0;
+      box-shadow: 0 0 10px #ff55ff;
+    }
+
+    @keyframes floatAnimal {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(-10px, 10px) rotate(10deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+
+    /* Smaller screens */
+    @media screen and (max-width: 480px) {
+      .container {
+        margin-top: 100px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>ระบบจองคิวดูดวง</h2>
+  <!-- Magical Animal -->
+  <div class="magic-animal"></div>
+
+  <div class="container">
+    <h2>จองคิวดูดวง</h2>
     <form id="bookingForm">
-        <label for="nickname">ชื่อเล่น:</label>
-        <input type="text" id="nickname" name="nickname" required>
+      <label>ชื่อเล่น:</label>
+      <input type="text" id="name" required>
 
-        <label for="age">อายุ:</label>
-        <input type="number" id="age" name="age" required>
+      <label>อายุ:</label>
+      <input type="number" id="age" required min="1">
 
-        <label for="category">หมวดหมู่:</label>
-        <select id="category" name="category" required>
-            <option value="ดูดวงส่วนตัว">ดูดวงส่วนตัว</option>
-            <option value="โชคชะตา">โชคชะตา</option>
-            <option value="ความฝัน">ความฝัน</option>
-            <option value="อดีตและอนาคต">อดีตและอนาคต</option>
-            <option value="ความรัก">ความรัก</option>
-            <option value="การงาน">การงาน</option>
-            <option value="การเงิน">การเงิน</option>
-            <option value="การเรียน">การเรียน</option>
-            <option value="สุขภาพ">สุขภาพ</option>
-        </select>
+      <label>หมวดหมู่:</label>
+      <select id="category">
+        <option>ดูดวงส่วนตัว</option>
+        <option>โชคชะตา</option>
+        <option>ความฝัน</option>
+        <option>อดีตและอนาคต</option>
+        <option>ความรัก</option>
+        <option>การงาน</option>
+        <option>การเงิน</option>
+        <option>การเรียน</option>
+        <option>สุขภาพ</option>
+      </select>
 
-        <label for="appointmentDate">วันที่ต้องการจอง:</label>
-        <input type="date" id="appointmentDate" name="appointmentDate" required>
+      <label>เลือกวัน:</label>
+      <input type="date" id="date" required>
 
-        <button type="submit">จองคิว</button>
+      <button type="submit">จองคิว</button>
     </form>
-</div>
+  </div>
 
-<div id="ticketModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>ใบคิวของคุณ</h2>
-        <p id="ticketDetails"></p>
-        <button id="downloadPdf">ดาวน์โหลด PDF</button>
-        <a href="https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx" target="_blank">
-            <button>ไปยัง Instagram</button>
-        </a>
-    </div>
-</div>
+  <!-- Popup for the ticket -->
+  <div class="popup" id="popup">
+    <div id="ticketData"></div>
+  </div>
 
-<script>
-    document.getElementById('bookingForm').onsubmit = function(event) {
-        event.preventDefault();
+  <script>
+    const queueDB = {}; // เก็บข้อมูลคิวในหน้านี้ (local)
 
-        const nickname = document.getElementById('nickname').value;
-        const age = document.getElementById('age').value;
-        const category = document.getElementById('category').value;
-        const appointmentDate = document.getElementById('appointmentDate').value;
+    document.getElementById("bookingForm").addEventListener("submit", function(e) {
+      e.preventDefault();
 
-        const queueNumber = Math.floor(Math.random() * 1000) + 1;
-        const referenceNumber = Math.random().toString(36).substr(2, 9).toUpperCase();
+      const name = document.getElementById("name").value.trim();
+      const age = document.getElementById("age").value.trim();
+      const category = document.getElementById("category").value;
+      let date = document.getElementById("date").value;
 
-        const ticketDetails = `
-            ชื่อ: ${nickname}<br>
-            อายุ: ${age}<br>
-            หมวดหมู่: ${category}<br>
-            วันที่จอง: ${appointmentDate}<br>
-            ลำดับคิว: ${queueNumber}<br>
-            เลขอ้างอิง: ${referenceNumber}
-        `;
+      if (!name || !age || !category || !date) return;
 
-        document.getElementById('ticketDetails').innerHTML = ticketDetails;
-        document.getElementById('ticketModal').style.display = 'block';
-    };
+      // ถ้าวันนี้ยังไม่เคยมีคิว ให้กำหนด array ว่าง
+      if (!queueDB[date]) {
+        queueDB[date] = [];
+      }
 
-    document.querySelector('.close').onclick = function() {
-        document.getElementById('ticketModal').style.display = 'none';
-    };
-
-    window.onclick = function(event) {
-        if (event.target == document.getElementById('ticketModal')) {
-            document.getElementById('ticketModal').style.display = 'none';
+      // ถ้าวันนี้เต็ม 5 คิว => เลื่อนไปวันถัดไป
+      while (queueDB[date].length >= 5) {
+        const nextDay = new Date(date);
+        nextDay.setDate(nextDay.getDate() + 1);
+        date = nextDay.toISOString().split('T')[0];
+        if (!queueDB[date]) {
+          queueDB[date] = [];
         }
-    };
+      }
 
-    document.getElementById('downloadPdf').onclick = function() {
-        const element = document.createElement('a');
-        const ticketContent = document.getElementById('ticketDetails').innerText;
- 
+      // ลำดับคิว
+      const queueNumber = queueDB[date].length + 1;
+      // สร้างเลขอ้างอิงสุ่ม
+      const referenceId = Math.random().toString(36).substring(2, 10).toUpperCase();
+
+      const ticket = {
+        name, age, category, date, queueNumber, referenceId
+      };
+
+      // บันทึกลง queueDB
+      queueDB[date].push(ticket);
+
+      // แสดงใบคิวใน popup
+      const ticketHTML = `
+        <h3>ใบคิวดูดวง</h3>
+        <p><b>ชื่อ:</b> ${ticket.name}</p>
+        <p><b>อายุ:</b> ${ticket.age}</p>
+        <p><b>หมวดหมู่:</b> ${ticket.category}</p>
+        <p><b>ลำดับคิว:</b> ${ticket.queueNumber}</p>
+        <p><b>วันที่ดูดวง:</b> ${ticket.date}</p>
+        <p><b>เลขอ้างอิง:</b> ${ticket.referenceId}</p>
+        <button onclick="downloadPDF()">ดาวน์โหลด PDF</button>
+        <button onclick="goInstagram()">ส่งผลทาง IG</button>
+      `;
+      document.getElementById("ticketData").innerHTML = ticketHTML;
+
+      // แสดง popup
+      document.getElementById("popup").style.display = "block";
+    });
+
+    function downloadPDF() {
+      // สร้าง blob ข้อมูลจากข้อความ
+      const text = document.getElementById("ticketData").innerText;
+      const blob = new Blob([text], { type: "application/pdf" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "ใบคิวดูดวง.pdf";
+      link.click();
+    }
+
+    function goInstagram() {
+      window.open("https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx", "_blank");
+    }
+  </script>
+</body>
+</html>
