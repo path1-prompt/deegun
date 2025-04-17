@@ -507,14 +507,25 @@ Reference No: ${currentTicket.referenceId}`;
     snapshot.forEach(doc => {
       const ticket = doc.data();
       const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${ticket.name}</td>
-        <td>${ticket.age}</td>
-        <td>${ticket.category}</td>
-        <td>${ticket.date}</td>
-        <td>${ticket.queueNumber}</td>
-        <td>${ticket.referenceId}</td>
-      `;
+row.innerHTML = `
+  <td>${ticket.name}</td>
+  <td>${ticket.age}</td>
+  <td>${ticket.category}</td>
+  <td>${ticket.date}</td>
+  <td>${ticket.queueNumber}</td>
+  <td>${ticket.referenceId}</td>
+  <td>
+    ${ticket.igUsername
+      ? ticket.igUsername
+      : `
+        <span style="color:#ccc;">ไม่แสดงข้อมูล</span>
+        <span 
+          onclick="alert('หมายเหตุ : ระบบพึ่งอัปเดตขึ้นสำหรับลูกดวงที่เข้าระบบจองคิวหลังจากวันที่ 17 เมษายน 2568')"
+          style="cursor:pointer; color:#ff99ff; text-decoration: underline; margin-left:6px;"
+        >(ดูหมายเหตุ)</span>
+      `}
+  </td>
+`;
       adminTableBody.appendChild(row);
     });
     document.getElementById("adminSection").style.display = "block";
