@@ -651,15 +651,7 @@ row.innerHTML = `
   <td>${ticket.date}</td>
   <td>${ticket.queueNumber}</td>
   <td>${ticket.referenceId ? ticket.referenceId.slice(0, 6) + '...' : '-'}</td>
-  <td>
-    ${ticket.igUsername
-      ? (ticket.igUsername.length > 10 ? ticket.igUsername.slice(0, 10) + "..." : ticket.igUsername)
-      : `<span style="color:#ccc;">ไม่แสดงข้อมูล</span>
-         <span 
-          onclick="alert('หมายเหตุ : ระบบพึ่งอัปเดตขึ้นสำหรับลูกดวงที่เข้าระบบจองคิวหลังจากวันที่ 17 เมษายน 2568')"
-          style="cursor:pointer; color:#ff99ff; text-decoration: underline; margin-left:4px;"
-         >(ดู)</span>`}
-  </td>
+
 `;
       adminTableBody.appendChild(row);
     });
