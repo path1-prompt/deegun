@@ -279,13 +279,33 @@
 .live-stats div {
   margin: 5px 0;
 }
+.stats-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffccff;
+  text-shadow: 0 0 10px #ff66ff;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.stats-item {
+  background: linear-gradient(90deg, #660066, #330033);
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  box-shadow: 0 0 10px #ff66ff;
+  font-weight: 500;
+  text-align: center;
+}
   </style>
 </head>
 <body>
   <!-- ส่วนแสดงยอดผู้จองคิวและเวลาปัจจุบัน -->
+<!-- ส่วนแสดงยอดผู้จองคิวและเวลาปัจจุบัน -->
 <div class="live-stats" id="liveStats">
-  <div id="queueCount">ยอดผู้จองคิวทั้งหมด: 0 คน</div>
-  <div id="currentTime">เวลาปัจจุบัน: --:--</div>
+  <div class="stats-title">สถานะพลังจองคิว</div>
+  <div class="stats-item" id="queueCount">ยอดผู้จองคิวทั้งหมด: 0 คน</div>
+  <div class="stats-item" id="currentTime">เวลาปัจจุบัน: --:--</div>
 </div>
   <img src="IMG_0920.JPG" alt="โลโก้" class="logo-glow">
   <!-- Magical Animal -->
