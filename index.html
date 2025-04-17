@@ -419,6 +419,98 @@
   }
 
   @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap');
+  
+  .popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 0, 20, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
+  z-index: 9999;
+}
+
+.popup-box {
+  background: #1b002b;
+  border: 2px solid #ff99ff;
+  padding: 25px 30px;
+  border-radius: 12px;
+  text-align: center;
+  color: #fff;
+  position: relative;
+  animation: popUp 0.4s ease-out;
+  box-shadow: 0 0 25px #ff66cc, 0 0 40px #9900cc;
+}
+
+.popup-box h3 {
+  margin-top: 0;
+  font-size: 22px;
+  color: #ffccff;
+}
+
+.popup-box .ig-text {
+  font-size: 20px;
+  color: #ff99ff;
+  margin: 12px 0;
+  font-weight: bold;
+}
+
+.popup-box .note {
+  font-size: 13px;
+  color: #ccc;
+}
+
+.popup-box button {
+  margin-top: 15px;
+  background-color: #ff99ff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.popup-box button:hover {
+  background: #ffffff;
+  color: #ff00aa;
+  box-shadow: 0 0 10px #ff99ff;
+}
+
+/* Animation */
+@keyframes popUp {
+  0% { transform: scale(0.7); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; }
+}
+
+/* Magic glow effect */
+.magic-glow {
+  box-shadow: 0 0 20px #ff99ff, 0 0 40px #ff00ff, 0 0 60px #cc00cc;
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 20px #ff99ff, 0 0 40px #ff00ff, 0 0 60px #cc00cc; }
+  50% { box-shadow: 0 0 30px #ff66cc, 0 0 50px #ff00ff, 0 0 70px #ff33cc; }
+}
 </style>
 </head>
 <body>
@@ -806,37 +898,22 @@ async function calculateBookingStats() {
 function showIGPopup(igUsername) {
     const popup = document.createElement('div');
     popup.innerHTML = `
-      <div style="
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: #1a1a1a;
-        border: 2px solid #ff99ff;
-        color: white;
-        padding: 20px;
-        border-radius: 10px;
-        z-index: 9999;
-        max-width: 90%;
-        text-align: center;
-        box-shadow: 0 0 15px #ff99ff;
-      ">
-        <h3 style="margin-top: 0;">Instagram ของลูกดวง</h3>
-        <p style="font-size: 18px; color: #ffccff;">${igUsername}</p>
-        <p style="font-size: 13px; color: #ccc;">(แสดงข้อมูลเต็มจากระบบ)</p>
-        <button onclick="this.parentElement.remove()" style="
-          margin-top: 15px;
-          background-color: #ff99ff;
-          border: none;
-          padding: 8px 16px;
-          border-radius: 6px;
-          color: black;
-          font-weight: bold;
-          cursor: pointer;
-        ">ปิด</button>
+      <div class="popup-overlay">
+        <div class="popup-box magic-glow">
+          <h3>Instagram ของลูกดวง</h3>
+          <p class="ig-text">@${igUsername}</p>
+          <p class="note">(แสดงข้อมูลเต็มจากระบบ)</p>
+          <button onclick="closePopup(this)">ปิด</button>
+        </div>
       </div>
     `;
     document.body.appendChild(popup);
+  }
+
+  function closePopup(btn) {
+    const overlay = btn.closest('.popup-overlay');
+    overlay.classList.add('fade-out');
+    setTimeout(() => overlay.remove(), 300); // remove after animation
   }
 
 
