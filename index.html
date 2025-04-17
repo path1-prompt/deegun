@@ -618,21 +618,26 @@ Reference No: ${currentTicket.referenceId}`;
       const ticket = doc.data();
       const row = document.createElement("tr");
 row.innerHTML = `
-  <td>${ticket.name}</td>
-  <td>${ticket.age}</td>
-  <td>${ticket.category}</td>
-  <td>${ticket.date}</td>
-  <td>${ticket.queueNumber}</td>
-  <td>${ticket.referenceId ? ticket.referenceId.slice(0, 6) + '...' : '-'}</td>
-  <td>
-    ${ticket.igUsername
-      ? (ticket.igUsername.length > 10 ? ticket.igUsername.slice(0, 10) + "..." : ticket.igUsername)
-      : `<span style="color:#ccc;">ไม่แสดงข้อมูล</span>
-         <span 
-          onclick="alert('หมายเหตุ : ระบบพึ่งอัปเดตขึ้นสำหรับลูกดวงที่เข้าระบบจองคิวหลังจากวันที่ 17 เมษายน 2568')"
-          style="cursor:pointer; color:#ff99ff; text-decoration: underline; margin-left:4px;"
-         >(ดู)</span>`}
-  </td>
+<td>${ticket.name}</td>
+<td>${ticket.age}</td>
+<td>${ticket.category}</td>
+<td>${ticket.date}</td>
+<td>${ticket.queueNumber}</td>
+<td>${ticket.referenceId ? ticket.referenceId.slice(0, 6) + '...' : '-'}</td>
+<td>
+  ${ticket.igUsername
+    ? `${ticket.igUsername.length > 10 ? ticket.igUsername.slice(0, 10) + "..." : ticket.igUsername}
+       <button onclick="showIGPopup('${ticket.igUsername}')" 
+         style="margin-left: 6px; background-color: #ff99ff; color: black; border: none; border-radius: 4px; padding: 2px 6px; cursor: pointer;">
+         ดู
+       </button>`
+    : `<span style="color:#ccc;">ไม่แสดงข้อมูล</span>
+       <span 
+        onclick="alert('หมายเหตุ : ระบบพึ่งอัปเดตขึ้นสำหรับลูกดวงที่เข้าระบบจองคิวหลังจากวันที่ 17 เมษายน 2568')"
+        style="cursor:pointer; color:#ff99ff; text-decoration: underline; margin-left:4px;"
+       >(ดู)</span>`
+  }
+</td>
 `;
       adminTableBody.appendChild(row);
     });
@@ -797,6 +802,44 @@ async function calculateBookingStats() {
       document.getElementById("preloader").style.display = "none";
     }
   }, 2); // โหลดเร็วขึ้นหรือลดความเร็วได้ตรงนี้
+
+function showIGPopup(igUsername) {
+    const popup = document.createElement('div');
+    popup.innerHTML = `
+      <div style="
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #1a1a1a;
+        border: 2px solid #ff99ff;
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        z-index: 9999;
+        max-width: 90%;
+        text-align: center;
+        box-shadow: 0 0 15px #ff99ff;
+      ">
+        <h3 style="margin-top: 0;">Instagram ของลูกดวง</h3>
+        <p style="font-size: 18px; color: #ffccff;">${igUsername}</p>
+        <p style="font-size: 13px; color: #ccc;">(แสดงข้อมูลเต็มจากระบบ)</p>
+        <button onclick="this.parentElement.remove()" style="
+          margin-top: 15px;
+          background-color: #ff99ff;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 6px;
+          color: black;
+          font-weight: bold;
+          cursor: pointer;
+        ">ปิด</button>
+      </div>
+    `;
+    document.body.appendChild(popup);
+  }
+
+
 </script>
 </body>
 </html> 
