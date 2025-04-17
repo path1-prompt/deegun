@@ -162,35 +162,51 @@
     }
     
     /* Admin Section */
+.admin-section {
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  overflow-x: auto;
+  margin-top: 30px;
+  color: #fff;
+  box-shadow: 0 0 10px #ff00cc;
+}
+
+.admin-section h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #ff66ff;
+  text-shadow: 0 0 5px #ff00cc;
+}
+
 .admin-section table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
-  font-size: 13px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 0 15px #ff99ff;
+  table-layout: auto;
+  min-width: 1000px; /* ป้องกันการบีบ */
+}
+
+.admin-section thead {
+  background-color: #330033;
 }
 
 .admin-section th, .admin-section td {
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 10px 6px;
-  text-align: center;
-  word-break: break-word;
-  color: #fff;
+  padding: 15px 20px;
+  border: 1px solid #ff66ff;
+  text-align: left;
+  word-wrap: break-word;
+  white-space: normal;
+  font-size: 16px;
 }
 
-.admin-section th {
-  background: linear-gradient(90deg, #9900cc, #cc33ff);
-  color: #ffccff;
-  font-weight: bold;
-  text-shadow: 0 0 6px #fff;
+.admin-section tbody tr:nth-child(even) {
+  background-color: rgba(255, 0, 255, 0.1);
 }
 
 .admin-section tbody tr:hover {
-  background-color: rgba(255, 255, 255, 0.07);
-  transition: background-color 0.3s;
+  background-color: rgba(255, 0, 255, 0.3);
+  transition: background-color 0.3s ease;
 }
 
 /* Responsive - จอเล็กไม่ต้อง scroll */
