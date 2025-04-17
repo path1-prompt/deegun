@@ -419,29 +419,7 @@
   }
 
   @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap');
-/* ชื่อ + IG */
-.admin-section td.name-cell {
-  position: relative;
-  padding-top: 16px; /* เว้นที่ให้ label IG */
-}
-
-/* ตัว IG handle */
-.admin-section .ig-handle {
-  position: absolute;
-  top: 4px;
-  right: 8px;
-  font-size: 12px;
-  color: #ffccff;
-}
-
-/* เติมคำว่า “IG:” */
-.admin-section .ig-handle::before {
-  content: "IG: ";
-  font-size: 10px;
-  color: #ccc;
-}
-
-  </style>
+</style>
 </head>
 <body>
   <div id="preloader">
@@ -516,28 +494,26 @@
 </div>
 
   <!-- Admin Section -->
-<!-- … -->
-<div class="admin-section" id="adminSection">
-  <h2>ข้อมูลใบคิวทั้งหมด</h2>
-  <div style="overflow-x:auto;">
-    <table id="adminTable">
-      <thead>
-        <tr>
-          <th>ชื่อ</th>
-          <th>อายุ</th>
-          <th>หมวดหมู่</th>
-          <th>วันที่</th>
-          <th>คิว</th>
-          <th>เลขอ้างอิง</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- rows เติมโดย JS -->
-      </tbody>
-    </table>
-  </div>
+<div class="admin-section" id="adminSection" style="display: block;">
+    <h2>ข้อมูลใบคิวทั้งหมด</h2>
+<div style="overflow-x: auto;">
+  <table id="adminTable">
+    <thead>
+      <tr>
+        <th>ชื่อ</th>
+        <th>อายุ</th>
+        <th>หมวดหมู่</th>
+        <th>วันที่</th>
+        <th>คิว</th>
+        <th>เลขอ้างอิง</th>
+        <th>IG</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- ข้อมูลจะถูกเติมโดย JavaScript -->
+    </tbody>
+  </table>
 </div>
-<!-- … -->
 <div style="text-align: center; margin-top: 20px;">
   <button onclick="closeAdmin()" style="
     padding: 10px 20px;
@@ -632,28 +608,34 @@ Reference No: ${currentTicket.referenceId}`;
    
 
     // แสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
-async function showAdminSection() {
-  const tbody = document.querySelector('#adminTable tbody');
-  tbody.innerHTML = '';
+    async function showAdminSection() {
+  const adminTableBody = document.getElementById("adminTable").querySelector("tbody");
+  adminTableBody.innerHTML = "";
 
-  const snapshot = await db.collection('queues').orderBy('date','desc').get();
-  snapshot.forEach(doc => {
-    const t = doc.data();
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td class="name-cell">
-        ${t.name}
-        ${t.igUsername ? `<span class="ig-handle">${t.igUsername}</span>` : ''}
-      </td>
-      <td>${t.age}</td>
-      <td>${t.category}</td>
-      <td>${t.date}</td>
-      <td>${t.queueNumber}</td>
-      <td>${t.referenceId}</td>
-    `;
-    tbody.appendChild(row);
-  });
-}
+  try {
+    const snapshot = await db.collection("queues").orderBy("date", "desc").get();
+    snapshot.forEach(doc => {
+      const ticket = doc.data();
+      const row = document.createElement("tr");
+row.innerHTML = `
+  <td>${ticket.name}</td>
+  <td>${ticket.age}</td>
+  <td>${ticket.category}</td>
+  <td>${ticket.date}</td>
+  <td>${ticket.queueNumber}</td>
+  <td>${ticket.referenceId ? ticket.referenceId.slice(0, 6) + '...' : '-'}</td>
+  <td>
+    ${ticket.igUsername
+      ? (ticket.igUsername.length > 10 ? ticket.igUsername.slice(0, 10) + "..." : ticket.igUsername)
+      : `<span style="color:#ccc;">ไม่แสดงข้อมูล</span>
+         <span 
+          onclick="alert('หมายเหตุ : ระบบพึ่งอัปเดตขึ้นสำหรับลูกดวงที่เข้าระบบจองคิวหลังจากวันที่ 17 เมษายน 2568')"
+          style="cursor:pointer; color:#ff99ff; text-decoration: underline; margin-left:4px;"
+         >(ดู)</span>`}
+  </td>
+`;
+      adminTableBody.appendChild(row);
+    });
     document.getElementById("adminSection").style.display = "block";
   } catch (error) {
     alert("เกิดข้อผิดพลาดในการโหลดข้อมูล: " + error.message);
