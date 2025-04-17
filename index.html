@@ -519,7 +519,7 @@
 }
 
 .shop-name {
-    font-size: 6rem;
+    font-size: 3rem; /* ลดขนาดฟอนต์ */
     text-align: center;
     position: relative;
     z-index: 10;
@@ -528,7 +528,7 @@
 
 .text {
     color: #fff;
-    text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff, 0 0 45px #ff00ff, 0 0 60px #ff007f, 0 0 75px #ff007f, 0 0 90px #ff007f, 0 0 105px #ff007f;
+    text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff007f, 0 0 50px #ff007f, 0 0 60px #ff007f, 0 0 70px #ff007f;
     font-weight: bold;
     position: relative;
     animation: colorChange 3s ease-in-out infinite alternate;
@@ -536,22 +536,22 @@
 
 .outer-border {
     position: absolute;
-    top: -10px;
-    left: -10px;
-    right: -10px;
-    bottom: -10px;
-    border: 5px solid #ff00ff;
-    border-radius: 15px;
+    top: -5px; /* ลดขนาดกรอบ */
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border: 3px solid #ff00ff; /* ลดขนาดเส้นกรอบ */
+    border-radius: 12px; /* ลดขนาดของมุมกรอบ */
     animation: rotateBorder 4s linear infinite, glow 1.5s ease-in-out infinite alternate, colorChange 3s ease-in-out infinite alternate;
-    padding: 10px;
-    box-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff, 0 0 50px #ff007f;
+    padding: 5px; /* ลดขนาดระยะห่างของกรอบ */
+    box-shadow: 0 0 15px #ff00ff, 0 0 25px #ff00ff, 0 0 35px #ff00ff, 0 0 45px #ff007f;
 }
 
 .inner-border {
     position: relative;
-    padding: 30px;
-    border: 3px solid #ff00ff;
-    border-radius: 12px;
+    padding: 20px; /* ลดขนาดกรอบภายใน */
+    border: 2px solid #ff00ff; /* ลดขนาดเส้นกรอบภายใน */
+    border-radius: 10px; /* ลดขนาดมุมกรอบภายใน */
     animation: pulsate 1.5s ease-in-out infinite, shimmer 3s linear infinite;
 }
 
@@ -566,67 +566,67 @@
 
 @keyframes pulsate {
     0% {
-        box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+        box-shadow: 0 0 8px #ff00ff, 0 0 16px #ff00ff, 0 0 24px #ff00ff;
     }
     50% {
-        box-shadow: 0 0 15px #ff007f, 0 0 25px #ff007f, 0 0 35px #ff007f;
+        box-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f, 0 0 30px #ff007f;
     }
     100% {
-        box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+        box-shadow: 0 0 8px #ff00ff, 0 0 16px #ff00ff, 0 0 24px #ff00ff;
     }
 }
 
 @keyframes neonPulse {
     0% {
-        text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff, 0 0 45px #ff00ff, 0 0 60px #ff007f, 0 0 75px #ff007f, 0 0 90px #ff007f, 0 0 105px #ff007f;
+        text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff007f, 0 0 50px #ff007f, 0 0 60px #ff007f, 0 0 70px #ff007f;
     }
     50% {
-        text-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff, 0 0 60px #ff00ff, 0 0 80px #ff007f, 0 0 100px #ff007f, 0 0 120px #ff007f, 0 0 140px #ff007f;
+        text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff, 0 0 45px #ff00ff, 0 0 60px #ff007f, 0 0 75px #ff007f, 0 0 90px #ff007f, 0 0 105px #ff007f;
     }
     100% {
-        text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff, 0 0 45px #ff00ff, 0 0 60px #ff007f, 0 0 75px #ff007f, 0 0 90px #ff007f, 0 0 105px #ff007f;
+        text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff007f, 0 0 50px #ff007f, 0 0 60px #ff007f, 0 0 70px #ff007f;
     }
 }
 
 @keyframes glow {
     0% {
-        box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+        box-shadow: 0 0 8px #ff00ff, 0 0 16px #ff00ff, 0 0 24px #ff00ff;
     }
     50% {
-        box-shadow: 0 0 20px #ff007f, 0 0 30px #ff007f, 0 0 40px #ff007f;
+        box-shadow: 0 0 12px #ff007f, 0 0 24px #ff007f, 0 0 36px #ff007f;
     }
     100% {
-        box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+        box-shadow: 0 0 8px #ff00ff, 0 0 16px #ff00ff, 0 0 24px #ff00ff;
     }
 }
 
 @keyframes shimmer {
     0% {
         background: linear-gradient(45deg, #ff00ff, #ff007f, #ff00ff);
-        background-size: 200% 200%;
+        background-size: 150% 150%;
     }
     50% {
         background: linear-gradient(45deg, #ff007f, #ff00ff, #ff007f);
-        background-size: 300% 300%;
+        background-size: 200% 200%;
     }
     100% {
         background: linear-gradient(45deg, #ff00ff, #ff007f, #ff00ff);
-        background-size: 200% 200%;
+        background-size: 150% 150%;
     }
 }
 
 @keyframes colorChange {
     0% {
         color: #ff00ff;
-        text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff, 0 0 45px #ff00ff, 0 0 60px #ff007f, 0 0 75px #ff007f, 0 0 90px #ff007f, 0 0 105px #ff007f;
+        text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff007f, 0 0 50px #ff007f, 0 0 60px #ff007f, 0 0 70px #ff007f;
     }
     50% {
         color: #000000;
-        text-shadow: 0 0 15px #000000, 0 0 30px #000000, 0 0 45px #000000, 0 0 60px #666666, 0 0 75px #666666, 0 0 90px #666666, 0 0 105px #666666;
+        text-shadow: 0 0 10px #000000, 0 0 20px #000000, 0 0 30px #000000, 0 0 40px #666666, 0 0 50px #666666, 0 0 60px #666666, 0 0 70px #666666;
     }
     100% {
         color: #ff00ff;
-        text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff, 0 0 45px #ff00ff, 0 0 60px #ff007f, 0 0 75px #ff007f, 0 0 90px #ff007f, 0 0 105px #ff007f;
+        text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff007f, 0 0 50px #ff007f, 0 0 60px #ff007f, 0 0 70px #ff007f;
     }
 }
 </style>
