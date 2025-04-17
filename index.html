@@ -405,7 +405,7 @@
 <body>
 <div id="preloader">
   <div class="spell-circle"></div>
-  <div class="loading-text">ร่ายคาถา... <span id="loading-percent">0%</span></div>
+  <div class="loading-text">กรุณารอส้กครู่... <span id="loading-percent">0%</span></div>
 </div>
 <!-- ส่วนแสดงยอดผู้จองคิวและเวลาปัจจุบัน -->
 <div class="live-stats" id="liveStats">
@@ -733,8 +733,7 @@ setInterval(updateLiveStats, 1000);
 // เมื่อโหลดหน้าเว็บ ให้เรียกฟังก์ชันทันที
 window.addEventListener("load", updateLiveStats);
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   const now = new Date();
 
   function isCompleted(bookingDateStr) {
@@ -817,8 +816,7 @@ window.addEventListener("load", updateLiveStats);
       }
     });
   });
-</script>
-<script>
+
   let percent = 0;
   const loadingText = document.getElementById("loading-percent");
 
@@ -830,7 +828,7 @@ window.addEventListener("load", updateLiveStats);
       clearInterval(loadingInterval);
       document.getElementById("preloader").style.display = "none";
     }
-  }, 30); // โหลดเร็วขึ้นหรือลดความเร็วได้ตรงนี้
+  }, 20); // โหลดเร็วขึ้นหรือลดความเร็วได้ตรงนี้
 </script>
 </body>
 </html> 
