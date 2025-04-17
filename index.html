@@ -734,88 +734,67 @@ setInterval(updateLiveStats, 1000);
 window.addEventListener("load", updateLiveStats);
 
   
-  const now = new Date();
+// ข้อมูลตัวอย่างจาก Firebase
+function fetchDataAndDrawChart() {
+  const categoryCounts = {
+    "ดูดวงส่วนตัว": 0,
+    "โชคชะตา": 0,
+    "ความฝัน": 0,
+    "อดีตและอนาคต": 0,
+    "ความรัก": 0,
+    "การงาน": 0,
+    "การเงิน": 0,
+    "การเรียน": 0,
+    "สุขภาพ": 0
+  };
 
-  function isCompleted(bookingDateStr) {
-    const limitTime = new Date(bookingDateStr + 'T20:00:00'); // เลยเวลา 20:00 ของวันจอง
-    return now > limitTime;
+  db.collection('bookings').get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      const category = doc.data().category;  // Assume `category` is the field for category in Firestore
+      if (categoryCounts[category] !== undefined) {
+        categoryCounts[category]++;
+      }
+    });
+    
+    // Update chart with data
+    updateChart(categoryCounts);
+  });
+}
+
+// อัพเดทกราฟแท่ง
+function updateChart(data) {
+  const ctx = document.getElementById('magicBarChart').getContext('2d');
+  
+  // สร้างกราฟใหม่หรืออัพเดทกราฟเดิม
+  if (window.barChart) {
+    window.barChart.destroy();
   }
 
-  let total = 0;
-  let completed = 0;
-  let pending = 0;
-
-  firebase.database().ref('queue').once('value', snapshot => {
-    snapshot.forEach(child => {
-      const data = child.val();
-      total++;
-
-      if (isCompleted(data.bookingDate)) {
-        completed++;
-      } else {
-        pending++;
-      }
-    });
-
-    const ctx = document.getElementById('magicBarChart').getContext('2d');
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['จองทั้งหมด', 'ดูดวงเสร็จแล้ว', 'ยังไม่ถึงคิว'],
-        datasets: [{
-          label: 'จำนวน (คน)',
-          data: [total, completed, pending],
-          backgroundColor: [
-            'rgba(255, 0, 102, 0.8)',
-            'rgba(0, 255, 153, 0.8)',
-            'rgba(255, 204, 0, 0.8)'
-          ],
-          borderColor: [
-            'rgba(255, 0, 102, 1)',
-            'rgba(0, 255, 153, 1)',
-            'rgba(255, 204, 0, 1)'
-          ],
-          borderWidth: 4,
-          borderRadius: 20,
-          hoverBackgroundColor: [
-            'rgba(255, 0, 102, 1)',
-            'rgba(0, 255, 153, 1)',
-            'rgba(255, 204, 0, 1)'
-          ]
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            labels: {
-              color: 'white',
-              font: {
-                size: 16,
-                weight: 'bold'
-              }
-            }
-          },
-          tooltip: {
-            backgroundColor: '#222',
-            titleColor: '#fff',
-            bodyColor: '#fff'
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: { color: 'white', stepSize: 1 },
-            grid: { color: 'rgba(255,255,255,0.1)' }
-          },
-          x: {
-            ticks: { color: 'white' },
-            grid: { color: 'rgba(255,255,255,0.05)' }
-          }
+  window.barChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: Object.keys(data),  // หมวดหมู่ทั้งหมด
+      datasets: [{
+        label: 'จำนวนผู้จองคิวตามหมวดหมู่',
+        data: Object.values(data),  // จำนวนผู้จองในแต่ละหมวดหมู่
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
         }
       }
-    });
+    }
   });
+}
+
+// เรียกใช้ฟังก์ชันในการดึงข้อมูลและแสดงกราฟ
+fetchDataAndDrawChart();
+
   </script>
 <script>
   let percent = 0;
@@ -829,7 +808,7 @@ window.addEventListener("load", updateLiveStats);
       clearInterval(loadingInterval);
       document.getElementById("preloader").style.display = "none";
     }
-  }, 20); // โหลดเร็วขึ้นหรือลดความเร็วได้ตรงนี้
+  }, 10); // โหลดเร็วขึ้นหรือลดความเร็วได้ตรงนี้
 </script>
 </body>
 </html> 
