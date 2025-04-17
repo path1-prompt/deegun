@@ -511,6 +511,124 @@
   0%, 100% { box-shadow: 0 0 20px #ff99ff, 0 0 40px #ff00ff, 0 0 60px #cc00cc; }
   50% { box-shadow: 0 0 30px #ff66cc, 0 0 50px #ff00ff, 0 0 70px #ff33cc; }
 }
+.wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.shop-name {
+    font-size: 6rem;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+    animation: neonPulse 2s ease-in-out infinite;
+}
+
+.text {
+    color: #fff;
+    text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff, 0 0 45px #ff00ff, 0 0 60px #ff007f, 0 0 75px #ff007f, 0 0 90px #ff007f, 0 0 105px #ff007f;
+    font-weight: bold;
+    position: relative;
+    animation: colorChange 3s ease-in-out infinite alternate;
+}
+
+.outer-border {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border: 5px solid #ff00ff;
+    border-radius: 15px;
+    animation: rotateBorder 4s linear infinite, glow 1.5s ease-in-out infinite alternate, colorChange 3s ease-in-out infinite alternate;
+    padding: 10px;
+    box-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff, 0 0 50px #ff007f;
+}
+
+.inner-border {
+    position: relative;
+    padding: 30px;
+    border: 3px solid #ff00ff;
+    border-radius: 12px;
+    animation: pulsate 1.5s ease-in-out infinite, shimmer 3s linear infinite;
+}
+
+@keyframes rotateBorder {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulsate {
+    0% {
+        box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+    }
+    50% {
+        box-shadow: 0 0 15px #ff007f, 0 0 25px #ff007f, 0 0 35px #ff007f;
+    }
+    100% {
+        box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+    }
+}
+
+@keyframes neonPulse {
+    0% {
+        text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff, 0 0 45px #ff00ff, 0 0 60px #ff007f, 0 0 75px #ff007f, 0 0 90px #ff007f, 0 0 105px #ff007f;
+    }
+    50% {
+        text-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff, 0 0 60px #ff00ff, 0 0 80px #ff007f, 0 0 100px #ff007f, 0 0 120px #ff007f, 0 0 140px #ff007f;
+    }
+    100% {
+        text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff, 0 0 45px #ff00ff, 0 0 60px #ff007f, 0 0 75px #ff007f, 0 0 90px #ff007f, 0 0 105px #ff007f;
+    }
+}
+
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+    }
+    50% {
+        box-shadow: 0 0 20px #ff007f, 0 0 30px #ff007f, 0 0 40px #ff007f;
+    }
+    100% {
+        box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background: linear-gradient(45deg, #ff00ff, #ff007f, #ff00ff);
+        background-size: 200% 200%;
+    }
+    50% {
+        background: linear-gradient(45deg, #ff007f, #ff00ff, #ff007f);
+        background-size: 300% 300%;
+    }
+    100% {
+        background: linear-gradient(45deg, #ff00ff, #ff007f, #ff00ff);
+        background-size: 200% 200%;
+    }
+}
+
+@keyframes colorChange {
+    0% {
+        color: #ff00ff;
+        text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff, 0 0 45px #ff00ff, 0 0 60px #ff007f, 0 0 75px #ff007f, 0 0 90px #ff007f, 0 0 105px #ff007f;
+    }
+    50% {
+        color: #000000;
+        text-shadow: 0 0 15px #000000, 0 0 30px #000000, 0 0 45px #000000, 0 0 60px #666666, 0 0 75px #666666, 0 0 90px #666666, 0 0 105px #666666;
+    }
+    100% {
+        color: #ff00ff;
+        text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff, 0 0 45px #ff00ff, 0 0 60px #ff007f, 0 0 75px #ff007f, 0 0 90px #ff007f, 0 0 105px #ff007f;
+    }
+}
 </style>
 </head>
 <body>
@@ -530,7 +648,15 @@
   <img src="IMG_0920.JPG" alt="โลโก้" class="logo-glow">
   <!-- Magical Animal -->
   <div class="magic-animal"></div>
-
+    <div class="wrapper">
+        <div class="shop-name">
+            <div class="outer-border">
+                <div class="inner-border">
+                    <span class="text">Horoscope</span>
+                </div>
+            </div>
+        </div>
+    </div>
   <!-- Main Booking Container -->
   <div class="container" id="mainContainer">
     <h2>จองคิวดูดวงอัตโนมัติ</h2>
