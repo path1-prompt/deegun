@@ -342,6 +342,30 @@
   margin-left: 5px;
   font-style: italic;
 }
+.dashboard-btn {
+  display: inline-block;
+  background: linear-gradient(145deg, #7a00b3, #d600ff);
+  color: #fff;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: 'Orbitron', 'Sarabun', sans-serif;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 0 15px #ff66ff, 0 0 30px #aa00ff;
+  text-shadow: 0 0 6px #fff;
+  transition: all 0.3s ease;
+  margin: 20px auto;
+  display: block;
+}
+
+.dashboard-btn:hover {
+  transform: scale(1.05) rotate(-1deg);
+  box-shadow: 0 0 25px #ff99ff, 0 0 45px #cc33ff;
+  background: linear-gradient(145deg, #9900cc, #ff33ff);
+}
+
   </style>
 </head>
 <body>
@@ -402,7 +426,7 @@
     <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
   </div>
 
-<button onclick="showDashboard()">ดูแดชบอร์ด</button>
+<button class="dashboard-btn" onclick="showDashboard()">ดูแดชบอร์ด</button>
 <div class="admin-section" id="dashboardSection">
   <h2>แดชบอร์ดการจองคิว</h2>
   <canvas id="lineChart" style="max-width:100%; margin-bottom:30px;"></canvas>
@@ -588,38 +612,130 @@ async function showDashboard() {
   const snapshot = await db.collection("queues").get();
   const data = snapshot.docs.map(doc => doc.data());
 
-  // สร้างข้อมูลนับตามวันที่
-  const dateMap = {};
-  const categoryMap = {};
+  // นับจำนวนคิวต่อวัน
+  const dateMap = {}, categoryMap = {}, ageMap = {};
+  let totalAge = 0;
+  let maxDate = '', maxCount = 0;
+
   data.forEach(item => {
+    // จำนวนคิวต่อวัน
     dateMap[item.date] = (dateMap[item.date] || 0) + 1;
+    // หมวดหมู่
     categoryMap[item.category] = (categoryMap[item.category] || 0) + 1;
+    // อายุ
+    const age = parseInt(item.age);
+    totalAge += age;
+    const ageGroup = age < 20 ? '<20' : age < 30 ? '20-29' : age < 40 ? '30-39' : '40+';
+    ageMap[ageGroup] = (ageMap[ageGroup] || 0) + 1;
   });
 
-  // กราฟเส้น - จำนวนคิวต่อวัน
   const dateLabels = Object.keys(dateMap).sort();
-  const queueCounts = dateLabels.map(date => dateMap[date]);
+  const queueCounts = dateLabels.map(date => {
+    const count = dateMap[date];
+    if (count > maxCount) {
+      maxCount = count;
+      maxDate = date;
+    }
+    return count;
+  });
 
-  new Chart(document.getElementById("lineChart"), {
-    type: 'line',
+  const avgAge = Math.round(totalAge / data.length);
+  const topCategory = Object.entries(categoryMap).sort((a,b)=>b[1]-a[1])[0][0];
+
+  // ล้าง canvas เก่าก่อนวาดใหม่
+  ["barChart", "pieChart", "ageChart"].forEach(id => {
+    const old = document.getElementById(id);
+    if (old) old.remove();
+  });
+
+  const dashboard = document.getElementById("dashboardSection");
+  dashboard.innerHTML = `
+    <h2>แดชบอร์ดการจองคิว</h2>
+    <div id="dashboardSummary" style="margin-bottom:20px; font-size:15px; color:#ffccff; text-shadow: 0 0 6px #ff66ff;">
+      <p>• <b>อายุเฉลี่ย:</b> ${avgAge} ปี</p>
+      <p>• <b>หมวดหมู่ยอดนิยม:</b> ${topCategory}</p>
+      <p>• <b>วันที่คนจองมากที่สุด:</b> ${maxDate} (${maxCount} คิว)</p>
+    </div>
+    <canvas id="barChart" style="max-width:100%;margin-bottom:25px;"></canvas>
+    <canvas id="ageChart" style="max-width:100%;margin-bottom:25px;"></canvas>
+    <canvas id="pieChart" style="max-width:100%;margin-bottom:25px;"></canvas>
+    <button onclick="closeDashboard()">ปิดแดชบอร์ด</button>
+  `;
+
+  // Bar Chart - จำนวนคิวต่อวัน
+  new Chart(document.getElementById("barChart"), {
+    type: 'bar',
     data: {
       labels: dateLabels,
       datasets: [{
-        label: 'จำนวนคิวแต่ละวัน',
+        label: 'จำนวนคิวต่อวัน',
         data: queueCounts,
-        borderColor: '#ff66ff',
-        backgroundColor: 'rgba(255,102,255,0.3)',
-        tension: 0.3
+        backgroundColor: '#cc33ff',
+        borderRadius: 8
       }]
     },
     options: {
       plugins: { legend: { labels: { color: "#fff" } } },
       scales: {
         x: { ticks: { color: "#fff" } },
-        y: { ticks: { color: "#fff" } }
+        y: { ticks: { color: "#fff" }, beginAtZero: true }
       }
     }
   });
+
+  // Pie Chart - หมวดหมู่
+  const categoryLabels = Object.keys(categoryMap);
+  const categoryCounts = categoryLabels.map(cat => categoryMap[cat]);
+
+  new Chart(document.getElementById("pieChart"), {
+    type: 'pie',
+    data: {
+      labels: categoryLabels,
+      datasets: [{
+        label: 'หมวดหมู่',
+        data: categoryCounts,
+        backgroundColor: [
+          '#ff66cc', '#ff99cc', '#cc99ff', '#9966cc', '#6600cc',
+          '#ff66ff', '#cc33ff', '#9933cc', '#660066'
+        ]
+      }]
+    },
+    options: {
+      plugins: {
+        legend: {
+          labels: {
+            color: '#fff'
+          }
+        }
+      }
+    }
+  });
+
+  // Bar Chart - อายุ
+  const ageLabels = Object.keys(ageMap);
+  const ageCounts = ageLabels.map(g => ageMap[g]);
+
+  new Chart(document.getElementById("ageChart"), {
+    type: 'bar',
+    data: {
+      labels: ageLabels,
+      datasets: [{
+        label: 'จำนวนคนจองแต่ละช่วงอายุ',
+        data: ageCounts,
+        backgroundColor: '#ff66ff',
+        borderRadius: 6
+      }]
+    },
+    options: {
+      plugins: { legend: { labels: { color: "#fff" } } },
+      scales: {
+        x: { ticks: { color: "#fff" } },
+        y: { ticks: { color: "#fff" }, beginAtZero: true }
+      }
+    }
+  });
+}
+
 
   // กราฟวงกลม - หมวดหมู่ยอดนิยม
   const categoryLabels = Object.keys(categoryMap);
