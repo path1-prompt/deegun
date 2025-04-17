@@ -262,12 +262,6 @@
   <!-- Main Booking Container -->
   <div class="container" id="mainContainer">
     <h2>จองคิวดูดวงอัตโนมัติ</h2>
-    <div class="container">
-  <h2>ตรวจสอบใบคิว</h2>
-  <input type="text" id="refInput" placeholder="ใส่เลขอ้างอิง">
-  <button onclick="checkReference()">ตรวจสอบ</button>
-  <div id="refResult"></div>
-</div>
     <form id="bookingForm">
       <label>ชื่อเล่น:</label>
       <input type="text" id="name" required>
@@ -291,6 +285,13 @@
     </form>
  
   </div>
+  
+      <div class="container">
+  <h2>ตรวจสอบใบคิว</h2>
+  <input type="text" id="refInput" placeholder="ใส่เลขอ้างอิง">
+  <button onclick="checkReference()">ตรวจสอบ</button>
+  <div id="refResult"></div>
+</div>
 
   <!-- Popup for the ticket -->
   <div class="popup" id="popup">
