@@ -9,7 +9,9 @@
   <!-- Firebase App (core) -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+
 <script>
   const firebaseConfig = {
     apiKey: "AIzaSyD0o88iBVuKsj-2qgEFlP-V3FwArPHCrkY",
@@ -485,35 +487,26 @@ canvas {
     <div id="ticketData"></div>
     <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
   </div>
-<div class="container" id="vipContainer">
-  <h2>จองคิว VIP (ศรัทธา 10 บาทขึ้นไป)</h2>
+  <button onclick="document.getElementById('vipBookingContainer').style.display='block'">จอง VIP</button>
+<div class="container" id="vipBookingContainer" style="display:none;">
+  <h2>จองคิว VIP</h2>
   <form id="vipForm">
-    <label>ชื่อเล่น:</label>
+    <label>ชื่อ:</label>
     <input type="text" id="vipName" required>
     <label>อายุ:</label>
     <input type="number" id="vipAge" required min="1">
     <label>หมวดหมู่:</label>
-    <select id="vipCategory">
-           <option>ดูดวงส่วนตัว</option>
-        <option>โชคชะตา</option>
-        <option>ความฝัน</option>
-        <option>อดีตและอนาคต</option>
-        <option>ความรัก</option>
-        <option>การงาน</option>
-        <option>การเงิน</option>
-        <option>การเรียน</option>
-        <option>สุขภาพ</option>
-    </select>
-    <label>Instagram (@username):</label>
-    <input type="text" id="vipIG" required placeholder="@yourusername">
+    <select id="vipCategory">...</select>
+    <label>Instagram:</label>
+    <input type="text" id="vipIG">
     <label>จำนวนเงินศรัทธา (บาท):</label>
-    <input type="number" id="vipAmount" required min="11">
-    <label>อัปโหลดสลิป (ต้องใส่ชื่อ/อายุ/IG):</label>
-    <input type="file" id="vipSlip" accept="image/*,application/pdf" required>
-    <button type="submit">ยืนยันจองคิว VIP</button>
+    <input type="number" id="vipAmount" required min="10">
+    <label>อัปโหลดสลิป:</label>
+    <input type="file" id="vipSlip" accept="image/*" required>
+    <button type="submit">ส่งคำขอ VIP</button>
   </form>
-  <div id="vipResult" style="margin-top: 15px; color: #ffccff;"></div>
 </div>
+
 
 <button class="dashboard-btn" onclick="showDashboard()">ดูแดชบอร์ด</button>
 <div class="admin-section" id="dashboardSection">
