@@ -25,27 +25,6 @@
   const db = firebase.firestore();
 </script>
   <style>
-  /* ชื่อ + IG */
-.admin-section td.name-cell {
-  position: relative;
-  padding-top: 16px; /* เว้นที่ให้ label IG */
-}
-
-/* ตัว IG handle */
-.admin-section .ig-handle {
-  position: absolute;
-  top: 4px;
-  right: 8px;
-  font-size: 12px;
-  color: #ffccff;
-}
-
-/* เติมคำว่า “IG:” */
-.admin-section .ig-handle::before {
-  content: "IG: ";
-  font-size: 10px;
-  color: #ccc;
-}
    button:active {
   box-shadow: 0 0 25px #ff66ff, 0 0 50px #aa00ff;
   transition: 0.1s;
@@ -440,6 +419,27 @@
   }
 
   @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap');
+  /* ชื่อ + IG */
+.admin-section td.name-cell {
+  position: relative;
+  padding-top: 16px; /* เว้นที่ให้ label IG */
+}
+
+/* ตัว IG handle */
+.admin-section .ig-handle {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  font-size: 12px;
+  color: #ffccff;
+}
+
+/* เติมคำว่า “IG:” */
+.admin-section .ig-handle::before {
+  content: "IG: ";
+  font-size: 10px;
+  color: #ccc;
+}
 </style>
 </head>
 <body>
@@ -641,11 +641,10 @@ Reference No: ${currentTicket.referenceId}`;
       const ticket = doc.data();
       const row = document.createElement("tr");
 row.innerHTML = `
-     <td class="name-cell">
+    <td class="name-cell">
         ${t.name}
         ${t.igUsername ? `<span class="ig-handle">${t.igUsername}</span>` : ''}
       </td>
-  <td>${ticket.name}</td>
   <td>${ticket.age}</td>
   <td>${ticket.category}</td>
   <td>${ticket.date}</td>
