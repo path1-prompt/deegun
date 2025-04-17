@@ -162,33 +162,71 @@
     }
     
     /* Admin Section */
-    .admin-section {
-      max-width: 420px;
-      margin: 20px auto;
-      padding: 20px;
-      background: rgba(40, 0, 50, 0.85);
-      box-shadow: 0 0 20px #aa00ff;
-      border-radius: 15px;
-      display: none;
-    }
-    .admin-section h2 {
-      text-align: center;
-      color: #ffccff;
-    }
-    .admin-section table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .admin-section th, .admin-section td {
-      border: 1px solid #fff;
-      padding: 8px;
-      text-align: center;
-      font-size: 14px;
-    }
-    .admin-section th {
-      background: #660099;
-    }
-    
+  .admin-section {
+  width: 95%;
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 20px;
+  background: rgba(40, 0, 50, 0.95);
+  box-shadow: 0 0 25px #cc00ff;
+  border-radius: 20px;
+  overflow-x: auto;
+}
+
+.admin-section h2 {
+  text-align: center;
+  font-size: 24px;
+  color: #ffccff;
+  margin-bottom: 20px;
+  text-shadow: 0 0 6px #ff99ff;
+}
+
+.admin-section table {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 15px #ff99ff;
+}
+
+.admin-section th, .admin-section td {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 12px 8px;
+  text-align: center;
+  font-size: 14px;
+  color: #fff;
+  word-break: break-word;
+}
+
+.admin-section th {
+  background: linear-gradient(90deg, #9900cc, #cc33ff);
+  color: #ffccff;
+  font-weight: bold;
+  text-shadow: 0 0 6px #fff;
+}
+
+.admin-section tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.07);
+  transition: background-color 0.3s;
+}
+
+/* ปรับสำหรับหน้าจอมือถือ */
+@media screen and (max-width: 768px) {
+  .admin-section {
+    padding: 10px;
+  }
+
+  .admin-section h2 {
+    font-size: 20px;
+  }
+
+  .admin-section th, .admin-section td {
+    font-size: 12px;
+    padding: 8px 6px;
+  }
+}
+
     /* Magical Animal Animation */
     .magic-animal {
       position: absolute;
@@ -398,25 +436,27 @@
   <!-- Admin Section -->
 <div class="admin-section" id="adminSection" style="display: block;">
     <h2>ข้อมูลใบคิวทั้งหมด</h2>
-    <table id="adminTable">
-      <thead>
-        <tr>
-          <th>ชื่อ</th>
-          <th>อายุ</th>
-          <th>หมวดหมู่</th>
-          <th>วันที่</th>
-          <th>คิว</th>
+<div style="overflow-x: auto;">
+  <table id="adminTable">
+    <thead>
+      <tr>
+        <th>ชื่อ</th>
+        <th>อายุ</th>
+        <th>หมวดหมู่</th>
+        <th>วันที่</th>
+        <th>คิว</th>
         <th>เลขอ้างอิง</th>
-<th>IG</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- ข้อมูลจะถูกเติมโดย JavaScript -->
-      </tbody>
-    </table>
-    <button onclick="closeAdmin()">ปิดหน้าดูข้อมูล</button>
-  </div>
-
+        <th>IG</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- ข้อมูลจะถูกเติมโดย JavaScript -->
+    </tbody>
+  </table>
+</div>
+<div style="text-align: center; margin-top: 20px;">
+  <button onclick="closeAdmin()" style="padding: 10px 20px; border-radius: 10px; background: #cc00ff; box-shadow: 0 0 10px #ff99ff; color: #fff; font-weight: bold;">ปิดหน้าดูข้อมูล</button>
+</div>
   <script>
     const queueDB = {}; // เก็บข้อมูลคิวใน session นี้
     let currentTicket = null; // เก็บใบคิวล่าสุด
