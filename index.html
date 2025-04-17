@@ -262,6 +262,12 @@
   <!-- Main Booking Container -->
   <div class="container" id="mainContainer">
     <h2>จองคิวดูดวงอัตโนมัติ</h2>
+    <div class="container">
+  <h2>ตรวจสอบใบคิว</h2>
+  <input type="text" id="refInput" placeholder="ใส่เลขอ้างอิง">
+  <button onclick="checkReference()">ตรวจสอบ</button>
+  <div id="refResult"></div>
+</div>
     <form id="bookingForm">
       <label>ชื่อเล่น:</label>
       <input type="text" id="name" required>
@@ -421,6 +427,20 @@ Reference No: ${currentTicket.referenceId}`;
       document.getElementById("adminSection").style.display = "none";
     }
     window.addEventListener("load", showAdminSection);
+    async function checkReference() {
+  const ref = document.getElementById("refInput").value.trim().toUpperCase();
+  const snapshot = await db.collection("queues").where("referenceId", "==", ref).get();
+  if (!snapshot.empty) {
+    const data = snapshot.docs[0].data();
+    document.getElementById("refResult").innerHTML = `
+      <p>ชื่อ: ${data.name}</p>
+      <p>วันที่จอง: ${data.date}</p>
+      <p>ลำดับคิว: ${data.queueNumber}</p>
+    `;
+  } else {
+    document.getElementById("refResult").innerText = "ไม่พบข้อมูล";
+  }
+}
   </script>
 </body>
 </html> 
