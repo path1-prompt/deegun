@@ -9,22 +9,18 @@
   <!-- Firebase App (core) -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyASsOEUsECZHN5Bf-Be4TD_MXwJwh9gE68",
-  authDomain: "horoscopequeue.firebaseapp.com",
-  projectId: "horoscopequeue",
- storageBucket: "horoscopequeue.appspot.com",
-  messagingSenderId: "276093348293",
-  appId: "1:276093348293:web:ac75808f868eaf29b943ac",
-  measurementId: "G-ENN31BYZGS"
-};
+  const firebaseConfig = {
+    apiKey: "AIzaSyD0o88iBVuKsj-2qgEFlP-V3FwArPHCrkY",
+    authDomain: "horoscopequeue.firebaseapp.com",
+    projectId: "horoscopequeue",
+    storageBucket: "horoscopequeue.appspot.com",
+    messagingSenderId: "30274669281",
+    appId: "1:30274669281:web:45b08e0c48e58680d3b351",
+    measurementId: "G-48X2FPNBYZ"
+  };
 
-  // เริ่มต้น Firebase ด้วย compat
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 </script>
@@ -346,90 +342,6 @@ const firebaseConfig = {
   margin-left: 5px;
   font-style: italic;
 }
-.dashboard-btn {
-  display: inline-block;
-  background: linear-gradient(145deg, #7a00b3, #d600ff);
-  color: #fff;
-  padding: 12px 24px;
-  font-size: 16px;
-  font-weight: bold;
-  font-family: 'Orbitron', 'Sarabun', sans-serif;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  box-shadow: 0 0 15px #ff66ff, 0 0 30px #aa00ff;
-  text-shadow: 0 0 6px #fff;
-  transition: all 0.3s ease;
-  margin: 20px auto;
-  display: block;
-}
-
-.dashboard-btn:hover {
-  transform: scale(1.05) rotate(-1deg);
-  box-shadow: 0 0 25px #ff99ff, 0 0 45px #cc33ff;
-  background: linear-gradient(145deg, #9900cc, #ff33ff);
-}
-#vipContainer {
-  margin-top: 40px;
-  padding: 20px;
-  background: linear-gradient(135deg, #3a003f, #1a001f);
-  border-radius: 15px;
-  box-shadow: 0 0 20px #ff33cc, 0 0 60px #aa00ff;
-  animation: glowPulse 2s infinite;
-}
-
-#vipContainer h2 {
-  text-align: center;
-  color: #ffccff;
-  font-size: 22px;
-  margin-bottom: 10px;
-  text-shadow: 0 0 10px #ff66ff;
-}
-
-#vipForm input, #vipForm select, #vipForm button {
-  margin-top: 8px;
-  margin-bottom: 12px;
-  width: 100%;
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  font-size: 16px;
-  transition: 0.3s ease;
-}
-
-#vipForm input:focus, #vipForm select:focus {
-  box-shadow: 0 0 10px #ff77ff;
-  outline: none;
-}
-
-#vipForm button {
-  background: linear-gradient(90deg, #9900cc, #ff33cc);
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 0 12px #ff66ff, 0 0 20px #cc00ff;
-  text-shadow: 0 0 5px #fff;
-}
-
-#vipForm button:hover {
-  transform: scale(1.05);
-  background: linear-gradient(90deg, #cc00ff, #ff66ff);
-  box-shadow: 0 0 20px #ff99ff;
-}
-
-#vipResult {
-  text-align: center;
-  font-size: 14px;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  box-shadow: 0 0 10px #ff66ff;
-}
-canvas {
-  width: 100% !important;
-  height: auto !important;
-}
-
   </style>
 </head>
 <body>
@@ -489,38 +401,8 @@ canvas {
     <div id="ticketData"></div>
     <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
   </div>
-  <button onclick="document.getElementById('vipBookingContainer').style.display='block'">จอง VIP</button>
-<div class="container" id="vipBookingContainer" style="display:none;">
-  <h2>จองคิว VIP 10บาทขึ้นไป</h2>
-  <form id="vipForm">
-    <label>ชื่อ:</label>
-    <input type="text" id="vipName" required>
-    <label>อายุ:</label>
-    <input type="number" id="vipAge" required min="1">
-    <label>หมวดหมู่:</label>
-    <select id="vipCategory">
-              <option>ดูดวงส่วนตัว</option>
-        <option>โชคชะตา</option>
-        <option>ความฝัน</option>
-        <option>อดีตและอนาคต</option>
-        <option>ความรัก</option>
-        <option>การงาน</option>
-        <option>การเงิน</option>
-        <option>การเรียน</option>
-        <option>สุขภาพ</option>
-    </select>
-    <label>Instagram:</label>
-    <input type="text" id="vipIG">
-    <label>จำนวนเงินศรัทธา (บาท):</label>
-    <input type="number" id="vipAmount" required min="10">
-    <label>อัปโหลดสลิป:</label>
-    <input type="file" id="vipSlip" accept="image/*" required>
-    <button type="submit">ส่งคำขอ VIP</button>
-  </form>
-</div>
 
-
-<button class="dashboard-btn" onclick="showDashboard()">ดูแดชบอร์ด</button>
+<button onclick="showDashboard()">ดูแดชบอร์ด</button>
 <div class="admin-section" id="dashboardSection">
   <h2>แดชบอร์ดการจองคิว</h2>
   <canvas id="lineChart" style="max-width:100%; margin-bottom:30px;"></canvas>
@@ -563,68 +445,6 @@ canvas {
 </div>
 
   <script>
-  document.getElementById("vipForm").addEventListener("submit", async function(e) {
-  e.preventDefault();
-
-  const name = document.getElementById("vipName").value.trim();
-  const age = document.getElementById("vipAge").value.trim();
-  const category = document.getElementById("vipCategory").value;
-  const ig = document.getElementById("vipIG").value.trim();
-  const amount = parseFloat(document.getElementById("vipAmount").value);
-  const file = document.getElementById("vipSlip").files[0];
-
-  if (!file) {
-    alert("กรุณาอัปโหลดสลิป!");
-    return;
-  }
-  if (amount < 11) {
-    alert("โปรดใส่ยอดศรัทธามากกว่า 10 บาท");
-    return;
-  }
-
-  const referenceId = Math.random().toString(36).substring(2, 10).toUpperCase();
-  const timestamp = Date.now();
-  const storageRef = firebase.storage().ref(`vip_slips/${timestamp}_${file.name}`);
-
-  try {
-    // อัปโหลดสลิป
-    const uploadTaskSnapshot = await storageRef.put(file);
-    const slipUrl = await uploadTaskSnapshot.ref.getDownloadURL();
-
-    // เก็บข้อมูลใน Firestore
-    const timeNow = new Date();
-const formattedTime = timeNow.toLocaleString('th-TH', {
-  hour: '2-digit', minute: '2-digit', second: '2-digit',
-  day: '2-digit', month: 'short', year: 'numeric'
-});
-
-const vipData = {
-  name,
-  age,
-  category,
-  ig,
-  amount,
-  referenceId,
-  slipUrl,
-  timestamp: timeNow,
-  transferTime: formattedTime,
-  status: "รอตรวจสอบ"
-};
-    await db.collection("vipQueues").add(vipData);
-
-document.getElementById("vipResult").innerHTML = `
-  <p>✅ <b>จองคิว VIP สำเร็จ!</b></p>
-  <p>เลขอ้างอิง: <span style="color:#fff;">${referenceId}</span></p>
-  <p>สถานะ: <span style="color:yellow;">รอตรวจสอบสลิป</span></p>
-  <p><b>เวลาแจ้งโอน:</b> ${formattedTime}</p>
-  <p>กรุณารอแม่หมอยืนยันภายในไม่เกิน 3 ชั่วโมง</p>
-`;
-    document.getElementById("vipForm").reset();
-  } catch (error) {
-    alert("เกิดข้อผิดพลาด: " + error.message);
-  }
-});
-
     const queueDB = {}; // เก็บข้อมูลคิวใน session นี้
     let currentTicket = null; // เก็บใบคิวล่าสุด
 
@@ -768,130 +588,38 @@ async function showDashboard() {
   const snapshot = await db.collection("queues").get();
   const data = snapshot.docs.map(doc => doc.data());
 
-  // นับจำนวนคิวต่อวัน
-  const dateMap = {}, categoryMap = {}, ageMap = {};
-  let totalAge = 0;
-  let maxDate = '', maxCount = 0;
-
+  // สร้างข้อมูลนับตามวันที่
+  const dateMap = {};
+  const categoryMap = {};
   data.forEach(item => {
-    // จำนวนคิวต่อวัน
     dateMap[item.date] = (dateMap[item.date] || 0) + 1;
-    // หมวดหมู่
     categoryMap[item.category] = (categoryMap[item.category] || 0) + 1;
-    // อายุ
-    const age = parseInt(item.age);
-    totalAge += age;
-    const ageGroup = age < 20 ? '<20' : age < 30 ? '20-29' : age < 40 ? '30-39' : '40+';
-    ageMap[ageGroup] = (ageMap[ageGroup] || 0) + 1;
   });
 
+  // กราฟเส้น - จำนวนคิวต่อวัน
   const dateLabels = Object.keys(dateMap).sort();
-  const queueCounts = dateLabels.map(date => {
-    const count = dateMap[date];
-    if (count > maxCount) {
-      maxCount = count;
-      maxDate = date;
-    }
-    return count;
-  });
+  const queueCounts = dateLabels.map(date => dateMap[date]);
 
-  const avgAge = Math.round(totalAge / data.length);
-  const topCategory = Object.entries(categoryMap).sort((a,b)=>b[1]-a[1])[0][0];
-
-  // ล้าง canvas เก่าก่อนวาดใหม่
-  ["barChart", "pieChart", "ageChart"].forEach(id => {
-    const old = document.getElementById(id);
-    if (old) old.remove();
-  });
-
-  const dashboard = document.getElementById("dashboardSection");
-  dashboard.innerHTML = `
-    <h2>แดชบอร์ดการจองคิว</h2>
-    <div id="dashboardSummary" style="margin-bottom:20px; font-size:15px; color:#ffccff; text-shadow: 0 0 6px #ff66ff;">
-      <p>• <b>อายุเฉลี่ย:</b> ${avgAge} ปี</p>
-      <p>• <b>หมวดหมู่ยอดนิยม:</b> ${topCategory}</p>
-      <p>• <b>วันที่คนจองมากที่สุด:</b> ${maxDate} (${maxCount} คิว)</p>
-    </div>
-    <canvas id="barChart" style="max-width:100%;margin-bottom:25px;"></canvas>
-    <canvas id="ageChart" style="max-width:100%;margin-bottom:25px;"></canvas>
-    <canvas id="pieChart" style="max-width:100%;margin-bottom:25px;"></canvas>
-    <button onclick="closeDashboard()">ปิดแดชบอร์ด</button>
-  `;
-
-  // Bar Chart - จำนวนคิวต่อวัน
-  new Chart(document.getElementById("barChart"), {
-    type: 'bar',
+  new Chart(document.getElementById("lineChart"), {
+    type: 'line',
     data: {
       labels: dateLabels,
       datasets: [{
-        label: 'จำนวนคิวต่อวัน',
+        label: 'จำนวนคิวแต่ละวัน',
         data: queueCounts,
-        backgroundColor: '#cc33ff',
-        borderRadius: 8
+        borderColor: '#ff66ff',
+        backgroundColor: 'rgba(255,102,255,0.3)',
+        tension: 0.3
       }]
     },
     options: {
       plugins: { legend: { labels: { color: "#fff" } } },
       scales: {
         x: { ticks: { color: "#fff" } },
-        y: { ticks: { color: "#fff" }, beginAtZero: true }
+        y: { ticks: { color: "#fff" } }
       }
     }
   });
-
-  // Pie Chart - หมวดหมู่
-  const categoryLabels = Object.keys(categoryMap);
-  const categoryCounts = categoryLabels.map(cat => categoryMap[cat]);
-
-  new Chart(document.getElementById("pieChart"), {
-    type: 'pie',
-    data: {
-      labels: categoryLabels,
-      datasets: [{
-        label: 'หมวดหมู่',
-        data: categoryCounts,
-        backgroundColor: [
-          '#ff66cc', '#ff99cc', '#cc99ff', '#9966cc', '#6600cc',
-          '#ff66ff', '#cc33ff', '#9933cc', '#660066'
-        ]
-      }]
-    },
-    options: {
-      plugins: {
-        legend: {
-          labels: {
-            color: '#fff'
-          }
-        }
-      }
-    }
-  });
-
-  // Bar Chart - อายุ
-  const ageLabels = Object.keys(ageMap);
-  const ageCounts = ageLabels.map(g => ageMap[g]);
-
-  new Chart(document.getElementById("ageChart"), {
-    type: 'bar',
-    data: {
-      labels: ageLabels,
-      datasets: [{
-        label: 'จำนวนคนจองแต่ละช่วงอายุ',
-        data: ageCounts,
-        backgroundColor: '#ff66ff',
-        borderRadius: 6
-      }]
-    },
-    options: {
-      plugins: { legend: { labels: { color: "#fff" } } },
-      scales: {
-        x: { ticks: { color: "#fff" } },
-        y: { ticks: { color: "#fff" }, beginAtZero: true }
-      }
-    }
-  });
-}
-
 
   // กราฟวงกลม - หมวดหมู่ยอดนิยม
   const categoryLabels = Object.keys(categoryMap);
