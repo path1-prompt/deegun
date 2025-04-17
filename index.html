@@ -542,7 +542,6 @@
     bottom: -5px;
     border: 3px solid #ff00ff; /* ลดขนาดเส้นกรอบ */
     border-radius: 12px; /* ลดขนาดของมุมกรอบ */
-    animation: rotateBorder 4s linear infinite, glow 1.5s ease-in-out infinite alternate, colorChange 3s ease-in-out infinite alternate;
     padding: 5px; /* ลดขนาดระยะห่างของกรอบ */
     box-shadow: 0 0 15px #ff00ff, 0 0 25px #ff00ff, 0 0 35px #ff00ff, 0 0 45px #ff007f;
 }
@@ -555,12 +554,15 @@
     animation: pulsate 1.5s ease-in-out infinite, shimmer 3s linear infinite;
 }
 
-@keyframes rotateBorder {
+@keyframes neonPulse {
     0% {
-        transform: rotate(0deg);
+        text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff007f, 0 0 50px #ff007f, 0 0 60px #ff007f, 0 0 70px #ff007f;
+    }
+    50% {
+        text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff, 0 0 45px #ff00ff, 0 0 60px #ff007f, 0 0 75px #ff007f, 0 0 90px #ff007f, 0 0 105px #ff007f;
     }
     100% {
-        transform: rotate(360deg);
+        text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff007f, 0 0 50px #ff007f, 0 0 60px #ff007f, 0 0 70px #ff007f;
     }
 }
 
@@ -573,18 +575,6 @@
     }
     100% {
         box-shadow: 0 0 8px #ff00ff, 0 0 16px #ff00ff, 0 0 24px #ff00ff;
-    }
-}
-
-@keyframes neonPulse {
-    0% {
-        text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff007f, 0 0 50px #ff007f, 0 0 60px #ff007f, 0 0 70px #ff007f;
-    }
-    50% {
-        text-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff, 0 0 45px #ff00ff, 0 0 60px #ff007f, 0 0 75px #ff007f, 0 0 90px #ff007f, 0 0 105px #ff007f;
-    }
-    100% {
-        text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff007f, 0 0 50px #ff007f, 0 0 60px #ff007f, 0 0 70px #ff007f;
     }
 }
 
@@ -628,7 +618,7 @@
         color: #ff00ff;
         text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff007f, 0 0 50px #ff007f, 0 0 60px #ff007f, 0 0 70px #ff007f;
     }
-}
+
 </style>
 </head>
 <body>
