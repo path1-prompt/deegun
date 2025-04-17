@@ -642,9 +642,10 @@ row.innerHTML = `
     document.getElementById("refResult").innerText = "ไม่พบข้อมูล";
   }
 }
-async function showDashboard() {
-  const dashboard = document.getElementById("dashboardSection");
-  dashboard.style.display = "block";
+function showDashboard() {
+  document.getElementById('dashboardSection').style.display = 'block';
+  loadBarChart();
+}
 
   const snapshot = await db.collection("queues").get();
   const data = snapshot.docs.map(doc => doc.data());
