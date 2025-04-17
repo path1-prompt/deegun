@@ -12,19 +12,28 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 
-<script>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
   const firebaseConfig = {
-    apiKey: "AIzaSyD0o88iBVuKsj-2qgEFlP-V3FwArPHCrkY",
+    apiKey: "AIzaSyASsOEUsECZHN5Bf-Be4TD_MXwJwh9gE68",
     authDomain: "horoscopequeue.firebaseapp.com",
     projectId: "horoscopequeue",
-    storageBucket: "horoscopequeue.appspot.com",
-    messagingSenderId: "30274669281",
-    appId: "1:30274669281:web:45b08e0c48e58680d3b351",
-    measurementId: "G-48X2FPNBYZ"
+    storageBucket: "horoscopequeue.firebasestorage.app",
+    messagingSenderId: "276093348293",
+    appId: "1:276093348293:web:ac75808f868eaf29b943ac",
+    measurementId: "G-ENN31BYZGS"
   };
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
 </script>
   <style>
    button:active {
