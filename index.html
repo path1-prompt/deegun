@@ -342,9 +342,48 @@
   margin-left: 5px;
   font-style: italic;
 }
-  </style>
+  #preloader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+
+  .spell-circle {
+    width: 120px;
+    height: 120px;
+    border: 8px solid transparent;
+    border-top: 8px solid #ff00aa;
+    border-right: 8px solid #00fff2;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    box-shadow: 0 0 20px #ff00aa, 0 0 40px #00fff2;
+    margin-bottom: 20px;
+  }
+
+  .loading-text {
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 24px;
+    text-shadow: 0 0 10px #fff;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
 </head>
 <body>
+  <div id="preloader">
+  <div class="spell-circle"></div>
+  <div class="loading-text">ร่ายคาถา... <span id="loading-percent">0%</span></div>
+</div>
   <!-- ส่วนแสดงยอดผู้จองคิวและเวลาปัจจุบัน -->
 <!-- ส่วนแสดงยอดผู้จองคิวและเวลาปัจจุบัน -->
 <div class="live-stats" id="liveStats">
@@ -672,5 +711,19 @@ setInterval(updateLiveStats, 1000);
 // เมื่อโหลดหน้าเว็บ ให้เรียกฟังก์ชันทันที
 window.addEventListener("load", updateLiveStats);
   </script>
+  <script>
+  let percent = 0;
+  const loadingText = document.getElementById("loading-percent");
+
+  const loadingInterval = setInterval(() => {
+    percent++;
+    loadingText.textContent = percent + "%";
+
+    if (percent >= 100) {
+      clearInterval(loadingInterval);
+      document.getElementById("preloader").style.display = "none";
+    }
+  }, 30); // โหลดเร็วขึ้นหรือลดความเร็วได้ตรงนี้
+</script>
 </body>
 </html> 
