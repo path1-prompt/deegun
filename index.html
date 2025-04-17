@@ -9,7 +9,7 @@
   <!-- Firebase App (core) -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   const firebaseConfig = {
     apiKey: "AIzaSyD0o88iBVuKsj-2qgEFlP-V3FwArPHCrkY",
@@ -252,6 +252,9 @@
   animation: glowPulse 2.5s infinite;
   object-fit: cover;
 }
+#dashboardSection {
+  display: none;
+}
   </style>
 </head>
 <body>
@@ -296,8 +299,13 @@
     <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
   </div>
 
-  <!-- Admin Login Popup -->
-
+<button onclick="showDashboard()">ดูแดชบอร์ด</button>
+<div class="admin-section" id="dashboardSection">
+  <h2>แดชบอร์ดการจองคิว</h2>
+  <canvas id="lineChart" style="max-width:100%; margin-bottom:30px;"></canvas>
+  <canvas id="pieChart" style="max-width:100%;"></canvas>
+  <button onclick="closeDashboard()">ปิดแดชบอร์ด</button>
+</div>
 
   <!-- Admin Section -->
 <div class="admin-section" id="adminSection" style="display: block;">
@@ -438,6 +446,78 @@ Reference No: ${currentTicket.referenceId}`;
   } else {
     document.getElementById("refResult").innerText = "ไม่พบข้อมูล";
   }
+}
+async function showDashboard() {
+  const dashboard = document.getElementById("dashboardSection");
+  dashboard.style.display = "block";
+
+  const snapshot = await db.collection("queues").get();
+  const data = snapshot.docs.map(doc => doc.data());
+
+  // สร้างข้อมูลนับตามวันที่
+  const dateMap = {};
+  const categoryMap = {};
+  data.forEach(item => {
+    dateMap[item.date] = (dateMap[item.date] || 0) + 1;
+    categoryMap[item.category] = (categoryMap[item.category] || 0) + 1;
+  });
+
+  // กราฟเส้น - จำนวนคิวต่อวัน
+  const dateLabels = Object.keys(dateMap).sort();
+  const queueCounts = dateLabels.map(date => dateMap[date]);
+
+  new Chart(document.getElementById("lineChart"), {
+    type: 'line',
+    data: {
+      labels: dateLabels,
+      datasets: [{
+        label: 'จำนวนคิวแต่ละวัน',
+        data: queueCounts,
+        borderColor: '#ff66ff',
+        backgroundColor: 'rgba(255,102,255,0.3)',
+        tension: 0.3
+      }]
+    },
+    options: {
+      plugins: { legend: { labels: { color: "#fff" } } },
+      scales: {
+        x: { ticks: { color: "#fff" } },
+        y: { ticks: { color: "#fff" } }
+      }
+    }
+  });
+
+  // กราฟวงกลม - หมวดหมู่ยอดนิยม
+  const categoryLabels = Object.keys(categoryMap);
+  const categoryCounts = categoryLabels.map(cat => categoryMap[cat]);
+
+  new Chart(document.getElementById("pieChart"), {
+    type: 'pie',
+    data: {
+      labels: categoryLabels,
+      datasets: [{
+        label: 'หมวดหมู่',
+        data: categoryCounts,
+        backgroundColor: [
+          '#ff66cc', '#ff99cc', '#cc99ff', '#9966cc', '#6600cc',
+          '#ff66ff', '#cc33ff', '#9933cc', '#660066'
+        ]
+      }]
+    },
+    options: {
+      plugins: {
+        legend: {
+          labels: {
+            color: '#fff'
+          }
+        }
+      }
+    }
+  });
+}
+
+function closeDashboard() {
+  document.getElementById("dashboardSection").style.display = "none";
 }
   </script>
 </body>
