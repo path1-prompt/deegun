@@ -384,6 +384,101 @@
   <div class="spell-circle"></div>
   <div class="loading-text">กรุณารอสักครู่... <span id="loading-percent">0%</span></div>
 </div>
+
+<!-- HTML -->
+<div class="magic-stats-container">
+  <div class="magic-card">
+    <h2>ยอดจองทั้งหมด</h2>
+    <span id="total-bookings">0</span>
+  </div>
+  <div class="magic-card">
+    <h2>ยังไม่ถึงคิว</h2>
+    <span id="not-yet-booked">0</span>
+  </div>
+  <div class="magic-card">
+    <h2>ดูดวงแล้ว</h2>
+    <span id="completed-bookings">0</span>
+  </div>
+</div>
+
+<!-- CSS -->
+<style>
+  .magic-stats-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 30px;
+    background: radial-gradient(circle at top left, #1a001a, #0a001a);
+    border-radius: 15px;
+    box-shadow: 0 0 40px rgba(138, 43, 226, 0.3);
+  }
+
+  .magic-card {
+    background: rgba(20, 0, 30, 0.8);
+    border: 2px solid #b84eff;
+    border-radius: 15px;
+    padding: 20px 30px;
+    text-align: center;
+    color: #fff;
+    font-family: 'Cinzel', serif;
+    box-shadow: 0 0 20px #b84eff55;
+    transition: transform 0.3s ease;
+  }
+
+  .magic-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px #ff6fff88;
+  }
+
+  .magic-card h2 {
+    font-size: 18px;
+    color: #ffccff;
+    margin-bottom: 10px;
+    text-shadow: 0 0 8px #ff99ff;
+  }
+
+  .magic-card span {
+    font-size: 32px;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 0 0 10px #ff66ff;
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap');
+</style>
+
+<!-- JavaScript -->
+<script>
+  async function calculateBookingStats() {
+    const querySnapshot = await db.collection("horoscopeBookings").get();
+    const now = new Date();
+
+    let totalBookings = 0;
+    let notYetBooked = 0;
+    let completedBookings = 0;
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      totalBookings++;
+
+      const bookingDateStr = data.date; // เช่น "2025-04-17"
+      const [year, month, day] = bookingDateStr.split("-");
+      const bookingEndTime = new Date(year, month - 1, day, 19, 0, 0); // 19:00 ของวันนั้น
+
+      if (now < bookingEndTime) {
+        notYetBooked++;
+      } else {
+        completedBookings++;
+      }
+    });
+
+    document.getElementById("total-bookings").textContent = totalBookings;
+    document.getElementById("not-yet-booked").textContent = notYetBooked;
+    document.getElementById("completed-bookings").textContent = completedBookings;
+  }
+
+  window.onload = calculateBookingStats;
+</script>
   <!-- ส่วนแสดงยอดผู้จองคิวและเวลาปัจจุบัน -->
 <!-- ส่วนแสดงยอดผู้จองคิวและเวลาปัจจุบัน -->
 <div class="live-stats" id="liveStats">
