@@ -363,6 +363,9 @@
       </select>
       <label>เลือกวัน:</label>
       <input type="date" id="date" required>
+        <label>Instagram (@username):</label>
+<input type="text" id="igUsername" placeholder="@yourusername">
+
       <button type="submit">จองคิว</button>
     </form>
           <div class="container">
@@ -403,7 +406,8 @@
           <th>หมวดหมู่</th>
           <th>วันที่</th>
           <th>คิว</th>
-          <th>เลขอ้างอิง</th>
+        <th>เลขอ้างอิง</th>
+<th>IG</th>
         </tr>
       </thead>
       <tbody>
@@ -437,8 +441,13 @@ document.getElementById("bookingForm").addEventListener("submit", async function
 
   const queueNumber = snapshot.size + 1;
   const referenceId = Math.random().toString(36).substring(2, 10).toUpperCase();
+const igUsername = document.getElementById("igUsername").value.trim();
+const ticket = {
+  name, age, category, date, queueNumber,
+  referenceId, timestamp: new Date(),
+  igUsername: igUsername || null
+};
 
-  const ticket = { name, age, category, date, queueNumber, referenceId, timestamp: new Date() };
   await db.collection("queues").add(ticket);
   currentTicket = ticket;
 
