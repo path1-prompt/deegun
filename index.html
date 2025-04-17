@@ -24,7 +24,27 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 </script>
+<style>
+  body {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    padding: 30px;
+    text-align: center;
+  }
+
+  canvas#magicBarChart {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    box-shadow: 0 0 50px rgba(255, 0, 150, 0.6),
+                0 0 30px rgba(0, 255, 200, 0.4),
+                0 0 20px rgba(255, 255, 0, 0.2);
+    margin-top: 20px;
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
   <style>
+  
    button:active {
   box-shadow: 0 0 25px #ff66ff, 0 0 50px #aa00ff;
   transition: 0.1s;
@@ -401,7 +421,7 @@
     <div id="ticketData"></div>
     <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
   </div>
-
+<canvas id="magicBarChart" width="600" height="300"></canvas>
 <button onclick="showDashboard()">ดูแดชบอร์ด</button>
 <div class="admin-section" id="dashboardSection">
   <h2>แดชบอร์ดการจองคิว</h2>
@@ -672,5 +692,90 @@ setInterval(updateLiveStats, 1000);
 // เมื่อโหลดหน้าเว็บ ให้เรียกฟังก์ชันทันที
 window.addEventListener("load", updateLiveStats);
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const now = new Date();
+
+  function isCompleted(bookingDateStr) {
+    const limitTime = new Date(bookingDateStr + 'T20:00:00'); // เลยเวลา 20:00 ของวันจอง
+    return now > limitTime;
+  }
+
+  let total = 0;
+  let completed = 0;
+  let pending = 0;
+
+  firebase.database().ref('queue').once('value', snapshot => {
+    snapshot.forEach(child => {
+      const data = child.val();
+      total++;
+
+      if (isCompleted(data.bookingDate)) {
+        completed++;
+      } else {
+        pending++;
+      }
+    });
+
+    const ctx = document.getElementById('magicBarChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['จองทั้งหมด', 'ดูดวงเสร็จแล้ว', 'ยังไม่ถึงคิว'],
+        datasets: [{
+          label: 'จำนวน (คน)',
+          data: [total, completed, pending],
+          backgroundColor: [
+            'rgba(255, 0, 102, 0.8)',
+            'rgba(0, 255, 153, 0.8)',
+            'rgba(255, 204, 0, 0.8)'
+          ],
+          borderColor: [
+            'rgba(255, 0, 102, 1)',
+            'rgba(0, 255, 153, 1)',
+            'rgba(255, 204, 0, 1)'
+          ],
+          borderWidth: 4,
+          borderRadius: 20,
+          hoverBackgroundColor: [
+            'rgba(255, 0, 102, 1)',
+            'rgba(0, 255, 153, 1)',
+            'rgba(255, 204, 0, 1)'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: {
+              color: 'white',
+              font: {
+                size: 16,
+                weight: 'bold'
+              }
+            }
+          },
+          tooltip: {
+            backgroundColor: '#222',
+            titleColor: '#fff',
+            bodyColor: '#fff'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { color: 'white', stepSize: 1 },
+            grid: { color: 'rgba(255,255,255,0.1)' }
+          },
+          x: {
+            ticks: { color: 'white' },
+            grid: { color: 'rgba(255,255,255,0.05)' }
+          }
+        }
+      }
+    });
+  });
+</script>
 </body>
 </html> 
