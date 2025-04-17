@@ -10,6 +10,8 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+
 <script>
   const firebaseConfig = {
     apiKey: "AIzaSyD0o88iBVuKsj-2qgEFlP-V3FwArPHCrkY",
@@ -365,6 +367,62 @@
   box-shadow: 0 0 25px #ff99ff, 0 0 45px #cc33ff;
   background: linear-gradient(145deg, #9900cc, #ff33ff);
 }
+#vipContainer {
+  margin-top: 40px;
+  padding: 20px;
+  background: linear-gradient(135deg, #3a003f, #1a001f);
+  border-radius: 15px;
+  box-shadow: 0 0 20px #ff33cc, 0 0 60px #aa00ff;
+  animation: glowPulse 2s infinite;
+}
+
+#vipContainer h2 {
+  text-align: center;
+  color: #ffccff;
+  font-size: 22px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px #ff66ff;
+}
+
+#vipForm input, #vipForm select, #vipForm button {
+  margin-top: 8px;
+  margin-bottom: 12px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  transition: 0.3s ease;
+}
+
+#vipForm input:focus, #vipForm select:focus {
+  box-shadow: 0 0 10px #ff77ff;
+  outline: none;
+}
+
+#vipForm button {
+  background: linear-gradient(90deg, #9900cc, #ff33cc);
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 12px #ff66ff, 0 0 20px #cc00ff;
+  text-shadow: 0 0 5px #fff;
+}
+
+#vipForm button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #cc00ff, #ff66ff);
+  box-shadow: 0 0 20px #ff99ff;
+}
+
+#vipResult {
+  text-align: center;
+  font-size: 14px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  box-shadow: 0 0 10px #ff66ff;
+}
 
   </style>
 </head>
@@ -425,6 +483,35 @@
     <div id="ticketData"></div>
     <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
   </div>
+<div class="container" id="vipContainer">
+  <h2>จองคิว VIP (ศรัทธา 10 บาทขึ้นไป)</h2>
+  <form id="vipForm">
+    <label>ชื่อเล่น:</label>
+    <input type="text" id="vipName" required>
+    <label>อายุ:</label>
+    <input type="number" id="vipAge" required min="1">
+    <label>หมวดหมู่:</label>
+    <select id="vipCategory">
+           <option>ดูดวงส่วนตัว</option>
+        <option>โชคชะตา</option>
+        <option>ความฝัน</option>
+        <option>อดีตและอนาคต</option>
+        <option>ความรัก</option>
+        <option>การงาน</option>
+        <option>การเงิน</option>
+        <option>การเรียน</option>
+        <option>สุขภาพ</option>
+    </select>
+    <label>Instagram (@username):</label>
+    <input type="text" id="vipIG" required placeholder="@yourusername">
+    <label>จำนวนเงินศรัทธา (บาท):</label>
+    <input type="number" id="vipAmount" required min="11">
+    <label>อัปโหลดสลิป (ต้องใส่ชื่อ/อายุ/IG):</label>
+    <input type="file" id="vipSlip" accept="image/*,application/pdf" required>
+    <button type="submit">ยืนยันจองคิว VIP</button>
+  </form>
+  <div id="vipResult" style="margin-top: 15px; color: #ffccff;"></div>
+</div>
 
 <button class="dashboard-btn" onclick="showDashboard()">ดูแดชบอร์ด</button>
 <div class="admin-section" id="dashboardSection">
@@ -469,6 +556,68 @@
 </div>
 
   <script>
+  document.getElementById("vipForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const name = document.getElementById("vipName").value.trim();
+  const age = document.getElementById("vipAge").value.trim();
+  const category = document.getElementById("vipCategory").value;
+  const ig = document.getElementById("vipIG").value.trim();
+  const amount = parseFloat(document.getElementById("vipAmount").value);
+  const file = document.getElementById("vipSlip").files[0];
+
+  if (!file) {
+    alert("กรุณาอัปโหลดสลิป!");
+    return;
+  }
+  if (amount < 11) {
+    alert("โปรดใส่ยอดศรัทธามากกว่า 10 บาท");
+    return;
+  }
+
+  const referenceId = Math.random().toString(36).substring(2, 10).toUpperCase();
+  const timestamp = Date.now();
+  const storageRef = firebase.storage().ref(`vip_slips/${timestamp}_${file.name}`);
+
+  try {
+    // อัปโหลดสลิป
+    const uploadTaskSnapshot = await storageRef.put(file);
+    const slipUrl = await uploadTaskSnapshot.ref.getDownloadURL();
+
+    // เก็บข้อมูลใน Firestore
+    const timeNow = new Date();
+const formattedTime = timeNow.toLocaleString('th-TH', {
+  hour: '2-digit', minute: '2-digit', second: '2-digit',
+  day: '2-digit', month: 'short', year: 'numeric'
+});
+
+const vipData = {
+  name,
+  age,
+  category,
+  ig,
+  amount,
+  referenceId,
+  slipUrl,
+  timestamp: timeNow,
+  transferTime: formattedTime,
+  status: "รอตรวจสอบ"
+};
+    await db.collection("vipQueues").add(vipData);
+
+document.getElementById("vipResult").innerHTML = `
+  <p>✅ <b>จองคิว VIP สำเร็จ!</b></p>
+  <p>เลขอ้างอิง: <span style="color:#fff;">${referenceId}</span></p>
+  <p>สถานะ: <span style="color:yellow;">รอตรวจสอบสลิป</span></p>
+  <p><b>เวลาแจ้งโอน:</b> ${formattedTime}</p>
+  <p>กรุณารอแม่หมอยืนยันภายในไม่เกิน 3 ชั่วโมง</p>
+`;
+    document.getElementById("vipForm").reset();
+  } catch (error) {
+    alert("เกิดข้อผิดพลาด: " + error.message);
+  }
+});
+
     const queueDB = {}; // เก็บข้อมูลคิวใน session นี้
     let currentTicket = null; // เก็บใบคิวล่าสุด
 
