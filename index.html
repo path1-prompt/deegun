@@ -255,9 +255,38 @@
 #dashboardSection {
   display: none;
 }
+/* สไตล์สำหรับแสดงข้อมูลยอดผู้จองคิวและเวลาปัจจุบัน */
+.live-stats {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px #ff66ff;
+  z-index: 9999;
+  font-size: 16px;
+  font-family: 'Sarabun', sans-serif;
+  animation: fadeIn 2s ease-out;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.live-stats div {
+  margin: 5px 0;
+}
   </style>
 </head>
 <body>
+  <!-- ส่วนแสดงยอดผู้จองคิวและเวลาปัจจุบัน -->
+<div class="live-stats" id="liveStats">
+  <div id="queueCount">ยอดผู้จอง: 0 คน</div>
+  <div id="currentTime">เวลาปัจจุบัน: --:--</div>
+</div>
   <img src="IMG_0920.JPG" alt="โลโก้" class="logo-glow">
   <!-- Magical Animal -->
   <div class="magic-animal"></div>
@@ -520,7 +549,24 @@ async function showDashboard() {
 function closeDashboard() {
   document.getElementById("dashboardSection").style.display = "none";
 }
+// ฟังก์ชันสำหรับการอัพเดตยอดผู้จองและเวลาปัจจุบัน
+async function updateLiveStats() {
+  const snapshot = await db.collection("queues").get();
+  const queueCount = snapshot.size; // จำนวนผู้จองคิวทั้งหมด
+
+  // แสดงยอดผู้จอง
+  document.getElementById("queueCount").innerText = `ยอดผู้จอง: ${queueCount} คน`;
+
+  // อัพเดตเวลาปัจจุบัน
+  const currentTime = new Date().toLocaleString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  document.getElementById("currentTime").innerText = `เวลาปัจจุบัน: ${currentTime}`;
+}
+
+// เรียกใช้งานฟังก์ชันทุก 1 วินาที
+setInterval(updateLiveStats, 1000);
+
+// เมื่อโหลดหน้าเว็บ ให้เรียกฟังก์ชันทันที
+window.addEventListener("load", updateLiveStats);
   </script>
 </body>
 </html> 
-จัดหน้าต่างให้เข้ากับมือถือได้ดี ปรับไม่ให้ใหญ่เกิน
