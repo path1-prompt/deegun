@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบสุ่มชื่อจริงและชื่อเล่น</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap">
+  <style>
+    body {
+      font-family: 'Cinzel', serif;
+      background: radial-gradient(circle, rgba(26, 0, 51, 1) 0%, rgba(54, 0, 99, 1) 100%);
+      color: #fff;
+      text-align: center;
+      padding-top: 100px;
+      animation: glowAnimation 3s infinite alternate;
+    }
+    @keyframes glowAnimation {
+      0% {
+        text-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff, 0 0 50px #ff00ff;
+      }
+      100% {
+        text-shadow: 0 0 25px #8a2be2, 0 0 35px #8a2be2, 0 0 45px #8a2be2, 0 0 60px #8a2be2;
+      }
+    }
+    .container {
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+      box-shadow: 0px 0px 15px rgba(255, 0, 255, 0.7);
+    }
+    .title {
+      font-size: 2.8em;
+      margin-bottom: 20px;
+      color: #9b59b6;
+      text-shadow: 0 0 15px #9b59b6, 0 0 30px #9b59b6;
+    }
+    .result {
+      font-size: 1.5em;
+      margin-top: 30px;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      text-shadow: 0 0 15px #9b59b6, 0 0 25px #9b59b6;
+    }
+    button {
+      background-color: #9b59b6;
+      color: #fff;
+      font-size: 1.2em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0px 0px 10px rgba(255, 0, 255, 0.7);
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      background-color: #8a2be2;
+      box-shadow: 0px 0px 20px rgba(255, 0, 255, 1);
+    }
+    .meaning {
+      font-size: 1.2em;
+      margin-top: 20px;
+      color: #ffccff;
+      text-shadow: 0 0 10px #ffccff;
+    }
+    .reason {
+      font-size: 1.1em;
+      margin-top: 10px;
+      color: #d39cd3;
+      text-shadow: 0 0 10px #d39cd3;
+    }
+    .back-button {
+      background-color: #8a2be2;
+      color: #fff;
+      font-size: 1.2em;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 40px;
+      box-shadow: 0px 0px 20px rgba(255, 0, 255, 0.8);
+      transition: all 0.3s ease;
+    }
+    .back-button:hover {
+      background-color: #9b59b6;
+      box-shadow: 0px 0px 30px rgba(255, 0, 255, 1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="title">ระบบสุ่มชื่อจริงและชื่อเล่น</div>
+    <button onclick="generateName()">สุ่มชื่อ</button>
+    
+    <div class="result" id="nameResult"></div>
+    <div class="meaning" id="meaning"></div>
+    <div class="reason" id="reason"></div>
+
+    <!-- Back button to index.html -->
+    <button class="back-button" onclick="goBack()">ย้อนกลับ</button>
+  </div>
+
+  <script>
+    const names = {
+      female: [
+        { real: 'อัญญ์รดา', nick: 'อัญ', meaning: 'หญิงผู้สูงค่า มีพลังในตัวเอง', reason: 'ชื่อมีพลังแห่งเสน่ห์และสง่างาม' },
+        { real: 'พิชชาภา', nick: 'พิชา', meaning: 'ความรู้ + ความเจิดจรัส', reason: 'ชื่อที่สื่อถึงความรู้และสติปัญญา' },
+        { real: 'ลลินดา', nick: 'ลิน', meaning: 'อ่อนโยนแต่ทรงพลัง', reason: 'ชื่อที่มีความเมตตาและพลังในตัวเอง' },
+        { real: 'รมิดา', nick: 'มีมี่', meaning: 'หญิงที่มีเสน่ห์เหนือธรรมชาติ', reason: 'พลังแห่งวันศุกร์เสริมเสน่ห์ให้คุณ' },
+        { real: 'พัชรินทร์', nick: 'พัช', meaning: 'หญิงแห่งความรุ่งโรจน์', reason: 'ชื่อที่เหมาะกับผู้ที่สามารถสร้างสรรค์สิ่งใหม่ ๆ ได้' },
+        { real: 'กานต์พิชชา', nick: 'กานต์', meaning: 'ผู้ที่มีสติปัญญา', reason: 'เสริมความฉลาดและความสามารถในการตัดสินใจ' },
+        { real: 'ธัญญา', nick: 'ธัญ', meaning: 'ความเจริญรุ่งเรือง', reason: 'เหมาะกับคนที่มีโชคลาภและความสำเร็จ' },
+        { real: 'ลินดา', nick: 'ลิน', meaning: 'สง่างาม, ยิ่งใหญ่', reason: 'เสริมความสวยงามและจิตใจที่สงบ' },
+        { real: 'ศศิธร', nick: 'ธาร', meaning: 'ดวงจันทร์, ความบริสุทธิ์', reason: 'เหมาะกับผู้หญิงที่มีความอ่อนโยนและสง่างาม' },
+        { real: 'ชนิษฐา', nick: 'นนิ', meaning: 'ชาญฉลาด, ฉลาดปราดเปรื่อง', reason: 'เหมาะกับผู้หญิงที่มีความคิดสร้างสรรค์และมีปัญญา' }
+      ],
+      male: [
+        { real: 'ธีรดล', nick: 'ดล', meaning: 'พลังผู้มีปัญญา', reason: 'เหมาะกับผู้นำที่มีความสามารถและปัญญา' },
+        { real: 'ภูบดินทร์', nick: 'ภู', meaning: 'หนักแน่นดั่งขุนเขา', reason: 'เหมาะกับคนที่มั่นคงและมีความแข็งแกร่ง' },
+        { real: 'นรินทร์', nick: 'ริน', meaning: 'นักรบแห่งแสง', reason: 'เหมาะกับผู้นำที่กล้าหาญและแข็งแกร่ง' },
+        { real: 'คิรันต์', nick: 'คิ', meaning: 'แสงสว่างแห่งความรู้', reason: 'เหมาะกับคนที่มีปัญญาและความคิดสร้างสรรค์' },
+        { real: 'ณัฐวุฒิ', nick: 'วุฒิ', meaning: 'ผู้มีความรู้ความสามารถ', reason: 'เหมาะกับผู้ที่มีความรู้และความสามารถในการตัดสินใจ' },
+        { real: 'สุวรรณ', nick: 'สุวรรณ', meaning: 'ทองคำ', reason: 'เสริมโชคลาภและความร่ำรวย' },
+        { real: 'บุณยชาติ', nick: 'ชาติ', meaning: 'ผู้มีความดี', reason: 'เหมาะกับคนที่มีจิตใจดีและเต็มไปด้วยคุณธรรม' },
+        { real: 'ทิวากร', nick: 'ทิวา', meaning: 'แสงแดดแห่งความสำเร็จ', reason: 'เหมาะกับคนที่มีความสามารถและพร้อมที่จะประสบความสำเร็จ' },
+        { real: 'ศุภชัย', nick: 'ชัย', meaning: 'ความสำเร็จ, ชัยชนะ', reason: 'เหมาะกับผู้ที่มุ่งมั่นและมีพลังในการต่อสู้เพื่อความสำเร็จ' },
+        { real: 'กฤษฎา', nick: 'กฤษ', meaning: 'ผู้มีพรสวรรค์', reason: 'เหมาะกับคนที่มีความสามารถพิเศษและมีพรสวรรค์' }
+      ]
+    };
+
+    function generateName() {
+      const gender = Math.random() < 0.5 ? 'female' : 'male'; // Randomly choose between male and female
+      const nameIndex = Math.floor(Math.random() * names[gender].length);
+      const selectedName = names[gender][nameIndex];
+
+      // Update UI with result
+      document.getElementById("nameResult").innerHTML = `ชื่อจริง: ${selectedName.real} <br>ชื่อเล่น: ${selectedName.nick}`;
+      document.getElementById("meaning").innerHTML = `ความหมาย: ${selectedName.meaning}`;
+      document.getElementById("reason").innerHTML = `เหตุผล: ${selectedName.reason}`;
+    }
+
+    function goBack() {
+      window.location.href = "index.html"; // Go back to the homepage (index.html)
+    }
+  </script>
+
+</body>
+</html>
