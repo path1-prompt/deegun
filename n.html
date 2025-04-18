@@ -6,7 +6,7 @@
   <title>คลังชื่อมงคล</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet"/>
   <style>
-    body {
+        body {
       margin: 0;
       font-family: 'Cinzel', serif;
       background: radial-gradient(circle, #1b0033, #2c0052);
@@ -16,68 +16,66 @@
 
     h1 {
       text-align: center;
-      font-size: 3em;
-      margin: 40px 0 20px;
+      font-size: 2em;
+      margin: 30px 0 20px;
       color: #ffccff;
-      text-shadow: 0 0 20px #ff00ff, 0 0 40px #aa00ff;
+      text-shadow: 0 0 15px #ff00ff, 0 0 30px #aa00ff;
     }
 
     .container {
       padding: 0 20px 50px;
-      max-width: 1300px;
+      max-width: 100%;
       margin: auto;
+      box-sizing: border-box;
     }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 15px;
-  overflow: hidden;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
-  table-layout: auto;
-}
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+      table-layout: auto;
+    }
 
-th, td {
-  padding: 15px 20px;
-  text-align: left;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  white-space: nowrap; /* ป้องกันไม่ให้ข้อความตัดบรรทัด */
-  overflow: hidden;
-  text-overflow: ellipsis; /* ใช้ในการแสดง '...' หากข้อความยาวเกิน */
-}
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      white-space: nowrap; 
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-th {
-  background-color: rgba(138, 43, 226, 0.4);
-  color: #ffccff;
-  font-size: 1.2em;
-  text-shadow: 0 0 10px #ffccff;
-}
-td {
-  color: #e0c8ff;
-}
+    th {
+      background-color: rgba(138, 43, 226, 0.4);
+      color: #ffccff;
+      font-size: 1em;
+      text-shadow: 0 0 8px #ffccff;
+    }
 
-
-
+    td {
+      color: #e0c8ff;
+    }
 
     tr:hover {
       background-color: rgba(255, 255, 255, 0.1);
       transition: 0.3s ease;
     }
 
-
     .back-btn {
       display: block;
       width: fit-content;
-      margin: 40px auto 0;
-      padding: 12px 30px;
-      font-size: 1.1em;
+      margin: 30px auto 0;
+      padding: 10px 25px;
+      font-size: 1em;
       background: #8a2be2;
       color: white;
       border: none;
-      border-radius: 10px;
-      box-shadow: 0 0 15px #ff00ff, 0 0 30px #aa00ff;
+      border-radius: 8px;
+      box-shadow: 0 0 12px #ff00ff, 0 0 20px #aa00ff;
       cursor: pointer;
       transition: 0.3s ease;
       text-decoration: none;
@@ -85,7 +83,53 @@ td {
 
     .back-btn:hover {
       background: #6b1fa7;
-      box-shadow: 0 0 25px #ff00ff, 0 0 40px #aa00ff;
+      box-shadow: 0 0 20px #ff00ff, 0 0 30px #aa00ff;
+    }
+
+    /* Media Query สำหรับมือถือ */
+    @media screen and (max-width: 768px) {
+      h1 {
+        font-size: 1.8em;
+        margin: 20px 0;
+      }
+
+      .container {
+        padding: 0 10px;
+      }
+
+      table {
+        font-size: 0.9em;
+        box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+      }
+
+      th, td {
+        padding: 10px 12px;
+      }
+
+      .back-btn {
+        padding: 8px 20px;
+        font-size: 0.9em;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      h1 {
+        font-size: 1.6em;
+        margin: 15px 0;
+      }
+
+      table {
+        font-size: 0.8em;
+      }
+
+      th, td {
+        padding: 8px 10px;
+      }
+
+      .back-btn {
+        padding: 6px 15px;
+        font-size: 0.8em;
+      }
     }
   </style>
 </head>
