@@ -642,13 +642,12 @@ input[type="checkbox"]:not(:checked) + .checkbox-custom {
 
 <!-- ส่วนของการจองเร่งด่วน -->
 <div id="urgentSection" style="display: none; margin-top: 10px; background: #2c0033; padding: 10px; border-radius: 6px;">
-  <p style="color:#fff; font-size: 14px;">กรุณาติดต่อแม่หมอและส่งสลิปการโอนเงิน พร้อมข้อมูลดังนี้:</p>
+  <label>แนบสลิปการโอนเงิน:</label><br>
+  <input type="file" id="slipFile" accept="image/*"><br><br>
   <p style="color:#ccc; font-size: 13px;">
+    * ในสลิป กรุณาเขียน: <br>
     ชื่อ / อายุ / IG
   </p>
-  <label>แนบสลิปการโอนเงิน:</label><br>
-  <input type="file" id="slipFile" accept="image/*" required><br><br>
-  <p style="color:#fff;">หลังจากจองเสร็จสิ้น ระบบจะรอตรวจสอบภายใน 1 ชั่วโมง</p>
 </div>
       <button type="submit">จองคิว</button>
     </form>
