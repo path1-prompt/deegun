@@ -1318,6 +1318,7 @@ const messages = [
     magic.style.display = "none";
   }, 2000);
 }
+const messages = [
 const wishMessages = [
   // เวทมนตร์ลี้ลับ
   "พลังงานแห่งดวงจันทร์ได้โอบรับคำอธิษฐานของเจ้าแล้ว",
@@ -1367,9 +1368,15 @@ function submitWish() {
     return;
   }
 
-
+  // เก็บข้อมูลลง localStorage หรือส่งไป Firebase
   localStorage.setItem("lastWishTime", now);
   localStorage.setItem("wishText", wishText); // ถ้าใช้ Firebase ก็ส่งแทน
+
+  const response = messages[Math.floor(Math.random() * messages.length)];
+  document.getElementById("responseMessage").innerText = response;
+  document.getElementById("wishInput").value = "";
+  document.getElementById("countdownTimer").innerText = "คำอธิษฐานของเจ้าได้ถูกส่งแล้ว";
+}
 
   </script>
   <script>
