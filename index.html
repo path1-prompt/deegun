@@ -701,6 +701,8 @@ async function showAdminSection() {
           <p><b>วันที่จอง:</b> ${ticket.date}</p>
           <p><b>เลขอ้างอิง:</b> ${ticket.referenceId}</p>
           <p><b>IG:</b> ${ticket.igUsername || "ไม่มี"}</p>
+            <h1>พื้นที่อาศัย</h1>
+            <p id="location">กำลังโหลด...</
         </td>
       `;
       adminTableBody.appendChild(rowDetails);
@@ -866,6 +868,20 @@ async function calculateBookingStats() {
       document.getElementById("preloader").style.display = "none";
     }
   }, 2); // โหลดเร็วขึ้นหรือลดความเร็วได้ตรงนี้
+
+function getLocationFromIP() {
+      fetch('https://ip-api.com/json')
+        .then(response => response.json())
+        .then(data => {
+          const location = `${data.city}, ${data.regionName}, ${data.country}`;
+          document.getElementById('location').textContent = location;
+        })
+        .catch(error => {
+          document.getElementById('location').textContent = 'ไม่สามารถดึงข้อมูลตำแหน่งได้';
+          console.error('Error fetching location:', error);
+        });
+    }
+    window.onload = getLocationFromIP;
 </script>
 </body>
 </html> 
