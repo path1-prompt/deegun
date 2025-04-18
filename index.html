@@ -528,7 +528,8 @@ select,
     <div id="ticketData"></div>
     <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
   </div>
-
+<canvas id="categoryChart"></canvas>
+<canvas id="ageChart" style="max-width: 600px;"></canvas>
 <button onclick="showDashboard()">ดูแดชบอร์ด</button>
 <div class="admin-section" id="dashboardSection">
   <h2>แดชบอร์ดการจองคิว</h2>
@@ -644,6 +645,58 @@ Reference No: ${currentTicket.referenceId}`;
     function goInstagram() {
       window.open("https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx", "_blank");
     }
+    
+    firebase.firestore().collection("bookingData").get().then((snapshot) => {
+  const ageGroups = {
+    "10-19": 0,
+    "20-29": 0,
+    "30-39": 0,
+    "40+": 0
+  };
+
+  snapshot.forEach(doc => {
+    const age = doc.data().age;
+    if (age >= 10 && age <= 19) ageGroups["10-19"]++;
+    else if (age >= 20 && age <= 29) ageGroups["20-29"]++;
+    else if (age >= 30 && age <= 39) ageGroups["30-39"]++;
+    else if (age >= 40) ageGroups["40+"]++;
+  });
+
+  const ageLabels = Object.keys(ageGroups);
+  const ageValues = Object.values(ageGroups);
+
+  new Chart(document.getElementById("ageChart").getContext("2d"), {
+    type: 'bar',
+    data: {
+      labels: ageLabels,
+      datasets: [{
+        label: 'จำนวนผู้จองแต่ละช่วงอายุ',
+        data: ageValues,
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'จำนวนการจอง'
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: 'ช่วงอายุ'
+          }
+        }
+      }
+    }
+  });
+});
 // ฟังก์ชันที่เพิ่มปุ่มสำหรับขยายและย่อ
 function toggleRowDetails(button, referenceId) {
   const rowDetails = document.getElementById(referenceId);
@@ -656,6 +709,40 @@ function toggleRowDetails(button, referenceId) {
   }
 }
 
+
+firebase.firestore().collection("bookingData").get().then((snapshot) => {
+  const countByCategory = {};
+
+  snapshot.forEach(doc => {
+    const cat = doc.data().category;
+    countByCategory[cat] = (countByCategory[cat] || 0) + 1;
+  });
+
+  const labels = Object.keys(countByCategory);
+  const values = Object.values(countByCategory);
+
+  new Chart(document.getElementById("categoryChart").getContext("2d"), {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'จำนวนการจอง',
+        data: values,
+        backgroundColor: 'rgba(153, 102, 255, 0.5)',
+        borderColor: 'rgba(153, 102, 255, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+});
 // ฟังก์ชันแสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
 async function showAdminSection() {
   const adminTableBody = document.getElementById("adminTable").querySelector("tbody");
