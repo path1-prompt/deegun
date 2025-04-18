@@ -776,18 +776,6 @@ textarea:focus {
         <input type="radio" name="rating" value="5" id="star5">
       </div>
     </div>
-    
-    <div class="message">
-      <label for="message">ข้อความรีวิว:</label>
-      <textarea id="message" placeholder="เขียนรีวิวของคุณ"></textarea>
-    </div>
-
-    <div class="submit-btn">
-      <button onclick="submitReview()">ส่งรีวิว</button>
-    </div>
-    
-    <div id="result"></div>
-  </div>
 <div class="admin-section" id="adminSection" style="display: block;">
     <h2>ข้อมูลใบคิวทั้งหมด</h2>
 <div style="overflow-x: auto;">
@@ -1104,121 +1092,7 @@ async function calculateBookingStats() {
     document.getElementById("not-yet-booked").textContent = notYetBooked;
     document.getElementById("completed-bookings").textContent = completedBookings;
   }
-
   window.onload = calculateBookingStats;
-  
-  function getUserIp() {
-  let userIp = "";
-  
-  // ใช้ ipify API เพื่อดึง IP ของผู้ใช้
-  fetch('https://api.ipify.org?format=json')
-    .then(response => response.json())
-    .then(data => {
-      userIp = data.ip;
-    })
-    .catch(error => {
-      console.error("Error getting IP address: ", error);
-      userIp = "Unknown IP";
-    });
-  
-  return userIp;
-}
-function checkIfIpExists(userIp) {
-  const reviewsRef = database.ref('reviews');
-  
-  reviewsRef.orderByChild('ip').equalTo(userIp).once('value', snapshot => {
-    if (snapshot.exists()) {
-      alert("คุณได้รีวิวแล้ว ไม่สามารถรีวิวซ้ำได้.");
-    } else {
-      submitReview();
-    }
-  });
-}
-
-function displayReviews() {
-  const reviewsRef = database.ref('reviews');
-  
-  reviewsRef.on('value', snapshot => {
-    const reviews = snapshot.val();
-    const reviewsContainer = document.getElementById('result');
-    reviewsContainer.innerHTML = ''; // Clear previous reviews
-    
-    if (!reviews) {
-      reviewsContainer.innerHTML = '<p>ยังไม่มีรีวิว</p>';
-      return;
-    }
-    
-    for (const reviewId in reviews) {
-      const review = reviews[reviewId];
-      const reviewDiv = document.createElement('div');
-      reviewDiv.classList.add('review');
-      
-      // Create star rating
-      const starRating = createStarRating(review.rating);
-      
-      // Display review message
-      const message = document.createElement('p');
-      message.textContent = review.message;
-      
-      // Add to container
-      reviewDiv.appendChild(starRating);
-      reviewDiv.appendChild(message);
-      reviewsContainer.appendChild(reviewDiv);
-    }
-  });
-}
-
-function createStarRating(rating) {
-  const starsDiv = document.createElement('div');
-  for (let i = 0; i < 5; i++) {
-    const star = document.createElement('i');
-    star.classList.add('fas', 'fa-star');
-    if (i < rating) {
-      star.classList.add('filled');
-    }
-    starsDiv.appendChild(star);
-  }
-  return starsDiv;
-}
-  
-function submitReview() {
-  const rating = document.querySelector('input[name="rating"]:checked').value; // Get rating
-  const message = document.getElementById('message').value; // Get review message
-  const userIp = getUserIp(); // ดึง IP ของผู้ใช้
-
-  if (rating && message) {
-    // Firebase reference for saving review
-    const reviewsRef = database.ref('reviews');
-    
-    // Generate a unique ID for each review
-    const newReviewRef = reviewsRef.push();
-    
-    // Save review to Firebase
-    newReviewRef.set({
-      rating: rating,
-      message: message,
-      ip: userIp,
-      timestamp: new Date().toISOString(),
-    })
-    .then(() => {
-      console.log("รีวิวถูกส่งเรียบร้อย!");
-      alert("รีวิวถูกส่งเรียบร้อย!");
-      clearForm(); // Clear form after submission
-      displayReviews(); // แสดงรีวิวหลังจากส่ง
-    })
-    .catch((error) => {
-      console.error("Error writing new review: ", error);
-      alert("เกิดข้อผิดพลาดในการส่งรีวิว.");
-    });
-  } else {
-    alert("กรุณากรอกข้อมูลให้ครบถ้วน.");
-  }
-}
-
-function clearForm() {
-  document.querySelector('input[name="rating"]:checked').checked = false;
-  document.getElementById('message').value = '';
-}
   </script>
   <script>
   let percent = 0;
