@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>บริจาคตามจิตศรัทธา</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Kanit', sans-serif;
+      background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .poster {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      padding: 40px 30px;
+      max-width: 500px;
+      text-align: center;
+      position: relative;
+    }
+    .poster h1 {
+      color: #d35400;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+    .poster p {
+      font-size: 1.2em;
+      color: #333;
+      margin: 15px 0;
+    }
+    .highlight {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+    .cta-button {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 25px;
+      background-color: #e67e22;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 1.1em;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .cta-button:hover {
+      background-color: #d35400;
+      transform: scale(1.05);
+    }
+    /* Popup styles */
+    .popup {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.6);
+    }
+    .popup-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .popup-content img {
+      width: 200px;
+      height: 200px;
+      margin-bottom: 15px;
+    }
+    .close-button {
+      background-color: #e74c3c;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    .close-button:hover {
+      background-color: #c0392b;
+    }
+    @media (max-width: 600px) {
+      .poster {
+        padding: 30px 20px;
+      }
+      .poster h1 {
+        font-size: 2em;
+      }
+      .poster p {
+        font-size: 1em;
+      }
+    }
+    .back-button {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 1em;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #2980b9;
+  transform: scale(1.05);
+}
+  </style>
+</head>
+<body>
+  <div class="poster">
+    <h1>✨ บริจาคตามจิตศรัทธา ✨</h1>
+    <p>เพียง <span class="highlight">10 บาทขึ้นไป</span></p>
+    <p>รับบริการสุดพิเศษจาก <span class="highlight">แม่หมอ</span> ทันที!</p>
+    <p>จำนวนจำกัด อย่าพลาดโอกาสดีๆ นี้</p>
+    <button class="cta-button" onclick="openPopup()">ร่วมบริจาคเลย</button>
+    <a href="index.html" class="back-button">ย้อนกลับ</a>
+  </div>
+
+  <!-- Popup -->
+  <div id="donationPopup" class="popup">
+    <div class="popup-content">
+      <h2>สแกน QR เพื่อบริจาค</h2>
+      <img src="prompng" alt="PromptPay QR Code" />
+      <p>กรุณาส่งสลิปไปยัง Instagram: <a href="https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx" target="_blank">@horoscope_1308</a></p>
+      <button class="close-button" onclick="closePopup()">ปิด</button>
+      <a href="index.html" class="back-button">ย้อนกลับ</a>
+    </div>
+  </div>
+
+  <script>
+    function openPopup() {
+      document.getElementById("donationPopup").style.display = "block";
+    }
+    function closePopup() {
+      document.getElementById("donationPopup").style.display = "none";
+    }
+  </script>
+</body>
+</html>
