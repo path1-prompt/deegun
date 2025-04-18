@@ -765,18 +765,18 @@ document.getElementById("resultCount").innerText = `พบทั้งหมด 
     // แสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
 // ฟังก์ชันที่เพิ่มปุ่มสำหรับขยายและย่อ
 // ฟังก์ชันที่เพิ่มปุ่มสำหรับขยายและย่อ
-function toggleRowDetails(button, referenceId) {
-  const rowDetails = document.getElementById(referenceId);
-  const isVisible = rowDetails.classList.contains("show");
-
-  if (!isVisible) {
-    rowDetails.classList.add("show");
-    button.innerText = "ย่อ";
+// ฟังก์ชันที่เพิ่มปุ่มสำหรับขยายและย่อ
+function toggleRowDetails(button, rowId) {
+  const rowDetails = document.getElementById(rowId);
+  if (rowDetails.style.display === "none" || rowDetails.style.display === "") {
+    rowDetails.style.display = "table-row"; // ขยายแถว
+    button.innerText = "ย่อ"; // เปลี่ยนข้อความปุ่ม
   } else {
-    rowDetails.classList.remove("show");
-    button.innerText = "ขยาย";
+    rowDetails.style.display = "none"; // ย่อแถว
+    button.innerText = "ขยาย"; // เปลี่ยนข้อความปุ่ม
   }
 }
+
 // ฟังก์ชันแสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
 async function showAdminSection() {
   const adminTableBody = document.getElementById("adminTable").querySelector("tbody");
@@ -784,9 +784,9 @@ async function showAdminSection() {
 
   try {
     const snapshot = await db.collection("queues").orderBy("date", "desc").get();
-    snapshot.forEach((doc) => {
+    snapshot.forEach((doc, index) => {
       const ticket = doc.data();
-      const rowId = `row-details-${ticket.referenceId}`; // ใช้ referenceId เป็น rowId
+      const rowId = `row-details-${index}`; // ID สำหรับแต่ละแถว
 
       const row = document.createElement("tr");
       row.innerHTML = `
