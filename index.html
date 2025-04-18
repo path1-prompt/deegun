@@ -672,6 +672,56 @@ textarea:focus {
   0% { opacity: 0; transform: translateY(20px); }
   100% { opacity: 1; transform: translateY(0); }
 }
+
+
+    .card {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      max-width: 420px;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    h2 {
+      color: #a349a4;
+      margin-bottom: 15px;
+    }
+
+    #msg {
+      font-size: 1.2rem;
+      color: #444;
+      margin-bottom: 20px;
+      min-height: 60px;
+    }
+
+    #timer {
+      font-size: 0.9rem;
+      color: #888;
+      margin-top: 10px;
+    }
+
+    button {
+      background-color: #c084fc;
+      border: none;
+      color: white;
+      padding: 10px 25px;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
 </style>
 </head>
 <body>
@@ -766,6 +816,12 @@ textarea:focus {
   </div>
     <div class="laser-divider">
     <div class="laser-effect"></div>
+  </div>
+    <div class="card">
+    <h2>พลังบวกจากแม่หมอ</h2>
+    <div id="msg">กดปุ่มเพื่อรับคำปลอบโยนจากจักรวาล</div>
+    <button id="btn" onclick="getMessage()">สุ่มกำลังใจ</button>
+    <div id="timer"></div>
   </div>
 <div class="admin-section" id="adminSection" style="display: block;">
     <h2>ข้อมูลใบคิวทั้งหมด</h2>
@@ -1084,6 +1140,103 @@ async function calculateBookingStats() {
     document.getElementById("completed-bookings").textContent = completedBookings;
   }
   window.onload = calculateBookingStats;
+  
+const messages = [
+  "แม่หมอสัมผัสได้ถึงแสงสว่างในใจของเธอ",
+  "เธอจะเจอเรื่องดี ๆ ที่ไม่คาดคิดเร็ว ๆ นี้",
+  "แม้วันนี้จะมีเมฆ แต่ฟ้ายังอยู่ข้างหลังเสมอ",
+  "เธอผ่านอะไรมามาก และเธอยังอยู่ นั่นแหละคือพลัง",
+  "แม่หมอส่งพลังงานดี ๆ ให้เสมอ แม้เธอไม่เห็นก็ตาม",
+  "พรุ่งนี้ยังมาไม่ถึง อย่ารีบเศร้าไปก่อนเลยนะ",
+  "ไม่เป็นไรถ้ารู้สึกอ่อนแอ นั่นแหละคือมนุษย์",
+  "ทุกการเริ่มต้นใหม่ ล้วนต้องเดินผ่านจุดที่สับสน",
+  "เหนื่อยนักก็พักก่อน ไม่ใช่เรื่องผิดเลย",
+  "น้ำตาที่ไหลวันนี้ จะกลายเป็นรอยยิ้มในวันหน้า",
+  "เธอมีค่ามากกว่าที่คิด แม่หมอรับรู้ได้",
+  "ไม่มีใครสมบูรณ์แบบ ทุกคนต่างกำลังเติบโต",
+  "โลกนี้ยังมีมุมอบอุ่น รอให้เธอไปเจอ",
+  "อย่าตัดสินตัวเองจากวันที่แย่ มันไม่ได้กำหนดทั้งหมดของชีวิต",
+  "ดวงเธอยังสดใสอยู่นะ เพียงแต่อาจมีหมอกบาง ๆ บังไว้เท่านั้น",
+  "เมื่อจิตใจนิ่ง ความสว่างจะเผยตัว",
+  "ไม่ใช่ทุกปัญหาต้องแก้ทันที บางอย่างแค่ต้องรอเวลา",
+  "รักตัวเองก่อน แล้วพลังดี ๆ จะตามมาเอง",
+  "แม้โลกจะวุ่นวาย แต่เธอยังมีแม่หมออยู่นะ",
+  "เชื่อเถอะว่าเธอจะผ่านมันไปได้อีกครั้ง เหมือนที่เคยทำมาแล้ว",
+  "เธอไม่ได้ล้มเหลว แค่ยังไม่ถึงเวลาที่ผลิบาน",
+  "แม้ไม่มีใครเข้าใจ เธอก็ยังเป็นคนมีคุณค่าเสมอ",
+  "อย่ากลัวการเริ่มต้นใหม่ มันอาจพาไปที่ที่สวยงามกว่าที่เดิม",
+  "บางทีความเงียบก็เป็นเพื่อนที่ดีที่สุดในช่วงเวลานี้",
+  "เธอไม่ต้องเร่งรีบ ทุกอย่างมีจังหวะของมัน",
+  "แม่หมอขอให้วันนี้เธอเจอรอยยิ้มเล็ก ๆ สักหนึ่งครั้งก็ยังดี",
+  "หยุดโทษตัวเองเถอะ ทุกคนต่างก็เคยทำพลาด",
+  "มองตัวเองด้วยสายตาเมตตา เหมือนที่แม่หมอมองเธอ",
+  "แม้วันนี้จะไม่ดี แต่ยังมีโอกาสทำให้พรุ่งนี้ดีขึ้น",
+  "เธออาจยังไม่เห็นทาง แต่แสงกำลังจะมา",
+  "แม่หมอเชื่อมั่นในพลังของเธอ เธอคือคนที่สู้ได้เสมอ",
+  "ไม่ใช่ทุกน้ำตาคือความอ่อนแอ บางครั้งมันคือความกล้าหาญ",
+  "เธอไม่ต้องเปรียบเทียบตัวเองกับใครเลย",
+  "แม้ไม่มีใครอยู่ แม่หมอก็ยังอยู่ตรงนี้เสมอ",
+  "เธอไม่ได้ลำพัง ความรักยังโอบล้อมอยู่รอบตัวเธอ",
+  "แม่หมอเห็นแล้วว่า เธอกำลังดีขึ้น แม้ช้าแต่แน่นอน",
+  "บางครั้งสิ่งที่ดีที่สุดคือการหายใจลึก ๆ แล้วเริ่มใหม่",
+  "เธอจะดีขึ้นในแบบของเธอ ไม่ต้องเหมือนใคร",
+  "เธอเก่งมากแล้ว ที่ยังยิ้มได้แม้ข้างในจะเหนื่อย",
+  "เธอมีพลังวิเศษของตัวเอง อยู่แค่ต้องกล้าปล่อยให้เปล่งประกาย"
+];
+
+    const btn = document.getElementById('btn');
+    const msg = document.getElementById('msg');
+    const timer = document.getElementById('timer');
+    const cooldownMs = 24 * 60 * 60 * 1000; // 24 ชั่วโมง
+
+    function getMessage() {
+      const now = Date.now();
+      const lastTime = localStorage.getItem('lastFortuneTime');
+
+      if (lastTime && now - lastTime < cooldownMs) {
+        updateTimer();
+        return;
+      }
+
+      const randomIndex = Math.floor(Math.random() * messages.length);
+      msg.textContent = messages[randomIndex];
+      localStorage.setItem('lastFortuneTime', now);
+      updateTimer();
+    }
+
+    function updateTimer() {
+      const last = parseInt(localStorage.getItem('lastFortuneTime'));
+      if (!last) return;
+
+      const now = Date.now();
+      const diff = cooldownMs - (now - last);
+
+      if (diff > 0) {
+        btn.disabled = true;
+
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        timer.textContent = `รอรับพลังใหม่ได้ในอีก ${hours} ชม. ${minutes} นาที ${seconds} วินาที`;
+
+        setTimeout(updateTimer, 1000);
+      } else {
+        timer.textContent = "";
+        btn.disabled = false;
+        msg.textContent = "เธอสามารถขอพลังจากแม่หมอได้อีกครั้งแล้วนะ";
+        localStorage.removeItem('lastFortuneTime');
+      }
+    }
+
+    // ป้องกันกดหลายรอบด้วยการโหลดสถานะเมื่อเปิดหน้า
+    window.onload = () => {
+      updateTimer();
+      const last = localStorage.getItem('lastFortuneTime');
+      if (last && Date.now() - last < cooldownMs) {
+        btn.disabled = true;
+      }
+    };
   </script>
   <script>
   let percent = 0;
