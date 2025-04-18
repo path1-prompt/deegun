@@ -577,6 +577,101 @@ select,
       0% { left: -100%; }
       100% { left: 100%; }
     }
+    .review-container {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 25px rgba(255, 0, 255, 0.6);
+  width: 350px;
+  text-align: center;
+  border: 3px solid #ff00ff;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.glow-title {
+  font-size: 30px;
+  color: #ff00ff;
+  text-shadow: 0 0 15px #ff00ff, 0 0 25px #ff0055, 0 0 35px #ff0000;
+  margin-bottom: 20px;
+}
+
+/* Rating Stars */
+.stars {
+  margin: 20px 0;
+}
+
+.star-rating {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.star-rating input {
+  -webkit-appearance: none;
+  background: #ccc;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.star-rating input:checked {
+  background: #ff00ff;
+}
+
+.star-rating input:hover {
+  background: #c44fff;
+}
+
+/* Message Section */
+.message {
+  margin-top: 20px;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  background-color: #333;
+  color: white;
+  border: 2px solid #ff00ff;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 10px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: transform 0.3s ease-in-out;
+}
+
+textarea:focus {
+  transform: scale(1.05);
+  border-color: #ff00ff;
+  outline: none;
+}
+
+/* Submit Button */
+.submit-btn button {
+  background-color: #ff00ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.submit-btn button:hover {
+  background-color: #c44fff;
+}
+
+/* Animation for review container */
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
 </style>
 </head>
 <body>
@@ -668,7 +763,31 @@ select,
     <div class="laser-divider">
     <div class="laser-effect"></div>
   </div>
-  <!-- Admin Section -->
+  <div class="review-container">
+    <h2 class="glow-title">รีวิวร้านแม่หมอ</h2>
+    
+    <div class="stars">
+      <label for="rating">ให้คะแนนร้าน:</label>
+      <div class="star-rating">
+        <input type="radio" name="rating" value="1" id="star1">
+        <input type="radio" name="rating" value="2" id="star2">
+        <input type="radio" name="rating" value="3" id="star3">
+        <input type="radio" name="rating" value="4" id="star4">
+        <input type="radio" name="rating" value="5" id="star5">
+      </div>
+    </div>
+    
+    <div class="message">
+      <label for="message">ข้อความรีวิว:</label>
+      <textarea id="message" placeholder="เขียนรีวิวของคุณ"></textarea>
+    </div>
+
+    <div class="submit-btn">
+      <button onclick="submitReview()">ส่งรีวิว</button>
+    </div>
+    
+    <div id="result"></div>
+  </div>
 <div class="admin-section" id="adminSection" style="display: block;">
     <h2>ข้อมูลใบคิวทั้งหมด</h2>
 <div style="overflow-x: auto;">
@@ -987,6 +1106,112 @@ async function calculateBookingStats() {
   }
 
   window.onload = calculateBookingStats;
+  
+  function getUserIp() {
+  let userIp = "";
+  
+  // ใช้ ipify API เพื่อดึง IP ของผู้ใช้
+  fetch('https://api.ipify.org?format=json')
+    .then(response => response.json())
+    .then(data => {
+      userIp = data.ip;
+    })
+    .catch(error => {
+      console.error("Error getting IP address: ", error);
+      userIp = "Unknown IP";
+    });
+  
+  return userIp;
+}
+function checkIfIpExists(userIp) {
+  const reviewsRef = database.ref('reviews');
+  
+  reviewsRef.orderByChild('ip').equalTo(userIp).once('value', snapshot => {
+    if (snapshot.exists()) {
+      alert("คุณได้รีวิวแล้ว ไม่สามารถรีวิวซ้ำได้.");
+    } else {
+      submitReview();
+    }
+  });
+}
+
+function displayReviews() {
+  const reviewsRef = database.ref('reviews');
+  
+  reviewsRef.on('value', snapshot => {
+    const reviews = snapshot.val();
+    const reviewsContainer = document.getElementById('result');
+    reviewsContainer.innerHTML = ''; // Clear previous reviews
+    
+    for (const reviewId in reviews) {
+      const review = reviews[reviewId];
+      const reviewDiv = document.createElement('div');
+      reviewDiv.classList.add('review');
+      
+      // Create star rating
+      const starRating = createStarRating(review.rating);
+      
+      // Display review message
+      const message = document.createElement('p');
+      message.textContent = review.message;
+      
+      // Add to container
+      reviewDiv.appendChild(starRating);
+      reviewDiv.appendChild(message);
+      reviewsContainer.appendChild(reviewDiv);
+    }
+  });
+}
+
+function createStarRating(rating) {
+  const starsDiv = document.createElement('div');
+  for (let i = 0; i < 5; i++) {
+    const star = document.createElement('i');
+    star.classList.add('fas', 'fa-star');
+    if (i < rating) {
+      star.classList.add('filled');
+    }
+    starsDiv.appendChild(star);
+  }
+  return starsDiv;
+}
+  
+  function submitReview() {
+  const rating = document.querySelector('input[name="rating"]:checked').value; // Get rating
+  const message = document.getElementById('message').value; // Get review message
+  const userIp = getUserIp(); // เรียกใช้ฟังก์ชันดึง IP ที่เราจะเพิ่มในระบบ
+
+  if (rating && message) {
+    // Firebase reference for saving review
+    const reviewsRef = database.ref('reviews');
+    
+    // Generate a unique ID for each review
+    const newReviewRef = reviewsRef.push();
+    
+    // Save review to Firebase
+    newReviewRef.set({
+      rating: rating,
+      message: message,
+      ip: userIp,
+      timestamp: new Date().toISOString(),
+    })
+    .then(() => {
+      alert("รีวิวถูกส่งเรียบร้อย!");
+      clearForm(); // Clear form after submission
+    })
+    .catch((error) => {
+      console.error("Error writing new review: ", error);
+      alert("เกิดข้อผิดพลาดในการส่งรีวิว.");
+    });
+  } else {
+    alert("กรุณากรอกข้อมูลให้ครบถ้วน.");
+  }
+}
+
+function clearForm() {
+  document.querySelector('input[name="rating"]:checked').checked = false;
+  document.getElementById('message').value = '';
+}
   </script>
   <script>
   let percent = 0;
