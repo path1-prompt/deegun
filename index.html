@@ -831,7 +831,7 @@ button:hover {
 </style>
 </head>
 <body>
-<div class="maintenance-popup" id="popup">
+<div class="maintenance-popup" id="popupTicket">
   <div class="popup-inner">
     <h2>ขณะนี้ระบบอยู่ระหว่างการปรับปรุง</h2>
     <p>จะเปิดให้บริการในวันที่ <strong>20 เมษายน 2568</strong></p>
@@ -899,7 +899,7 @@ button:hover {
   </a>
 </div>
 
-  <div class="popup" id="popup">
+  <div class="popup" id="popupMaintenance">
     <div id="ticketData"></div>
     <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
   </div>
@@ -1265,9 +1265,9 @@ async function calculateBookingStats() {
     document.getElementById("not-yet-booked").textContent = notYetBooked;
     document.getElementById("completed-bookings").textContent = completedBookings;
   }
-  window.onload = calculateBookingStats;
+  // window.onload = calculateBookingStats;
   
-const messages = [
+// const messages = [
   "แม่หมอสัมผัสได้ถึงแสงสว่างในใจของเธอ",
   "เธอจะเจอเรื่องดี ๆ ที่ไม่คาดคิดเร็ว ๆ นี้",
   "แม้วันนี้จะมีเมฆ แต่ฟ้ายังอยู่ข้างหลังเสมอ",
@@ -1425,7 +1425,7 @@ function submitWish() {
   localStorage.setItem("lastWishTime", now);
   localStorage.setItem("wishText", wishText); // ถ้าใช้ Firebase ก็ส่งแทน
 
-  const response = messages[Math.floor(Math.random() * messages.length)];
+  const response = wishMessages[Math.floor(Math.random() * messages.length)];
   document.getElementById("responseMessage").innerText = response;
   document.getElementById("wishInput").value = "";
   document.getElementById("countdownTimer").innerText = "คำอธิษฐานของเจ้าได้ถูกส่งแล้ว";
@@ -1455,21 +1455,6 @@ function closePopup() {
     countdown.innerHTML = "เหลือเวลา " + days + " วัน " + hours + " ชั่วโมง " + minutes + " นาที " + seconds + " วินาที";
   }, 1000);
   </script>
-  <script>
-  let percent = 0;
-  const loadingText = document.getElementById("loading-percent");
-
-  const loadingInterval = setInterval(() => {
-    percent++;
-    loadingText.textContent = percent + "%";
-
-    if (percent >= 100) {
-      clearInterval(loadingInterval);
-      document.getElementById("preloader").style.display = "none";
-    }
-  }, 10); // โหลดเร็วขึ้นหรือลดความเร็วได้ตรงนี้
-
-</script>
 </body>
 </html> 
 
