@@ -462,7 +462,92 @@ select,
   width: 250px;
 }
 
-  
+      .poster {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      padding: 40px 30px;
+      max-width: 500px;
+      text-align: center;
+      animation: fadeIn 1.5s ease-in-out;
+      position: relative;
+    }
+    .poster::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      left: -50px;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, #f8b500, transparent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+      z-index: -1;
+    }
+    .poster h1 {
+      color: #d35400;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      animation: slideIn 1s ease-out;
+    }
+    .poster p {
+      font-size: 1.2em;
+      color: #333;
+      margin: 15px 0;
+      animation: fadeInUp 1s ease-in-out;
+    }
+    .highlight {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+    .cta-button {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 25px;
+      background-color: #e67e22;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 1.1em;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      animation: bounce 2s infinite;
+    }
+    .cta-button:hover {
+      background-color: #d35400;
+      transform: scale(1.05);
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    @keyframes slideIn {
+      from {transform: translateY(-50px); opacity: 0;}
+      to {transform: translateY(0); opacity: 1;}
+    }
+    @keyframes fadeInUp {
+      from {transform: translateY(50px); opacity: 0;}
+      to {transform: translateY(0); opacity: 1;}
+    }
+    @keyframes pulse {
+      0% {transform: scale(0.9); opacity: 0.7;}
+      50% {transform: scale(1); opacity: 1;}
+      100% {transform: scale(0.9); opacity: 0.7;}
+    }
+    @keyframes bounce {
+      0%, 100% {transform: translateY(0);}
+      50% {transform: translateY(-5px);}
+    }
+    @media (max-width: 600px) {
+      .poster {
+        padding: 30px 20px;
+      }
+      .poster h1 {
+        font-size: 2em;
+      }
+      .poster p {
+        font-size: 1em;
+      }
+    }
 </style>
 </head>
 <body>
@@ -471,19 +556,18 @@ select,
   <div class="loading-text">กรุณารอสักครู่... <span id="loading-percent">0%</span></div>
 </div>
 
-<!-- CSS -->
-  <!-- ส่วนแสดงยอดผู้จองคิวและเวลาปัจจุบัน -->
-<!-- ส่วนแสดงยอดผู้จองคิวและเวลาปัจจุบัน -->
+
+
 <div class="live-stats" id="liveStats">
   <div class="stats-title">สถานะพลังจองคิว</div>
   <div class="stats-item" id="queueCount">ยอดผู้จองคิวทั้งหมด: 0 คน</div>
   <div class="stats-item" id="currentTime">เวลาปัจจุบัน: --:--</div>
 </div>
   <img src="IMG_0920.JPG" alt="โลโก้" class="logo-glow">
-  <!-- Magical Animal -->
+
   <div class="magic-animal"></div>
 
-  <!-- Main Booking Container -->
+
   <div class="container" id="mainContainer">
     <h2>จองคิวดูดวงอัตโนมัติ</h2>
     <form id="bookingForm">
@@ -510,6 +594,13 @@ select,
 
       <button type="submit">จองคิว</button>
     </form>
+      <div class="poster">
+    <h1>✨ บริจาคตามจิตศรัทธา ✨</h1>
+    <p>เพียง <span class="highlight">10 บาทขึ้นไป</span></p>
+    <p>รับบริการสุดพิเศษจาก <span class="highlight">แม่หมอ</span> ทันที!</p>
+    <p>จำนวนจำกัด อย่าพลาดโอกาสดีๆ นี้</p>
+    <a href="#" class="cta-button">ร่วมบริจาคเลย</a>
+  </div>
           <div class="container">
   <h2>ตรวจสอบใบคิว</h2>
   <input type="text" id="refInput" placeholder="ใส่เลขอ้างอิง">
