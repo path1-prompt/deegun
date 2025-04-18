@@ -722,6 +722,63 @@ textarea:focus {
       0%, 100% { transform: translateY(0px); }
       50% { transform: translateY(-10px); }
     }
+    .wish-box {
+  background: linear-gradient(135deg, #2e003e, #000000);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px purple;
+  color: #fff;
+  max-width: 500px;
+  margin: auto;
+  font-family: 'Cinzel', serif;
+}
+textarea {
+  width: 100%;
+  height: 100px;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 16px;
+}
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background: #aa00ff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 0 10px #ff00f7;
+}
+button:hover {
+  background: #c400ff;
+}
+
+.magic-effect {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, #ffccff 0%, transparent 70%);
+  border-radius: 50%;
+  box-shadow: 0 0 50px 25px #aa00ff;
+  animation: magicGlow 2s ease-out forwards;
+  z-index: 999;
+}
+
+@keyframes magicGlow {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
 </style>
 </head>
 <body>
@@ -822,6 +879,26 @@ textarea:focus {
     <div id="msg">จับมือเพื่อรับคำปลอบโยนจากจักรวาล</div>
     <button id="btn" onclick="getMessage()">จับมือ</button>
     <div id="timer"></div>
+  </div>
+    </div>
+    <div class="laser-divider">
+    <div class="laser-effect"></div>
+  </div>
+  
+  
+  <div class="wish-box">
+  <h2>กล่องอธิษฐานของแม่หมอ</h2>
+  <textarea id="wishInput" placeholder="พิมพ์คำอธิษฐานของเจ้า..."></textarea>
+  <button onclick="submitWish()">ส่งคำอธิษฐาน</button>
+  <div class="magic-effect" id="magicEffect"></div>
+  <p id="responseMessage"></p>
+  <p id="countdownTimer"></p>
+</div>
+  
+  
+    </div>
+    <div class="laser-divider">
+    <div class="laser-effect"></div>
   </div>
 <div class="admin-section" id="adminSection" style="display: block;">
     <h2>ข้อมูลใบคิวทั้งหมด</h2>
@@ -1237,6 +1314,72 @@ const messages = [
         btn.disabled = true;
       }
     };
+    
+    function showMagicEffect() {
+  const magic = document.getElementById("magicEffect");
+  magic.style.display = "block";
+  setTimeout(() => {
+    magic.style.display = "none";
+  }, 2000);
+}
+const wishMessages = [
+  // เวทมนตร์ลี้ลับ
+  "พลังงานแห่งดวงจันทร์ได้โอบรับคำอธิษฐานของเจ้าแล้ว",
+  "กลุ่มดาวลับกำลังเคลื่อนตัวตามเสียงของหัวใจเจ้า…",
+  "แสงเรืองรองแห่งจิตวิญญาณโบราณกำลังเดินทางมาหาเจ้า",
+  "จักรวาลกำลังเขียนบทใหม่ให้เจ้าด้วยความอ่อนโยน",
+  "แม่หมอขอเรียกพลังแห่งดวงอาทิตย์มาโอบอุ้มเจ้าในวันที่เหนื่อยล้า",
+
+  // กำลังใจแบบหวานละมุน
+  "แม่หมอกำลังลูบหัวเจ้าเบา ๆ ผ่านลมคืนนี้นะ",
+  "เจ้าทำได้ดีแล้ว ไม่ว่าจะเหนื่อยแค่ไหน แม่หมอรับรู้ได้หมด",
+  "ไม่มีคำอธิษฐานไหนไร้ความหมาย ทุกความหวังคือเวทมนตร์ที่แท้จริง",
+  "บางครั้งความเงียบก็เป็นคำตอบจากจักรวาลว่า 'จงเชื่อมั่นต่อไป'",
+  "แม่หมอเห็นแววตาเจ้าในแสงดวงดาว มันสวยงามกว่าที่เจ้าคิด",
+
+  // แนวพลังบวกแอบฟรุ้งฟริ้ง
+  "แม่หมอกำลังเป่า ‘ฝุ่นดาว’ ใส่ใจเจ้าเพื่อให้มันพองฟูอีกครั้ง",
+  "คำอธิษฐานของเจ้า...กำลังลอยหมุนกลางอากาศ เหมือนผีเสื้อแห่งความหวัง",
+  "มีวิญญาณแมวน้อยกำลังนำความอบอุ่นมาส่งให้เจ้าจากอีกโลกหนึ่ง",
+  "หัวใจเจ้าสั่นสะเทือนเบา ๆ จักรวาลตอบรับแล้วล่ะ",
+  "เจ้าได้รับคาถา: ‘ใจอ่อนโยน – พลังใจ +99’",
+
+  // คำปลอบโยนอย่างลึกซึ้ง
+  "แม้เสียงของเจ้าจะเงียบงัน แต่พลังของมันดังลั่นถึงดาวไกล",
+  "แม่หมออยากให้เจ้าจำไว้นะว่า ‘อยู่ต่อ’ ก็คือความกล้ารูปแบบหนึ่ง",
+  "ไม่ต้องรีบหายดี แค่ยังอยากมีชีวิตอยู่ต่อก็นับว่ากล้าหาญ",
+  "เจ้าสวยงามแม้ในวันที่น้ำตาเปื้อนแก้ม",
+  "แค่กล้าหวังอีกครั้ง ก็คือปาฏิหาริย์หนึ่งแล้ว"
+];
+
+function submitWish() {
+  const wishText = document.getElementById("wishInput").value;
+  const lastWishTime = localStorage.getItem("lastWishTime");
+  const now = Date.now();
+
+  if (lastWishTime && now - lastWishTime < 86400000) {
+    const remaining = 86400000 - (now - lastWishTime);
+    const hours = Math.floor(remaining / (1000 * 60 * 60));
+    const mins = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+    document.getElementById("countdownTimer").innerText = 
+      `เจ้าสามารถอธิษฐานอีกครั้งใน ${hours} ชั่วโมง ${mins} นาที`;
+    return;
+  }
+
+  if (wishText.trim() === "") {
+    alert("เจ้าต้องพิมพ์คำอธิษฐานก่อนนะ");
+    return;
+  }
+
+  // เก็บข้อมูลลง localStorage หรือส่งไป Firebase
+  localStorage.setItem("lastWishTime", now);
+  localStorage.setItem("wishText", wishText); // ถ้าใช้ Firebase ก็ส่งแทน
+
+  const response = messages[Math.floor(Math.random() * messages.length)];
+  document.getElementById("responseMessage").innerText = response;
+  document.getElementById("wishInput").value = "";
+  document.getElementById("countdownTimer").innerText = "คำอธิษฐานของเจ้าได้ถูกส่งแล้ว";
+}
   </script>
   <script>
   let percent = 0;
