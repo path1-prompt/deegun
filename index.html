@@ -1143,6 +1143,11 @@ function displayReviews() {
     const reviewsContainer = document.getElementById('result');
     reviewsContainer.innerHTML = ''; // Clear previous reviews
     
+    if (!reviews) {
+      reviewsContainer.innerHTML = '<p>ยังไม่มีรีวิว</p>';
+      return;
+    }
+    
     for (const reviewId in reviews) {
       const review = reviews[reviewId];
       const reviewDiv = document.createElement('div');
@@ -1176,10 +1181,10 @@ function createStarRating(rating) {
   return starsDiv;
 }
   
-  function submitReview() {
+function submitReview() {
   const rating = document.querySelector('input[name="rating"]:checked').value; // Get rating
   const message = document.getElementById('message').value; // Get review message
-  const userIp = getUserIp(); // เรียกใช้ฟังก์ชันดึง IP ที่เราจะเพิ่มในระบบ
+  const userIp = getUserIp(); // ดึง IP ของผู้ใช้
 
   if (rating && message) {
     // Firebase reference for saving review
@@ -1196,8 +1201,10 @@ function createStarRating(rating) {
       timestamp: new Date().toISOString(),
     })
     .then(() => {
+      console.log("รีวิวถูกส่งเรียบร้อย!");
       alert("รีวิวถูกส่งเรียบร้อย!");
       clearForm(); // Clear form after submission
+      displayReviews(); // แสดงรีวิวหลังจากส่ง
     })
     .catch((error) => {
       console.error("Error writing new review: ", error);
