@@ -546,6 +546,24 @@
     text-shadow: 0 0 20px #ff007f, 0 0 30px #ff007f;
 }
 
+.row-details {
+  transition: all 0.3s ease;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+}
+.row-details {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 10px;
+  border: 1px solid #cc66ff;
+  border-left: 5px solid #cc00cc;
+  animation: fadeInMystic 0.4s ease-in-out;
+}
+
+@keyframes fadeInMystic {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
 </style>
 </head>
 <body>
@@ -635,6 +653,7 @@
 <div style="overflow-x: auto;">
   <table id="adminTable">
     <thead>
+      <p id="resultCount" style="margin-top: 10px;"></p>
       <tr>
         <th>ชื่อ</th>
         <th>อายุ</th>
@@ -738,7 +757,7 @@ Reference No: ${currentTicket.referenceId}`;
     }
 
     // Admin Link - เปิด Admin Login Popup
-
+document.getElementById("resultCount").innerText = `พบทั้งหมด ${snapshot.size} รายการ`;
 
     // ตรวจสอบรหัสผ่านแอดมิน
    
@@ -748,15 +767,16 @@ Reference No: ${currentTicket.referenceId}`;
 // ฟังก์ชันที่เพิ่มปุ่มสำหรับขยายและย่อ
 function toggleRowDetails(button, referenceId) {
   const rowDetails = document.getElementById(referenceId);
-  if (rowDetails.style.display === "none" || rowDetails.style.display === "") {
-    rowDetails.style.display = "table-row"; // ขยายแถว
-    button.innerText = "ย่อ"; // เปลี่ยนข้อความปุ่ม
+  const isVisible = rowDetails.classList.contains("show");
+
+  if (!isVisible) {
+    rowDetails.classList.add("show");
+    button.innerText = "ย่อ";
   } else {
-    rowDetails.style.display = "none"; // ย่อแถว
-    button.innerText = "ขยาย"; // เปลี่ยนข้อความปุ่ม
+    rowDetails.classList.remove("show");
+    button.innerText = "ขยาย";
   }
 }
-
 // ฟังก์ชันแสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
 async function showAdminSection() {
   const adminTableBody = document.getElementById("adminTable").querySelector("tbody");
