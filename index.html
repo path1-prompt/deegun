@@ -834,7 +834,7 @@ button:hover {
   <div class="maintenance-popup">
   <div class="popup-inner">
     <h2>ขณะนี้ระบบอยู่ระหว่างการปรับปรุง</h2>
-    <p>จะเปิดให้บริการในวันที่ <strong>20 เมษายน 2567</strong></p>
+    <p>จะเปิดให้บริการในวันที่ <strong>20 เมษายน 2568</strong></p>
         <button onclick="closePopup()">ปิด</button>
     <div id="countdown"></div>
   </div>
@@ -983,9 +983,10 @@ button:hover {
   document.getElementById("maintenancePopup").style.display = "flex";
 });
 
-    function closePopup() {
-      document.getElementById("maintenancePopup").style.display = "none";
-    }
+
+  function closePopup() {
+    document.querySelector(".maintenance-popup").style.display = "none";
+  }
     const queueDB = {}; // เก็บข้อมูลคิวใน session นี้
     let currentTicket = null; // เก็บใบคิวล่าสุด
 
