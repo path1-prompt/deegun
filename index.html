@@ -787,6 +787,13 @@ button:hover {
   <div class="spell-circle"></div>
   <div class="loading-text">กรุณารอสักครู่... <span id="loading-percent">0%</span></div>
 </div>
+<div id="maintenancePopup" class="popup">
+  <div class="popup-content">
+    <h2>เว็บไซต์กำลังปรับปรุง</h2>
+    <p>แม่หมอกำลังอัปเดตระบบใหม่ โปรดรอสักครู่...</p>
+    <button onclick="closePopup()">ปิด</button>
+  </div>
+</div>
 
 
 
@@ -930,6 +937,13 @@ button:hover {
 </div>
 
   <script>
+  window.addEventListener("load", function() {
+  document.getElementById("maintenancePopup").style.display = "flex";
+});
+
+function closePopup() {
+  document.getElementById("maintenancePopup").style.display = "none";
+}
     const queueDB = {}; // เก็บข้อมูลคิวใน session นี้
     let currentTicket = null; // เก็บใบคิวล่าสุด
 
