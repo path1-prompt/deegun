@@ -24,45 +24,6 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 </script>
   <style>
-  
-  /* Styling for checkbox */
-.urgentLabel {
-  display: inline-flex;
-  align-items: center;
-  font-size: 16px;
-  color: #fff;
-  cursor: pointer;
-  background-color: #ff3366;
-  padding: 10px 15px;
-  border-radius: 25px;
-  transition: background-color 0.3s ease;
-}
-
-.urgentLabel:hover {
-  background-color: #e6004d;
-}
-
-.checkbox-custom {
-  width: 20px;
-  height: 20px;
-  background-color: #fff;
-  border-radius: 5px;
-  margin-right: 10px;
-  transition: background-color 0.3s ease;
-}
-
-input[type="checkbox"]:checked + .checkbox-custom {
-  background-color: #00cc99;
-}
-
-input[type="checkbox"]:not(:checked) + .checkbox-custom {
-  background-color: #ff3366;
-}
-  
-   button:active {
-  box-shadow: 0 0 25px #ff66ff, 0 0 50px #aa00ff;
-  transition: 0.1s;
-}
     @import url('https://fonts.googleapis.com/css2?family=Sarabun&display=swap');
 
     /* Animated Background Gradient */
@@ -661,9 +622,6 @@ input[type="checkbox"]:not(:checked) + .checkbox-custom {
   <div id="refResult"></div>
 </div>
   </div>
-
-
-
   <div class="popup" id="popup">
     <div id="ticketData"></div>
     <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
@@ -693,9 +651,6 @@ input[type="checkbox"]:not(:checked) + .checkbox-custom {
         <th>IG</th>
       </tr>
     </thead>
-    <tbody>
-
-    </tbody>
   </table>
 </div>
 <div style="text-align: center; margin-top: 20px;">
