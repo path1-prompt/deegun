@@ -779,7 +779,7 @@ button:hover {
     opacity: 0;
   }
 }
-        .popups {
+        .popup {
       position: fixed;
       top: 0;
       left: 0;
@@ -793,7 +793,7 @@ button:hover {
       animation: fadeIn 0.8s ease;
     }
 
-    .popups-content {
+    .popup-content {
       background-color: #1a0028;
       padding: 40px;
       border-radius: 20px;
@@ -805,14 +805,14 @@ button:hover {
       animation: scaleUp 0.6s ease;
     }
 
-    .popups-content h2 {
+    .popup-content h2 {
       font-size: 32px;
       margin-bottom: 15px;
       color: #ffb3ff;
       text-shadow: 0 0 10px #ff00cc;
     }
 
-    .popups-content p {
+    .popup-content p {
       font-size: 18px;
       color: #f5e6ff;
     }
@@ -835,8 +835,8 @@ button:hover {
   <div class="loading-text">กรุณารอสักครู่... <span id="loading-percent">0%</span></div>
 </div>
 
-  <div class="popups" id="popups">
-    <div class="popups-content">
+  <div class="popup" id="popup">
+    <div class="popup-content">
       <h2>เว็บไซต์กำลังปรับปรุง</h2>
       <p>แม่หมอกำลังอัปเดตระบบเวทมนตร์ กรุณารอสักครู่...</p>
       <button onclick="closePopup()">ปิด</button
