@@ -786,8 +786,9 @@ Reference No: ${currentTicket.referenceId}`;
       window.open("https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx", "_blank");
     }
 
-function toggleRowDetails(button, rowId) {
-  const rowDetails = document.getElementById(rowId);
+
+function toggleRowDetails(button, referenceId) {
+  const rowDetails = document.getElementById(referenceId);
   if (rowDetails.style.display === "none" || rowDetails.style.display === "") {
     rowDetails.style.display = "table-row"; // ขยายแถว
     button.innerText = "ย่อ"; // เปลี่ยนข้อความปุ่ม
@@ -804,9 +805,9 @@ async function showAdminSection() {
 
   try {
     const snapshot = await db.collection("queues").orderBy("date", "desc").get();
-    snapshot.forEach((doc, index) => {
+    snapshot.forEach((doc) => {
       const ticket = doc.data();
-      const rowId = `row-details-${index}`; // ID สำหรับแต่ละแถว
+      const rowId = `row-details-${ticket.referenceId}`; // ใช้ referenceId เป็น rowId
 
       const row = document.createElement("tr");
       row.innerHTML = `
@@ -832,7 +833,7 @@ async function showAdminSection() {
 
       const rowDetails = document.createElement("tr");
       rowDetails.id = rowId;
-      rowDetails.style.display = "none"; // ซ่อนแถวนี้เริ่มต้น
+      rowDetails.style.display = "none";
       rowDetails.innerHTML = `
         <td colspan="7">
           <p><b>ชื่อ:</b> ${ticket.name}</p>
