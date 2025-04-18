@@ -779,6 +779,63 @@ button:hover {
     opacity: 0;
   }
 }
+    .containers {
+      background: rgba(40, 0, 60, 0.8);
+      border-radius: 15px;
+      padding: 40px;
+      width: 100%;
+      max-width: 650px;
+      box-shadow: 0 0 30px #8a2be2;
+      text-align: center;
+      animation: pulse 3s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { box-shadow: 0 0 10px var(--primary-color); }
+      to { box-shadow: 0 0 30px var(--accent-color); }
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: var(--accent-color);
+      text-shadow: var(--glow);
+    }
+
+    .questions {
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+
+    button {
+      padding: 12px 25px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      background: var(--primary-color);
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      box-shadow: var(--glow);
+    }
+
+    button:hover {
+      background: var(--accent-color);
+      transform: scale(1.05);
+    }
+
+    .results {
+      font-size: 24px;
+      color: #ffcdf9;
+      margin-top: 30px;
+      animation: glow 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #ff9be2; }
+      to { text-shadow: 0 0 20px #ff9be2, 0 0 30px #a95aff; }
+    }
 </style>
 </head>
 <body>
@@ -894,6 +951,19 @@ button:hover {
   <p id="countdownTimer"></p>
 </div>
   
+  
+    </div>
+    <div class="laser-divider">
+    <div class="laser-effect"></div>
+  </div>
+  
+   <div class="containers">
+    <h1>ทดสอบบุคลิกภาพ MBTI</h1>
+    <div class="questions" id="questionText"></div>
+    <button onclick="answer('A')">เห็นด้วย</button>
+    <button onclick="answer('B')">ไม่เห็นด้วย</button>
+    <div class="results" id="results"></div>
+  </div>
   
     </div>
     <div class="laser-divider">
@@ -1379,6 +1449,101 @@ function submitWish() {
   document.getElementById("wishInput").value = "";
   document.getElementById("countdownTimer").innerText = "คำอธิษฐานของเจ้าได้ถูกส่งแล้ว";
 }
+    const questions = [
+      ["คุณชอบเข้าสังคมและพบปะผู้คนใหม่ ๆ", "E", "I"],
+      ["คุณมักโฟกัสกับความจริงมากกว่าความเป็นไปได้", "S", "N"],
+      ["คุณตัดสินใจโดยใช้เหตุผลมากกว่าอารมณ์", "T", "F"],
+      ["คุณชอบวางแผนล่วงหน้ามากกว่าการด้นสด", "J", "P"],
+      ["การอยู่ในที่เงียบ ๆ ทำให้คุณมีพลัง", "I", "E"],
+      ["คุณชอบเรียนรู้จากประสบการณ์ตรง", "S", "N"],
+      ["คุณมักแสดงความรู้สึกออกมาอย่างชัดเจน", "F", "T"],
+      ["คุณรู้สึกมั่นคงเมื่อทุกอย่างมีระเบียบ", "J", "P"],
+      ["คุณมักเริ่มพูดก่อนที่จะคิดให้รอบคอบ", "E", "I"],
+      ["คุณมักใช้สัญชาตญาณมากกว่าความจริง", "N", "S"],
+      ["คุณให้ความสำคัญกับความถูกต้องมากกว่าความรู้สึก", "T", "F"],
+      ["คุณรู้สึกไม่สบายใจเมื่อแผนเปลี่ยนไป", "J", "P"],
+      ["คุณรู้สึกเหนื่อยเมื่ออยู่กับคนมาก ๆ นาน ๆ", "I", "E"],
+      ["คุณใส่ใจในรายละเอียดเล็ก ๆ น้อย ๆ", "S", "N"],
+      ["คุณแคร์ความรู้สึกของผู้อื่นมากกว่าความจริง", "F", "T"],
+      ["คุณเปิดกว้างกับความยืดหยุ่นและการเปลี่ยนแปลง", "P", "J"],
+      ["คุณรู้สึกเป็นตัวของตัวเองเมื่อได้แสดงออก", "E", "I"],
+      ["คุณเชื่อในแรงบันดาลใจมากกว่าข้อเท็จจริง", "N", "S"],
+      ["คุณมักตัดสินใจได้อย่างเด็ดขาด", "T", "F"],
+      ["คุณวางโครงสร้างชัดเจนในแต่ละวัน", "J", "P"],
+      ["คุณเข้าสังคมได้ดีแม้ไม่รู้จักใคร", "E", "I"],
+      ["คุณมักอาศัยประสบการณ์ในอดีต", "S", "N"],
+      ["คุณวิเคราะห์สิ่งต่าง ๆ ด้วยตรรกะ", "T", "F"],
+      ["คุณไม่ชอบสิ่งที่ไม่แน่นอน", "J", "P"],
+      ["คุณรู้สึกว่าการอยู่คนเดียวทำให้คุณสงบ", "I", "E"],
+      ["คุณมักใช้ภาพรวมในการมองโลก", "N", "S"],
+      ["คุณมีความเห็นอกเห็นใจสูง", "F", "T"],
+      ["คุณทำงานได้ดีกับการวางแผนล่วงหน้า", "J", "P"],
+      ["คุณรู้สึกตื่นเต้นเมื่อเข้าสังคม", "E", "I"],
+      ["คุณอาศัยข้อมูลจริงในการตัดสินใจ", "S", "N"],
+      ["คุณมักตัดสินใจตามหลักการ", "T", "F"],
+      ["คุณชอบให้วันของคุณมีรูปแบบตายตัว", "J", "P"],
+      ["คุณไม่ลังเลที่จะพูดสิ่งที่คิด", "E", "I"],
+      ["คุณชอบคิดถึงสิ่งที่ยังไม่เกิดขึ้น", "N", "S"],
+      ["คุณเห็นคุณค่าของความยุติธรรมมากกว่าความรัก", "T", "F"],
+      ["คุณชอบทำงานตามลำดับขั้นตอน", "J", "P"],
+      ["คุณไม่กลัวการพบปะคนแปลกหน้า", "E", "I"],
+      ["คุณมีความคิดสร้างสรรค์และชอบจินตนาการ", "N", "S"],
+      ["คุณตัดสินใจได้รวดเร็วโดยไม่ลังเล", "T", "F"],
+      ["คุณวางแผนสิ่งต่าง ๆ ไว้เสมอ", "J", "P"]
+    ];
+
+    const scores = { E:0, I:0, S:0, N:0, T:0, F:0, J:0, P:0 };
+    let index = 0;
+
+    function showQuestion() {
+      if(index < questions.length){
+        document.getElementById("questionText").innerText = (index+1)+". "+questions[index][0];
+      } else {
+        showResult();
+      }
+    }
+
+    function answer(choice) {
+      if(index >= questions.length) return;
+      const trait = choice === "A" ? questions[index][1] : questions[index][2];
+      scores[trait]++;
+      index++;
+      showQuestion();
+    }
+
+    function showResult(){
+      let type = "";
+      type += scores["E"] >= scores["I"] ? "E" : "I";
+      type += scores["S"] >= scores["N"] ? "S" : "N";
+      type += scores["T"] >= scores["F"] ? "T" : "F";
+      type += scores["J"] >= scores["P"] ? "J" : "P";
+
+      const descriptions = {
+        INFJ: "ผู้สนับสนุน: ลึกซึ้ง อ่อนโยน มีวิสัยทัศน์และภารกิจ",
+        INFP: "นักไกล่เกลี่ย: มีจินตนาการสูง และเห็นอกเห็นใจ",
+        ENFP: "นักรณรงค์: กระตือรือร้น มองโลกในแง่ดี",
+        ENFJ: "ผู้นำ: มีความอบอุ่น มั่นใจ และเข้าใจคน",
+        ISTJ: "ผู้ตรวจสอบ: รับผิดชอบ มั่นคง และมีระบบ",
+        ISFJ: "ผู้พิทักษ์: ใจดี เชื่อถือได้ และช่วยเหลือผู้อื่น",
+        ESTJ: "ผู้บริหาร: มีเหตุผล และนำทีมเก่ง",
+        ESFJ: "ผู้ให้บริการ: ใส่ใจผู้อื่นและมีมนุษยสัมพันธ์ดี",
+        INTJ: "นักวางกลยุทธ์: เงียบขรึมและมีวิสัยทัศน์",
+        INTP: "นักตรรกะ: นักวิเคราะห์ชั้นยอด",
+        ENTJ: "ผู้บัญชาการ: ผู้นำโดยธรรมชาติ",
+        ENTP: "นักโต้แย้ง: ฉลาดและสร้างสรรค์",
+        ISTP: "นักปฏิบัติ: ชอบทดลองสิ่งใหม่ ๆ",
+        ISFP: "ศิลปิน: เงียบและรักอิสระ",
+        ESTP: "นักสำรวจ: กล้าหาญและเป็นผู้นำ",
+        ESFP: "ผู้แสดง: สนุกสนาน รักความบันเทิง"
+      };
+
+      document.getElementById("questionText").style.display = "none";
+      document.querySelectorAll("button").forEach(btn => btn.style.display = "none");
+      document.getElementById("result").innerHTML = 
+        `MBTI ของคุณคือ <b>${type}</b><br>${descriptions[type] || "บุคลิกภาพนี้ไม่พบในฐานข้อมูล"}`;
+    }
+
+    showQuestion();
   </script>
   <script>
   let percent = 0;
