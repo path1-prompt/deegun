@@ -528,8 +528,6 @@ select,
     <div id="ticketData"></div>
     <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
   </div>
-<canvas id="ageChart" style="max-width: 600px;"></canvas>
-<canvas id="categoryChart" style="max-width: 600px;"></canvas>
 <button onclick="showDashboard()">ดูแดชบอร์ด</button>
 <div class="admin-section" id="dashboardSection">
   <h2>แดชบอร์ดการจองคิว</h2>
@@ -645,84 +643,7 @@ Reference No: ${currentTicket.referenceId}`;
     function goInstagram() {
       window.open("https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx", "_blank");
     }
-    
-    firebase.firestore().collection("bookingData").get().then((snapshot) => {
-const ageGroups = {
-  "10-19": 0,
-  "20-29": 0,
-  "30-39": 0,
-  "40+": 0
-};
 
-const categoryCounts = {};
-
-firebase.firestore().collection("bookingData").get().then(snapshot => {
-  snapshot.forEach(doc => {
-    const data = doc.data();
-    const age = data.age;
-    const category = data.category;
-
-    // กลุ่มอายุ
-    if (age >= 10 && age <= 19) ageGroups["10-19"]++;
-    else if (age >= 20 && age <= 29) ageGroups["20-29"]++;
-    else if (age >= 30 && age <= 39) ageGroups["30-39"]++;
-    else if (age >= 40) ageGroups["40+"]++;
-
-    // หมวดหมู่
-    if (category in categoryCounts) {
-      categoryCounts[category]++;
-    } else {
-      categoryCounts[category] = 1;
-    }
-  });
-
-  // แสดงกราฟอายุ
-  new Chart(document.getElementById("ageChart"), {
-    type: 'bar',
-    data: {
-      labels: Object.keys(ageGroups),
-      datasets: [{
-        label: 'จำนวนตามช่วงอายุ',
-        data: Object.values(ageGroups),
-        backgroundColor: 'rgba(138,43,226, 0.6)', // purple
-        borderColor: 'rgba(138,43,226, 1)',
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-
-  // แสดงกราฟหมวดหมู่
-  new Chart(document.getElementById("categoryChart"), {
-    type: 'bar',
-    data: {
-      labels: Object.keys(categoryCounts),
-      datasets: [{
-        label: 'จำนวนตามหมวดหมู่',
-        data: Object.values(categoryCounts),
-        backgroundColor: 'rgba(255,69,0, 0.6)', // orange-red
-        borderColor: 'rgba(255,69,0, 1)',
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-
-}).catch(error => {
-  console.error("เกิดข้อผิดพลาดในการโหลดข้อมูล:", error);
-});
 // ฟังก์ชันที่เพิ่มปุ่มสำหรับขยายและย่อ
 function toggleRowDetails(button, referenceId) {
   const rowDetails = document.getElementById(referenceId);
