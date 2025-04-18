@@ -11,6 +11,40 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+/* Styling for checkbox */
+.urgentLabel {
+  display: inline-flex;
+  align-items: center;
+  font-size: 16px;
+  color: #fff;
+  cursor: pointer;
+  background-color: #ff3366;
+  padding: 10px 15px;
+  border-radius: 25px;
+  transition: background-color 0.3s ease;
+}
+
+.urgentLabel:hover {
+  background-color: #e6004d;
+}
+
+.checkbox-custom {
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  margin-right: 10px;
+  transition: background-color 0.3s ease;
+}
+
+input[type="checkbox"]:checked + .checkbox-custom {
+  background-color: #00cc99;
+}
+
+input[type="checkbox"]:not(:checked) + .checkbox-custom {
+  background-color: #ff3366;
+}
+
   const firebaseConfig = {
     apiKey: "AIzaSyD0o88iBVuKsj-2qgEFlP-V3FwArPHCrkY",
     authDomain: "horoscopequeue.firebaseapp.com",
@@ -617,19 +651,20 @@
         <label>Instagram (@username):</label>
 <input type="text" id="igUsername" placeholder="@yourusername">
 <!-- Checkbox สำหรับเร่งด่วน -->
-<label>
+<label class="urgentLabel">
   <input type="checkbox" id="urgentCheckbox" onchange="toggleUrgent()">
-  จองเร่งด่วน (นอกเวลา) - ขั้นต่ำ 10 บาท
+  <span class="checkbox-custom"></span> จองเร่งด่วน (นอกเวลา) - ขั้นต่ำ 10 บาท
 </label>
 
 <!-- ส่วนของการจองเร่งด่วน -->
 <div id="urgentSection" style="display: none; margin-top: 10px; background: #2c0033; padding: 10px; border-radius: 6px;">
-  <label>แนบสลิปการโอนเงิน:</label><br>
-  <input type="file" id="slipFile" accept="image/*"><br><br>
+  <p style="color:#fff; font-size: 14px;">กรุณาติดต่อแม่หมอและส่งสลิปการโอนเงิน พร้อมข้อมูลดังนี้:</p>
   <p style="color:#ccc; font-size: 13px;">
-    * ในสลิป กรุณาเขียน: <br>
     ชื่อ / อายุ / IG
   </p>
+  <label>แนบสลิปการโอนเงิน:</label><br>
+  <input type="file" id="slipFile" accept="image/*" required><br><br>
+  <p style="color:#fff;">หลังจากจองเสร็จสิ้น ระบบจะรอตรวจสอบภายใน 1 ชั่วโมง</p>
 </div>
       <button type="submit">จองคิว</button>
     </form>
@@ -773,7 +808,13 @@ Reference No: ${currentTicket.referenceId}`;
 
 
     // ตรวจสอบรหัสผ่านแอดมิน
-   
+   <script>
+  function toggleUrgent() {
+    const checkbox = document.getElementById("urgentCheckbox");
+    const section = document.getElementById("urgentSection");
+    section.style.display = checkbox.checked ? "block" : "none";
+  }
+</script>
 
     // แสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
 // ฟังก์ชันที่เพิ่มปุ่มสำหรับขยายและย่อ
