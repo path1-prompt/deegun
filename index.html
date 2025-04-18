@@ -828,6 +828,53 @@ button:hover {
     box-shadow: 0 0 60px #ff00cc, 0 0 90px #cc00ff, 0 0 120px #9900ff;
   }
 }
+#bird-container {
+  text-align: center;
+  margin-top: 100px;
+}
+
+#cage {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+  background: url('https://i.imgur.com/L9zbgMV.png') no-repeat center;
+  background-size: contain;
+  position: relative;
+}
+
+#bird {
+  width: 50px;
+  height: 50px;
+  background: url('https://i.imgur.com/l3Xc03O.png') no-repeat center;
+  background-size: cover;
+  position: absolute;
+  bottom: 20px;
+  left: 75px;
+  transition: transform 3s ease-in-out, opacity 2s;
+}
+
+.fly-away {
+  transform: translate(-300px, -300px) scale(1.5) rotate(-20deg);
+  opacity: 0;
+}
+
+#releaseBtn {
+  padding: 10px 25px;
+  font-size: 18px;
+  background: linear-gradient(45deg, #6f2da8, #9e3dfd);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  margin-top: 20px;
+  cursor: pointer;
+  box-shadow: 0 0 10px #8f45e5;
+}
+
+#message {
+  margin-top: 15px;
+  color: #e2ccff;
+  font-size: 16px;
+}
 </style>
 </head>
 <body>
@@ -924,7 +971,21 @@ button:hover {
   <p id="responseMessage"></p>
   <p id="countdownTimer"></p>
 </div>
+
+    <div class="laser-divider">
+    <div class="laser-effect"></div>
+  </div>
   
+<div id="bird-container">
+  <div id="cage">
+    <div id="bird"></div>
+  </div>
+  <button id="releaseBtn">ปล่อยนก</button>
+  <p id="message"></p>
+</div>
+      <div class="laser-divider">
+    <div class="laser-effect"></div>
+  </div>
   
 <div class="admin-section" id="adminSection" style="display: block;">
     <h2>ข้อมูลใบคิวทั้งหมด</h2>
@@ -960,6 +1021,47 @@ button:hover {
 </div>
 
   <script>
+  
+  const releaseBtn = document.getElementById('releaseBtn');
+const bird = document.getElementById('bird');
+const message = document.getElementById('message');
+
+function canReleaseBird() {
+  const lastRelease = localStorage.getItem('lastBirdRelease');
+  if (!lastRelease) return true;
+
+  const now = new Date().getTime();
+  return now - parseInt(lastRelease) > 12 * 60 * 60 * 1000; // 12 ชม.
+}
+
+function updateMessage() {
+  const lastRelease = localStorage.getItem('lastBirdRelease');
+  if (!lastRelease) return;
+
+  const now = new Date().getTime();
+  const diff = now - parseInt(lastRelease);
+  const remaining = (12 * 60 * 60 * 1000 - diff) / 1000;
+
+  if (remaining > 0) {
+    const hours = Math.floor(remaining / 3600);
+    const minutes = Math.floor((remaining % 3600) / 60);
+    message.innerText = `ปล่อยนกได้อีกครั้งใน ${hours} ชม. ${minutes} นาที`;
+    releaseBtn.disabled = true;
+  }
+}
+
+releaseBtn.addEventListener('click', () => {
+  if (!canReleaseBird()) return;
+
+  bird.classList.add('fly-away');
+  localStorage.setItem('lastBirdRelease', new Date().getTime());
+  message.innerText = 'คุณได้ปล่อยสิ่งชั่วร้ายออกไปแล้ว รับสิ่งดีๆ เข้ามา';
+
+  releaseBtn.disabled = true;
+});
+
+window.onload = updateMessage;
+
   window.addEventListener("load", function() {
   document.getElementById("maintenancePopup").style.display = "flex";
 });
