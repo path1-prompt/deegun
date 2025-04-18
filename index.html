@@ -742,7 +742,7 @@ async function updateLiveStats() {
   const queueCount = snapshot.size; // จำนวนผู้จองคิวทั้งหมด
 
   // แสดงยอดผู้จอง
-  document.getElementById("queueCount").innerText = `ยอดผู้จองคิวทั้งหมด: ${queueCount} คน`;
+  document.getElementById("queueCount").innerText = `ยอดรวมผู้จองคิวทั้งหมด: ${queueCount} คน`;
 
   // อัพเดตเวลาปัจจุบัน
   const currentTime = new Date().toLocaleString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
