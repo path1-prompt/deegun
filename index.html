@@ -804,6 +804,21 @@ button:hover {
     0 0 90px #9900ff;
   animation: glowPulse 2s infinite alternate;
 }
+.popup-content {
+  background: rgba(30, 30, 30, 0.95);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 30px #9900ff, 0 0 60px #ff00cc;
+  text-align: center;
+  color: white;
+  font-family: 'Kanit', sans-serif;
+  max-width: 500px;
+  width: 90%;
+  font-size: 18px; /* ปรับขนาดให้เล็กลงเล็กน้อย */
+  line-height: 1.6; /* เพิ่มระยะห่างบรรทัดให้ดูอ่านง่าย */
+  white-space: normal; /* ป้องกันไม่ให้ตัดคำ */
+  word-break: keep-all; /* ไม่ตัดคำกลางคำ */
+}
 
 @keyframes glowPulse {
   0% {
@@ -820,6 +835,7 @@ button:hover {
   <div class="popup-inner">
     <h2>ขณะนี้ระบบอยู่ระหว่างการปรับปรุง</h2>
     <p>จะเปิดให้บริการในวันที่ <strong>20 เมษายน 2567</strong></p>
+        <button onclick="closePopup()">ปิด</button>
     <div id="countdown"></div>
   </div>
 </div>
