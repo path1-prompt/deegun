@@ -11,19 +11,24 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyD0o88iBVuKsj-2qgEFlP-V3FwArPHCrkY",
-  authDomain: "horoscopequeue.firebaseapp.com",
-  projectId: "horoscopequeue",
-  storageBucket: "horoscopequeue.appspot.com",
-  messagingSenderId: "30274669281",
-  appId: "1:30274669281:web:45b08e0c48e58680d3b351",
-  measurementId: "G-48X2FPNBYZ"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+  const firebaseConfig = {
+    apiKey: "AIzaSyD0o88iBVuKsj-2qgEFlP-V3FwArPHCrkY",
+    authDomain: "horoscopequeue.firebaseapp.com",
+    projectId: "horoscopequeue",
+    storageBucket: "horoscopequeue.appspot.com",
+    messagingSenderId: "30274669281",
+    appId: "1:30274669281:web:45b08e0c48e58680d3b351",
+    measurementId: "G-48X2FPNBYZ"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 </script>
   <style>
+   button:active {
+  box-shadow: 0 0 25px #ff66ff, 0 0 50px #aa00ff;
+  transition: 0.1s;
+}
     @import url('https://fonts.googleapis.com/css2?family=Sarabun&display=swap');
 
     /* Animated Background Gradient */
@@ -53,7 +58,7 @@ const db = firebase.firestore();
 
     .container {
       max-width: 420px;
-      margin: 30px auto 0;
+      margin: 80px auto 0;
       padding: 20px;
       background: rgba(40, 0, 50, 0.85);
       box-shadow: 0 0 20px #aa00ff;
@@ -241,16 +246,16 @@ const db = firebase.firestore();
     }
     @media screen and (max-width: 480px) {
       .container {
-        margin-top: 40px;
+        margin-top: 100px;
       }
     }
     .logo-glow {
   position: fixed;
-  top: 10px;
+  top: 20px;
   right: 20px;
   width: 80px;
   height: 80px;
-  border-radius: 40%;
+  border-radius: 50%;
   box-shadow:
     0 0 15px #ff66ff,
     0 0 30px #aa00ff,
@@ -276,7 +281,7 @@ const db = firebase.firestore();
   border-radius: 8px;
   box-shadow: 0 0 15px #ff66ff;
   z-index: 9999;
-  font-size: 12px;
+  font-size: 16px;
   font-family: 'Sarabun', sans-serif;
   animation: fadeIn 2s ease-out;
 }
@@ -287,7 +292,7 @@ const db = firebase.firestore();
 }
 
 .live-stats div {
-  margin: 3px 0;
+  margin: 5px 0;
 }
 .stats-title {
   font-size: 14px;
@@ -300,8 +305,8 @@ const db = firebase.firestore();
 
 .stats-item {
   background: linear-gradient(90deg, #660066, #330033);
-  padding: 2px 4px;
-  border-radius: 2px;
+  padding: 4px 8px;
+  border-radius: 4px;
   margin-bottom: 4px;
   box-shadow: 0 0 6px #ff66ff;
   font-size: 12px;
@@ -310,7 +315,7 @@ const db = firebase.firestore();
 }
 .contact-section {
   text-align: center;
-  margin-top: 14px;
+  margin-top: 10px;
 }
 
 .ig-link {
@@ -414,151 +419,6 @@ const db = firebase.firestore();
   }
 
   @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap');
-  
-  .popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(10, 0, 20, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fadeIn 0.3s ease-out;
-  z-index: 9999;
-}
-
-.popup-box {
-  background: #1b002b;
-  border: 2px solid #ff99ff;
-  padding: 1px 30px;
-  border-radius: 12px;
-  text-align: center;
-  color: #fff;
-  position: relative;
-  animation: popUp 0.4s ease-out;
-  box-shadow: 0 0 25px #ff66cc, 0 0 40px #9900cc;
-}
-
-.popup-box h3 {
-  margin-top: 0;
-  font-size: 22px;
-  color: #ffccff;
-}
-
-.popup-box .ig-text {
-  font-size: 20px;
-  color: #ff99ff;
-  margin: 12px 0;
-  font-weight: bold;
-}
-
-.popup-box .note {
-  font-size: 13px;
-  color: #ccc;
-}
-
-.popup-box button {
-  margin-top: 15px;
-  background-color: #ff99ff;
-  border: none;
-  padding: 8px 18px;
-  border-radius: 6px;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.popup-box button:hover {
-  background: #ffffff;
-  color: #ff00aa;
-  box-shadow: 0 0 10px #ff99ff;
-}
-
-/* Animation */
-@keyframes popUp {
-  0% { transform: scale(0.7); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.fade-out {
-  animation: fadeOut 0.3s ease forwards;
-}
-
-@keyframes fadeOut {
-  to { opacity: 0; }
-}
-
-/* Magic glow effect */
-.magic-glow {
-  box-shadow: 0 0 20px #ff99ff, 0 0 40px #ff00ff, 0 0 60px #cc00cc;
-  animation: pulseGlow 2s infinite ease-in-out;
-}
-
-@keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 20px #ff99ff, 0 0 40px #ff00ff, 0 0 60px #cc00cc; }
-  50% { box-shadow: 0 0 30px #ff66cc, 0 0 50px #ff00ff, 0 0 70px #ff33cc; }
-}
-.wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.shop-name {
-    font-size: 3rem; /* ขนาดฟอนต์ */
-    text-align: left;
-    position: relative;
-    z-index: 10;
-    color: #fff;
-    text-shadow: 0 0 15px #ff00ff, 0 0 25px #ff00ff;
-}
-
-.border {
-    padding: 10px;
-    border: 3px solid #ff00ff;
-    border-radius: 12px;
-    box-shadow: 0 0 15px #ff00ff, 0 0 25px #ff00ff;
-    position: relative;
-    display: inline-block;
-}
-
-.text {
-    color: #fff;
-    font-weight: bold;
-    text-shadow: 0 0 15px #ff00ff, 0 0 25px #ff00ff;
-}
-
-.text:hover {
-    color: #ff007f; /* เปลี่ยนสีเมื่อวางเมาส์ */
-    text-shadow: 0 0 20px #ff007f, 0 0 30px #ff007f;
-}
-
-.row-details {
-  transition: all 0.3s ease;
-  opacity: 0;
-  height: 0;
-  overflow: hidden;
-}
-.row-details {
-  background-color: rgba(255, 255, 255, 0.05);
-  padding: 10px;
-  border: 1px solid #cc66ff;
-  border-left: 5px solid #cc00cc;
-  animation: fadeInMystic 0.4s ease-in-out;
-}
-
-@keyframes fadeInMystic {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
 </style>
 </head>
 <body>
@@ -567,24 +427,19 @@ const db = firebase.firestore();
   <div class="loading-text">กรุณารอสักครู่... <span id="loading-percent">0%</span></div>
 </div>
 
+<!-- CSS -->
+  <!-- ส่วนแสดงยอดผู้จองคิวและเวลาปัจจุบัน -->
+<!-- ส่วนแสดงยอดผู้จองคิวและเวลาปัจจุบัน -->
 <div class="live-stats" id="liveStats">
   <div class="stats-title">สถานะพลังจองคิว</div>
   <div class="stats-item" id="queueCount">ยอดผู้จองคิวทั้งหมด: 0 คน</div>
   <div class="stats-item" id="currentTime">เวลาปัจจุบัน: --:--</div>
 </div>
   <img src="IMG_0920.JPG" alt="โลโก้" class="logo-glow">
-
+  <!-- Magical Animal -->
   <div class="magic-animal"></div>
-    <div class="wrapper">
-        <div class="shop-name">
-            <div class="outer-border">
-                <div class="inner-border">
-                    <span class="text">__________________</span>
-                </div>
-            </div>
-        </div>
-    </div>
 
+  <!-- Main Booking Container -->
   <div class="container" id="mainContainer">
     <h2>จองคิวดูดวงอัตโนมัติ</h2>
     <form id="bookingForm">
@@ -608,13 +463,9 @@ const db = firebase.firestore();
       <input type="date" id="date" required>
         <label>Instagram (@username):</label>
 <input type="text" id="igUsername" placeholder="@yourusername">
+
       <button type="submit">จองคิว</button>
     </form>
-    <div class="contact-section">
-  <a href="https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx" target="_blank" class="ig-link">
-    ติดต่อแม่หมอผ่าน IG: @horoscope_1308 <span class="click-hint">(หรือคลิกที่นี่)</span>
-  </a>
-</div>
           <div class="container">
   <h2>ตรวจสอบใบคิว</h2>
   <input type="text" id="refInput" placeholder="ใส่เลขอ้างอิง">
@@ -622,6 +473,13 @@ const db = firebase.firestore();
   <div id="refResult"></div>
 </div>
   </div>
+  <!-- ช่องทางการติดต่อ Instagram -->
+<div class="contact-section">
+  <a href="https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx" target="_blank" class="ig-link">
+    ติดต่อแม่หมอผ่าน IG: @horoscope_1308 <span class="click-hint">(หรือคลิกที่นี่)</span>
+  </a>
+</div>
+  <!-- Popup for the ticket -->
   <div class="popup" id="popup">
     <div id="ticketData"></div>
     <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
@@ -635,7 +493,7 @@ const db = firebase.firestore();
   <button onclick="closeDashboard()">ปิดแดชบอร์ด</button>
 </div>
 
-
+  <!-- Admin Section -->
 <div class="admin-section" id="adminSection" style="display: block;">
     <h2>ข้อมูลใบคิวทั้งหมด</h2>
 <div style="overflow-x: auto;">
@@ -651,6 +509,9 @@ const db = firebase.firestore();
         <th>IG</th>
       </tr>
     </thead>
+    <tbody>
+      <!-- ข้อมูลจะถูกเติมโดย JavaScript -->
+    </tbody>
   </table>
 </div>
 <div style="text-align: center; margin-top: 20px;">
@@ -666,7 +527,6 @@ const db = firebase.firestore();
   ">ปิดหน้าดูข้อมูล</button>
 </div>
 
-<script>
   <script>
     const queueDB = {}; // เก็บข้อมูลคิวใน session นี้
     let currentTicket = null; // เก็บใบคิวล่าสุด
@@ -741,68 +601,42 @@ Reference No: ${currentTicket.referenceId}`;
       window.open("https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx", "_blank");
     }
 
-
-function toggleRowDetails(button, referenceId) {
-  const rowDetails = document.getElementById(referenceId);
-  if (rowDetails.style.display === "none" || rowDetails.style.display === "") {
-    rowDetails.style.display = "table-row"; // ขยายแถว
-    button.innerText = "ย่อ"; // เปลี่ยนข้อความปุ่ม
-  } else {
-    rowDetails.style.display = "none"; // ย่อแถว
-    button.innerText = "ขยาย"; // เปลี่ยนข้อความปุ่ม
-  }
-}
+    // Admin Link - เปิด Admin Login Popup
 
 
-async function showAdminSection() {
+    // ตรวจสอบรหัสผ่านแอดมิน
+   
+
+    // แสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
+    async function showAdminSection() {
   const adminTableBody = document.getElementById("adminTable").querySelector("tbody");
-  adminTableBody.innerHTML = ""; // ล้างตารางเดิม
+  adminTableBody.innerHTML = "";
 
   try {
     const snapshot = await db.collection("queues").orderBy("date", "desc").get();
-    snapshot.forEach((doc) => {
+    snapshot.forEach(doc => {
       const ticket = doc.data();
-      const rowId = `row-details-${ticket.referenceId}`; // ใช้ referenceId เป็น rowId
-
       const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${ticket.name}</td>
-        <td>${ticket.age}</td>
-        <td>${ticket.category}</td>
-        <td>${ticket.date}</td>
-        <td>${ticket.queueNumber}</td>
-        <td>${ticket.referenceId ? ticket.referenceId.slice(0, 6) + '...' : '-'}</td>
-        <td>
-          ${ticket.igUsername 
-            ? `<a href="https://www.instagram.com/${ticket.igUsername}" target="_blank" style="color: #ff99ff; text-decoration: none;">${ticket.igUsername}</a>`
-            : `<span style="color:#ccc;">ไม่แสดงข้อมูล</span>`
-          }
-          <button onclick="toggleRowDetails(this, '${rowId}')" 
-            style="background-color: #ff99ff; color: black; border: none; border-radius: 4px; padding: 2px 6px; cursor: pointer; margin-top: 5px;">
-            ขยาย
-          </button>
-        </td>
-      `;
+row.innerHTML = `
+  <td>${ticket.name}</td>
+  <td>${ticket.age}</td>
+  <td>${ticket.category}</td>
+  <td>${ticket.date}</td>
+  <td>${ticket.queueNumber}</td>
+  <td>${ticket.referenceId ? ticket.referenceId.slice(0, 6) + '...' : '-'}</td>
+  <td>
+    ${ticket.igUsername
+      ? (ticket.igUsername.length > 10 ? ticket.igUsername.slice(0, 10) + "..." : ticket.igUsername)
+      : `<span style="color:#ccc;">ไม่แสดงข้อมูล</span>
+         <span 
+          onclick="alert('หมายเหตุ : ระบบพึ่งอัปเดตขึ้นสำหรับลูกดวงที่เข้าระบบจองคิวหลังจากวันที่ 17 เมษายน 2568')"
+          style="cursor:pointer; color:#ff99ff; text-decoration: underline; margin-left:4px;"
+         >(ดู)</span>`}
+  </td>
+`;
       adminTableBody.appendChild(row);
-
-
-      const rowDetails = document.createElement("tr");
-      rowDetails.id = rowId;
-      rowDetails.style.display = "none";
-      rowDetails.innerHTML = `
-        <td colspan="7">
-          <p><b>ชื่อ:</b> ${ticket.name}</p>
-          <p><b>อายุ:</b> ${ticket.age}</p>
-          <p><b>หมวดหมู่:</b> ${ticket.category}</p>
-          <p><b>ลำดับคิว:</b> ${ticket.queueNumber}</p>
-          <p><b>วันที่จอง:</b> ${ticket.date}</p>
-          <p><b>เลขอ้างอิง:</b> ${ticket.referenceId}</p>
-          <p><b>IG:</b> ${ticket.igUsername || "ไม่มี"}</p>
-        </td>
-      `;
-      adminTableBody.appendChild(rowDetails);
     });
-    document.getElementById("adminSection").style.display = "block"; // แสดงส่วนแอดมิน
+    document.getElementById("adminSection").style.display = "block";
   } catch (error) {
     alert("เกิดข้อผิดพลาดในการโหลดข้อมูล: " + error.message);
   }
@@ -837,7 +671,7 @@ async function showDashboard() {
   const snapshot = await db.collection("queues").get();
   const data = snapshot.docs.map(doc => doc.data());
 
-
+  // สร้างข้อมูลนับตามวันที่
   const dateMap = {};
   const categoryMap = {};
   data.forEach(item => {
@@ -845,7 +679,7 @@ async function showDashboard() {
     categoryMap[item.category] = (categoryMap[item.category] || 0) + 1;
   });
 
-
+  // กราฟเส้น - จำนวนคิวต่อวัน
   const dateLabels = Object.keys(dateMap).sort();
   const queueCounts = dateLabels.map(date => dateMap[date]);
 
@@ -870,7 +704,7 @@ async function showDashboard() {
     }
   });
 
-
+  // กราฟวงกลม - หมวดหมู่ยอดนิยม
   const categoryLabels = Object.keys(categoryMap);
   const categoryCounts = categoryLabels.map(cat => categoryMap[cat]);
 
@@ -902,23 +736,23 @@ async function showDashboard() {
 function closeDashboard() {
   document.getElementById("dashboardSection").style.display = "none";
 }
-
+// ฟังก์ชันสำหรับการอัพเดตยอดผู้จองและเวลาปัจจุบัน
 async function updateLiveStats() {
   const snapshot = await db.collection("queues").get();
   const queueCount = snapshot.size; // จำนวนผู้จองคิวทั้งหมด
 
+  // แสดงยอดผู้จอง
+  document.getElementById("queueCount").innerText = `ยอดผู้จอง: ${queueCount} คน`;
 
-  document.getElementById("queueCount").innerText = `ยอดผู้จองคิวทั้งหมด: ${queueCount} คน`;
-
-
+  // อัพเดตเวลาปัจจุบัน
   const currentTime = new Date().toLocaleString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-  document.getElementById("currentTime").innerText = `เวลาปัจจุบัน(🇹🇭): ${currentTime}`;
+  document.getElementById("currentTime").innerText = `เวลาปัจจุบัน: ${currentTime}`;
 }
 
-
+// เรียกใช้งานฟังก์ชันทุก 1 วินาที
 setInterval(updateLiveStats, 1000);
 
-
+// เมื่อโหลดหน้าเว็บ ให้เรียกฟังก์ชันทันที
 window.addEventListener("load", updateLiveStats);
 async function calculateBookingStats() {
     const querySnapshot = await db.collection("horoscopeBookings").get();
@@ -950,7 +784,6 @@ async function calculateBookingStats() {
 
   window.onload = calculateBookingStats;
   </script>
-  </script>
   <script>
   let percent = 0;
   const loadingText = document.getElementById("loading-percent");
@@ -963,30 +796,8 @@ async function calculateBookingStats() {
       clearInterval(loadingInterval);
       document.getElementById("preloader").style.display = "none";
     }
-  }, 2); 
-
-function showIGPopup(igUsername) {
-    const popup = document.createElement('div');
-    popup.innerHTML = `
-      <div class="popup-overlay">
-        <div class="popup-box magic-glow">
-          <h3>Instagram ของลูกดวง</h3>
-          <p class="ig-text">@${igUsername}</p>
-          <p class="note">(แสดงข้อมูลเต็มจากระบบ)</p>
-          <button onclick="closePopup(this)">ปิด</button>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(popup);
-  }
-
-  function closePopup(btn) {
-    const overlay = btn.closest('.popup-overlay');
-    overlay.classList.add('fade-out');
-    setTimeout(() => overlay.remove(), 300); // remove after animation
-  }
-
-
+  }, 2); // โหลดเร็วขึ้นหรือลดความเร็วได้ตรงนี้
 </script>
 </body>
 </html> 
+
