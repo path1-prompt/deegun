@@ -28,37 +28,43 @@
       margin: auto;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: rgba(255, 255, 255, 0.05);
-      border-radius: 15px;
-      overflow: hidden;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
-    }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
+  table-layout: fixed; /* ทำให้แถวมีความยืดหยุ่น */
+}
 
-    th, td {
-      padding: 15px 20px;
-      text-align: left;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
+th, td {
+  padding: 15px 20px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  word-wrap: break-word; /* ทำให้ข้อความยืดไปตามบรรทัด */
+  white-space: normal; /* กำหนดไม่ให้ข้อความในช่องตัด */
+}
 
-    th {
-      background-color: rgba(138, 43, 226, 0.4);
-      color: #ffccff;
-      font-size: 1.2em;
-      text-shadow: 0 0 10px #ffccff;
-    }
+th {
+  background-color: rgba(138, 43, 226, 0.4);
+  color: #ffccff;
+  font-size: 1.2em;
+  text-shadow: 0 0 10px #ffccff;
+  white-space: nowrap; /* ไม่ให้ข้อความในหัวตารางตัด */
+}
+
+
 
     tr:hover {
       background-color: rgba(255, 255, 255, 0.1);
       transition: 0.3s ease;
     }
-
-    td {
-      color: #e0c8ff;
-    }
+td {
+  color: #e0c8ff;
+  white-space: normal; /* กำหนดให้ข้อความใน cell ขยายได้ */
+}
 
     .back-btn {
       display: block;
