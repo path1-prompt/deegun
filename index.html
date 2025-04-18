@@ -831,11 +831,11 @@ button:hover {
 </style>
 </head>
 <body>
-  <div class="maintenance-popup">
+<div class="maintenance-popup" id="popup">
   <div class="popup-inner">
     <h2>ขณะนี้ระบบอยู่ระหว่างการปรับปรุง</h2>
     <p>จะเปิดให้บริการในวันที่ <strong>20 เมษายน 2568</strong></p>
-        <button onclick="closePopup()">ปิด</button>
+    <button onclick="closePopup()">ปิด</button>
     <div id="countdown"></div>
   </div>
 </div>
@@ -983,10 +983,6 @@ button:hover {
   document.getElementById("maintenancePopup").style.display = "flex";
 });
 
-
-  function closePopup() {
-    document.querySelector(".maintenance-popup").style.display = "none";
-  }
     const queueDB = {}; // เก็บข้อมูลคิวใน session นี้
     let currentTicket = null; // เก็บใบคิวล่าสุด
 
@@ -1434,33 +1430,30 @@ function submitWish() {
   document.getElementById("wishInput").value = "";
   document.getElementById("countdownTimer").innerText = "คำอธิษฐานของเจ้าได้ถูกส่งแล้ว";
 }
-function countdownTimer() {
-  const endTime = new Date("2024-04-20T00:00:00").getTime();
-  const countdownEl = document.getElementById("countdown");
+function closePopup() {
+    document.getElementById("popup").style.display = "none";
+  }
 
-  const x = setInterval(() => {
+  const targetDate = new Date("April 20, 2025 00:00:00").getTime();
+
+  const countdown = document.getElementById("countdown");
+  const interval = setInterval(function() {
     const now = new Date().getTime();
-    const distance = endTime - now;
+    const distance = targetDate - now;
 
     if (distance < 0) {
-      clearInterval(x);
-      countdownEl.innerHTML = "ระบบกลับมาแล้ว!";
+      clearInterval(interval);
+      countdown.innerHTML = "ระบบกลับมาให้บริการแล้ว";
       return;
     }
 
     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hrs = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const secs = Math.floor((distance % (1000 * 60)) / 1000);
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-    countdownEl.innerHTML = `
-      <h3>เหลือเวลาอีก</h3>
-      <h1>${days} วัน ${hrs} ชม. ${mins} นาที ${secs} วินาที</h1>
-    `;
+    countdown.innerHTML = "เหลือเวลา " + days + " วัน " + hours + " ชั่วโมง " + minutes + " นาที " + seconds + " วินาที";
   }, 1000);
-}
-
-countdownTimer();
   </script>
   <script>
   let percent = 0;
