@@ -1,151 +1,171 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ระบบสุ่มชื่อจริงและชื่อเล่น</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>คลังชื่อมงคล</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet"/>
   <style>
     body {
+      margin: 0;
       font-family: 'Cinzel', serif;
-      background: radial-gradient(circle, rgba(26, 0, 51, 1) 0%, rgba(54, 0, 99, 1) 100%);
+      background: radial-gradient(circle, #1b0033, #2c0052);
       color: #fff;
+      overflow-x: hidden;
+    }
+
+    h1 {
       text-align: center;
-      padding-top: 100px;
-      animation: glowAnimation 3s infinite alternate;
-    }
-    @keyframes glowAnimation {
-      0% {
-        text-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff, 0 0 40px #ff00ff, 0 0 50px #ff00ff;
-      }
-      100% {
-        text-shadow: 0 0 25px #8a2be2, 0 0 35px #8a2be2, 0 0 45px #8a2be2, 0 0 60px #8a2be2;
-      }
-    }
-    .container {
-      background-color: rgba(0, 0, 0, 0.8);
-      padding: 30px;
-      border-radius: 20px;
-      max-width: 600px;
-      margin: 0 auto;
-      box-shadow: 0px 0px 15px rgba(255, 0, 255, 0.7);
-    }
-    .title {
-      font-size: 2.8em;
-      margin-bottom: 20px;
-      color: #9b59b6;
-      text-shadow: 0 0 15px #9b59b6, 0 0 30px #9b59b6;
-    }
-    .result {
-      font-size: 1.5em;
-      margin-top: 30px;
-      padding: 10px;
-      background-color: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      text-shadow: 0 0 15px #9b59b6, 0 0 25px #9b59b6;
-    }
-    button {
-      background-color: #9b59b6;
-      color: #fff;
-      font-size: 1.2em;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      box-shadow: 0px 0px 10px rgba(255, 0, 255, 0.7);
-      transition: all 0.3s ease;
-    }
-    button:hover {
-      background-color: #8a2be2;
-      box-shadow: 0px 0px 20px rgba(255, 0, 255, 1);
-    }
-    .meaning {
-      font-size: 1.2em;
-      margin-top: 20px;
+      font-size: 3em;
+      margin: 40px 0 20px;
       color: #ffccff;
+      text-shadow: 0 0 20px #ff00ff, 0 0 40px #aa00ff;
+    }
+
+    .container {
+      padding: 0 20px 50px;
+      max-width: 1300px;
+      margin: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
+    }
+
+    th, td {
+      padding: 15px 20px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    th {
+      background-color: rgba(138, 43, 226, 0.4);
+      color: #ffccff;
+      font-size: 1.2em;
       text-shadow: 0 0 10px #ffccff;
     }
-    .reason {
-      font-size: 1.1em;
-      margin-top: 10px;
-      color: #d39cd3;
-      text-shadow: 0 0 10px #d39cd3;
+
+    tr:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      transition: 0.3s ease;
     }
-    .back-button {
-      background-color: #8a2be2;
-      color: #fff;
-      font-size: 1.2em;
-      padding: 12px 25px;
+
+    td {
+      color: #e0c8ff;
+    }
+
+    .back-btn {
+      display: block;
+      width: fit-content;
+      margin: 40px auto 0;
+      padding: 12px 30px;
+      font-size: 1.1em;
+      background: #8a2be2;
+      color: white;
       border: none;
       border-radius: 10px;
+      box-shadow: 0 0 15px #ff00ff, 0 0 30px #aa00ff;
       cursor: pointer;
-      margin-top: 40px;
-      box-shadow: 0px 0px 20px rgba(255, 0, 255, 0.8);
-      transition: all 0.3s ease;
+      transition: 0.3s ease;
+      text-decoration: none;
     }
-    .back-button:hover {
-      background-color: #9b59b6;
-      box-shadow: 0px 0px 30px rgba(255, 0, 255, 1);
+
+    .back-btn:hover {
+      background: #6b1fa7;
+      box-shadow: 0 0 25px #ff00ff, 0 0 40px #aa00ff;
     }
   </style>
 </head>
 <body>
 
+  <h1>คลังชื่อมงคล</h1>
   <div class="container">
-    <div class="title">ระบบสุ่มชื่อจริงและชื่อเล่น</div>
-    <button onclick="generateName()">สุ่มชื่อ</button>
-    
-    <div class="result" id="nameResult"></div>
-    <div class="meaning" id="meaning"></div>
-    <div class="reason" id="reason"></div>
+    <table>
+      <thead>
+        <tr>
+          <th>ชื่อจริง</th>
+          <th>ชื่อเล่น</th>
+          <th>ความหมาย</th>
+          <th>เหตุผลที่เหมาะสม</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>อัญญ์รดา</td><td>อัญ</td><td>หญิงผู้สูงค่า มีพลังในตัวเอง</td><td>ชื่อมีพลังแห่งเสน่ห์และสง่างาม</td></tr>
+        <tr><td>พิชชาภา</td><td>พิชา</td><td>ความรู้ + ความเจิดจรัส</td><td>สื่อถึงความรู้และสติปัญญา</td></tr>
+        <tr><td>ลลินดา</td><td>ลิน</td><td>อ่อนโยนแต่ทรงพลัง</td><td>มีความเมตตาและพลังภายใน</td></tr>
+        <tr><td>รมิดา</td><td>มีมี่</td><td>หญิงที่มีเสน่ห์เหนือธรรมชาติ</td><td>พลังวันศุกร์เสริมเสน่ห์</td></tr>
+        <tr><td>พัชรินทร์</td><td>พัช</td><td>หญิงแห่งความรุ่งโรจน์</td><td>สามารถสร้างสรรค์สิ่งใหม่</td></tr>
+        <tr><td>ลินดา</td><td>ลิน</td><td>สง่างาม, ยิ่งใหญ่</td><td>เสริมความสงบและสวยงาม</td></tr>
+        <tr><td>ธัญญา</td><td>ธัญ</td><td>ความเจริญรุ่งเรือง</td><td>มีโชคลาภและความสำเร็จ</td></tr>
+        <tr><td>ศศิธร</td><td>ธาร</td><td>ดวงจันทร์, ความบริสุทธิ์</td><td>อ่อนโยนและสง่างาม</td></tr>
+        <tr><td>ชนิษฐา</td><td>นนิ</td><td>ฉลาดปราดเปรื่อง</td><td>คิดสร้างสรรค์และมีปัญญา</td></tr>
+        <tr><td>กานต์พิชชา</td><td>กานต์</td><td>ผู้ที่มีสติปัญญา</td><td>เสริมการตัดสินใจและความฉลาด</td></tr>
 
-    <!-- Back button to index.html -->
-    <button class="back-button" onclick="goBack()">ย้อนกลับ</button>
+        <tr><td>ธีรดล</td><td>ดล</td><td>พลังผู้มีปัญญา</td><td>เหมาะกับผู้นำมีความสามารถ</td></tr>
+        <tr><td>ภูบดินทร์</td><td>ภู</td><td>หนักแน่นดั่งขุนเขา</td><td>มั่นคงและแข็งแกร่ง</td></tr>
+        <tr><td>นรินทร์</td><td>ริน</td><td>นักรบแห่งแสง</td><td>กล้าหาญและแข็งแกร่ง</td></tr>
+        <tr><td>คิรันต์</td><td>คิ</td><td>แสงสว่างแห่งความรู้</td><td>ปัญญาและความคิดสร้างสรรค์</td></tr>
+        <tr><td>ณัฐวุฒิ</td><td>วุฒิ</td><td>ผู้มีความรู้ความสามารถ</td><td>ตัดสินใจได้ดี</td></tr>
+        <tr><td>สุวรรณ</td><td>สุวรรณ</td><td>ทองคำ</td><td>เสริมโชคลาภและความร่ำรวย</td></tr>
+        <tr><td>บุณยชาติ</td><td>ชาติ</td><td>ผู้มีความดี</td><td>จิตใจดีและคุณธรรม</td></tr>
+        <tr><td>ทิวากร</td><td>ทิวา</td><td>แสงแดดแห่งความสำเร็จ</td><td>พร้อมประสบความสำเร็จ</td></tr>
+        <tr><td>ศุภชัย</td><td>ชัย</td><td>ความสำเร็จ, ชัยชนะ</td><td>มีพลังต่อสู้เพื่อเป้าหมาย</td></tr>
+        <tr><td>กฤษฎา</td><td>กฤษ</td><td>ผู้มีพรสวรรค์</td><td>ความสามารถพิเศษเฉพาะตัว</td></tr>
+<tr><td>ณัฐชา</td><td>ณัฐ</td><td>ผู้มีปัญญาและความมั่นคง</td><td>เหมาะสำหรับผู้ที่ต้องการความมั่นคงในชีวิต</td></tr>
+<tr><td>ธนัญญา</td><td>ญาญ่า</td><td>ผู้มีทรัพย์และปัญญา</td><td>ส่งเสริมด้านการเงินและความฉลาด</td></tr>
+<tr><td>จิรดา</td><td>จิ</td><td>ความงามที่ยั่งยืน</td><td>เหมาะกับผู้หญิงที่สง่างามและมั่นใจ</td></tr>
+<tr><td>ปาริฉัตร</td><td>ริฉัตร</td><td>ดอกไม้แห่งสวรรค์</td><td>ให้พลังแห่งความสุขและศิลป์</td></tr>
+<tr><td>มนัญญา</td><td>มะนี</td><td>ความคิดงดงาม</td><td>เหมาะกับสายศิลป์และผู้มีจินตนาการ</td></tr>
+<tr><td>วริศรา</td><td>วา</td><td>ผู้ยิ่งใหญ่และมีเสน่ห์</td><td>เสริมบุคลิกผู้นำและดึงดูด</td></tr>
+<tr><td>ธนพร</td><td>พร</td><td>พรแห่งทรัพย์</td><td>เน้นด้านโชคลาภและธุรกิจ</td></tr>
+<tr><td>ฐิตารีย์</td><td>รีย์</td><td>ผู้ตั้งมั่นและมั่นคง</td><td>เสริมความแน่วแน่และใจหนักแน่น</td></tr>
+<tr><td>พิมพ์วรา</td><td>พิมพ์</td><td>ความงดงามแห่งผู้หญิง</td><td>เสริมความอ่อนโยนและนุ่มนวล</td></tr>
+<tr><td>ณัฐณิชา</td><td>ณิชา</td><td>ผู้มีความรู้และความรัก</td><td>สมดุลระหว่างปัญญาและหัวใจ</td></tr>
+
+<tr><td>จิรายุ</td><td>จิ</td><td>ผู้มีชีวิตยืนยาว</td><td>เสริมพลังชีวิตและสุขภาพดี</td></tr>
+<tr><td>วรพล</td><td>วร</td><td>ผู้มีพลังยิ่งใหญ่</td><td>เหมาะสำหรับผู้นำหรือเจ้าของกิจการ</td></tr>
+<tr><td>ปภังกร</td><td>กร</td><td>ผู้ให้พร</td><td>ส่งเสริมด้านบุญบารมี</td></tr>
+<tr><td>ศิวกร</td><td>ศิว</td><td>พลังแห่งพระศิวะ</td><td>เหมาะกับผู้ต้องการความมั่นคงและปกป้อง</td></tr>
+<tr><td>นนทกร</td><td>นนท์</td><td>ผู้สงบนิ่งแต่แข็งแกร่ง</td><td>ส่งเสริมสติและการตัดสินใจ</td></tr>
+<tr><td>อัครเดช</td><td>อัค</td><td>ผู้ยิ่งใหญ่และมีอำนาจ</td><td>เหมาะกับผู้บริหารหรือนักการเมือง</td></tr>
+<tr><td>ธีรภัทร</td><td>ภัทร</td><td>ผู้ดี มีปัญญา</td><td>เสริมด้านจริยธรรมและสติปัญญา</td></tr>
+<tr><td>พชร</td><td>พช</td><td>เพชร</td><td>สื่อถึงความแข็งแกร่งและล้ำค่า</td></tr>
+<tr><td>ชยพล</td><td>พล</td><td>พลังแห่งชัยชนะ</td><td>เหมาะสำหรับนักกีฬา นักสู้</td></tr>
+<tr><td>นพสิทธิ์</td><td>นพ</td><td>ผู้มีสิทธิ์อันสูงส่ง</td><td>เสริมบารมีและความภาคภูมิใจ</td></tr>
+
+<tr><td>ธันวา</td><td>ธัน</td><td>พลังแห่งเดือนธันวาคม</td><td>เหมาะกับผู้เกิดปลายปีหรือเปลี่ยนแปลงบ่อย</td></tr>
+<tr><td>ปฐวี</td><td>ปอ</td><td>ดิน, มั่นคง</td><td>ส่งเสริมความแน่นอนและเสถียรภาพ</td></tr>
+<tr><td>คณาธิป</td><td>คณา</td><td>ผู้นำกลุ่ม</td><td>เหมาะกับผู้ทำงานด้านบริหาร</td></tr>
+<tr><td>พิชญุตม์</td><td>พิช</td><td>ผู้มีความรู้เลิศ</td><td>เสริมพลังแห่งการเรียนรู้</td></tr>
+<tr><td>ภาสกร</td><td>ภาส</td><td>แสงแห่งดวงตะวัน</td><td>เหมาะกับสายงานพลังงานหรือการบุกเบิก</td></tr>
+<tr><td>กวินทร์</td><td>วิน</td><td>นักรบผู้กล้าหาญ</td><td>เสริมความกล้าและการตัดสินใจ</td></tr>
+<tr><td>เจษฎา</td><td>เจษ</td><td>ผู้ยิ่งใหญ่</td><td>เสริมชื่อเสียงและบารมี</td></tr>
+<tr><td>ณัฏฐ์</td><td>ณัฏ</td><td>ผู้มีความรู้</td><td>เหมาะสำหรับนักวิชาการ นักวิจัย</td></tr>
+<tr><td>สุเมธ</td><td>เมธ</td><td>ผู้มีปัญญาสูง</td><td>ส่งเสริมสติปัญญาและการตัดสินใจที่ถูกต้อง</td></tr>
+<tr><td>ธีรวัฒน์</td><td>ธี</td><td>ผู้มีอำนาจและความคิด</td><td>เหมาะกับสายบริหารหรือผู้จัดการ</td></tr>
+
+<tr><td>อลิน</td><td>ลิน</td><td>อ่อนหวาน แต่มั่นคง</td><td>เสริมความสงบเยือกเย็น</td></tr>
+<tr><td>ฟาริด้า</td><td>ฟา</td><td>ความงามที่โดดเด่น</td><td>เหมาะสำหรับสายแฟชั่น/ศิลป์</td></tr>
+<tr><td>นานา</td><td>นานา</td><td>ความหลากหลาย</td><td>เสริมความยืดหยุ่นและหลายทักษะ</td></tr>
+<tr><td>เทียนา</td><td>เทีย</td><td>แสงสว่าง</td><td>เหมาะกับผู้ต้องการเปล่งประกาย</td></tr>
+<tr><td>อริญญา</td><td>ญา</td><td>ปัญญาและความสงบ</td><td>ส่งเสริมการเรียนรู้และสมาธิ</td></tr>
+<tr><td>แพรพลอย</td><td>แพร</td><td>งดงามดั่งอัญมณี</td><td>เหมาะกับผู้ที่ต้องการความโดดเด่น</td></tr>
+<tr><td>พิชชาภา</td><td>ภา</td><td>แสงแห่งปัญญา</td><td>เสริมความสำเร็จทางการศึกษา</td></tr>
+<tr><td>เบญญา</td><td>เบญ</td><td>ผู้มีความรู้รอบด้าน</td><td>เหมาะกับผู้ทำงานหลายด้าน</td></tr>
+<tr><td>ณัฎฐา</td><td>ณัฎ</td><td>สติปัญญาอันบริสุทธิ์</td><td>เหมาะกับผู้มีความคิดสร้างสรรค์</td></tr>
+<tr><td>สุชาดา</td><td>ชาดา</td><td>ผู้มีชาติกำเนิดดี</td><td>เสริมบารมีและความภูมิฐาน</td></tr>
+
+      </tbody>
+    </table>
+
+    <a class="back-btn" href="index.html">← ย้อนกลับหน้าหลัก</a>
   </div>
-
-  <script>
-    const names = {
-      female: [
-        { real: 'อัญญ์รดา', nick: 'อัญ', meaning: 'หญิงผู้สูงค่า มีพลังในตัวเอง', reason: 'ชื่อมีพลังแห่งเสน่ห์และสง่างาม' },
-        { real: 'พิชชาภา', nick: 'พิชา', meaning: 'ความรู้ + ความเจิดจรัส', reason: 'ชื่อที่สื่อถึงความรู้และสติปัญญา' },
-        { real: 'ลลินดา', nick: 'ลิน', meaning: 'อ่อนโยนแต่ทรงพลัง', reason: 'ชื่อที่มีความเมตตาและพลังในตัวเอง' },
-        { real: 'รมิดา', nick: 'มีมี่', meaning: 'หญิงที่มีเสน่ห์เหนือธรรมชาติ', reason: 'พลังแห่งวันศุกร์เสริมเสน่ห์ให้คุณ' },
-        { real: 'พัชรินทร์', nick: 'พัช', meaning: 'หญิงแห่งความรุ่งโรจน์', reason: 'ชื่อที่เหมาะกับผู้ที่สามารถสร้างสรรค์สิ่งใหม่ ๆ ได้' },
-        { real: 'กานต์พิชชา', nick: 'กานต์', meaning: 'ผู้ที่มีสติปัญญา', reason: 'เสริมความฉลาดและความสามารถในการตัดสินใจ' },
-        { real: 'ธัญญา', nick: 'ธัญ', meaning: 'ความเจริญรุ่งเรือง', reason: 'เหมาะกับคนที่มีโชคลาภและความสำเร็จ' },
-        { real: 'ลินดา', nick: 'ลิน', meaning: 'สง่างาม, ยิ่งใหญ่', reason: 'เสริมความสวยงามและจิตใจที่สงบ' },
-        { real: 'ศศิธร', nick: 'ธาร', meaning: 'ดวงจันทร์, ความบริสุทธิ์', reason: 'เหมาะกับผู้หญิงที่มีความอ่อนโยนและสง่างาม' },
-        { real: 'ชนิษฐา', nick: 'นนิ', meaning: 'ชาญฉลาด, ฉลาดปราดเปรื่อง', reason: 'เหมาะกับผู้หญิงที่มีความคิดสร้างสรรค์และมีปัญญา' }
-      ],
-      male: [
-        { real: 'ธีรดล', nick: 'ดล', meaning: 'พลังผู้มีปัญญา', reason: 'เหมาะกับผู้นำที่มีความสามารถและปัญญา' },
-        { real: 'ภูบดินทร์', nick: 'ภู', meaning: 'หนักแน่นดั่งขุนเขา', reason: 'เหมาะกับคนที่มั่นคงและมีความแข็งแกร่ง' },
-        { real: 'นรินทร์', nick: 'ริน', meaning: 'นักรบแห่งแสง', reason: 'เหมาะกับผู้นำที่กล้าหาญและแข็งแกร่ง' },
-        { real: 'คิรันต์', nick: 'คิ', meaning: 'แสงสว่างแห่งความรู้', reason: 'เหมาะกับคนที่มีปัญญาและความคิดสร้างสรรค์' },
-        { real: 'ณัฐวุฒิ', nick: 'วุฒิ', meaning: 'ผู้มีความรู้ความสามารถ', reason: 'เหมาะกับผู้ที่มีความรู้และความสามารถในการตัดสินใจ' },
-        { real: 'สุวรรณ', nick: 'สุวรรณ', meaning: 'ทองคำ', reason: 'เสริมโชคลาภและความร่ำรวย' },
-        { real: 'บุณยชาติ', nick: 'ชาติ', meaning: 'ผู้มีความดี', reason: 'เหมาะกับคนที่มีจิตใจดีและเต็มไปด้วยคุณธรรม' },
-        { real: 'ทิวากร', nick: 'ทิวา', meaning: 'แสงแดดแห่งความสำเร็จ', reason: 'เหมาะกับคนที่มีความสามารถและพร้อมที่จะประสบความสำเร็จ' },
-        { real: 'ศุภชัย', nick: 'ชัย', meaning: 'ความสำเร็จ, ชัยชนะ', reason: 'เหมาะกับผู้ที่มุ่งมั่นและมีพลังในการต่อสู้เพื่อความสำเร็จ' },
-        { real: 'กฤษฎา', nick: 'กฤษ', meaning: 'ผู้มีพรสวรรค์', reason: 'เหมาะกับคนที่มีความสามารถพิเศษและมีพรสวรรค์' }
-      ]
-    };
-
-    function generateName() {
-      const gender = Math.random() < 0.5 ? 'female' : 'male'; // Randomly choose between male and female
-      const nameIndex = Math.floor(Math.random() * names[gender].length);
-      const selectedName = names[gender][nameIndex];
-
-      // Update UI with result
-      document.getElementById("nameResult").innerHTML = `ชื่อจริง: ${selectedName.real} <br>ชื่อเล่น: ${selectedName.nick}`;
-      document.getElementById("meaning").innerHTML = `ความหมาย: ${selectedName.meaning}`;
-      document.getElementById("reason").innerHTML = `เหตุผล: ${selectedName.reason}`;
-    }
-
-      function goBack() {
-        window.location.href = "index.html"; // Go back to the homepage (index.html)
-      }
-  </script>
 
 </body>
 </html>
