@@ -651,22 +651,6 @@ input[type="checkbox"]:not(:checked) + .checkbox-custom {
       <input type="date" id="date" required>
         <label>Instagram (@username):</label>
 <input type="text" id="igUsername" placeholder="@yourusername">
-<!-- Checkbox สำหรับเร่งด่วน -->
-<!-- Checkbox สำหรับเร่งด่วน -->
-<label>
-  <input type="checkbox" id="urgentCheckbox" onchange="toggleUrgent()">
-  จองเร่งด่วน (นอกเวลา) - ขั้นต่ำ 10 บาท
-</label>
-
-<!-- ส่วนของการจองเร่งด่วน -->
-<div id="urgentSection" style="display: none; margin-top: 10px; background: #2c0033; padding: 10px; border-radius: 6px;">
-  <label>แนบสลิปการโอนเงิน:</label><br>
-  <input type="file" id="slipFile" accept="image/*"><br><br>
-  <p style="color:#ccc; font-size: 13px;">
-    * ในสลิป กรุณาเขียน: <br>
-    ชื่อ / อายุ / IG
-  </p>
-</div>
       <button type="submit">จองคิว</button>
     </form>
     <div class="contact-section">
@@ -1019,22 +1003,6 @@ async function calculateBookingStats() {
     document.getElementById("total-bookings").textContent = totalBookings;
     document.getElementById("not-yet-booked").textContent = notYetBooked;
     document.getElementById("completed-bookings").textContent = completedBookings;
-
-  function toggleUrgent() {
-    const checkbox = document.getElementById("urgentCheckbox");
-    const section = document.getElementById("urgentSection");
-    section.style.display = checkbox.checked ? "block" : "none";
-  }
-
-  if (isUrgent) {
-  document.getElementById("ticketData").innerHTML = `
-    <h3>คำขอจองเร่งด่วนสำเร็จ</h3>
-    <p>รอตรวจสอบไม่เกิน 1 ชั่วโมง</p>
-    <p>ชื่อ: ${ticket.name}</p>
-    <p>วันที่จอง: ${ticket.date}</p>
-    <p>เลขอ้างอิง: ${ticket.referenceId}</p>
-  `;
-}
   window.onload = calculateBookingStats;
   </script>
   <script>
