@@ -606,16 +606,13 @@ input[type="checkbox"]:not(:checked) + .checkbox-custom {
   <div class="loading-text">กรุณารอสักครู่... <span id="loading-percent">0%</span></div>
 </div>
 
-<!-- CSS -->
-  <!-- ส่วนแสดงยอดผู้จองคิวและเวลาปัจจุบัน -->
-<!-- ส่วนแสดงยอดผู้จองคิวและเวลาปัจจุบัน -->
 <div class="live-stats" id="liveStats">
   <div class="stats-title">สถานะพลังจองคิว</div>
   <div class="stats-item" id="queueCount">ยอดผู้จองคิวทั้งหมด: 0 คน</div>
   <div class="stats-item" id="currentTime">เวลาปัจจุบัน: --:--</div>
 </div>
   <img src="IMG_0920.JPG" alt="โลโก้" class="logo-glow">
-  <!-- Magical Animal -->
+
   <div class="magic-animal"></div>
     <div class="wrapper">
         <div class="shop-name">
@@ -626,7 +623,7 @@ input[type="checkbox"]:not(:checked) + .checkbox-custom {
             </div>
         </div>
     </div>
-  <!-- Main Booking Container -->
+
   <div class="container" id="mainContainer">
     <h2>จองคิวดูดวงอัตโนมัติ</h2>
     <form id="bookingForm">
@@ -664,9 +661,9 @@ input[type="checkbox"]:not(:checked) + .checkbox-custom {
   <div id="refResult"></div>
 </div>
   </div>
-  <!-- ช่องทางการติดต่อ Instagram -->
 
-  <!-- Popup for the ticket -->
+
+
   <div class="popup" id="popup">
     <div id="ticketData"></div>
     <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
@@ -680,7 +677,7 @@ input[type="checkbox"]:not(:checked) + .checkbox-custom {
   <button onclick="closeDashboard()">ปิดแดชบอร์ด</button>
 </div>
 
-  <!-- Admin Section -->
+
 <div class="admin-section" id="adminSection" style="display: block;">
     <h2>ข้อมูลใบคิวทั้งหมด</h2>
 <div style="overflow-x: auto;">
@@ -697,7 +694,7 @@ input[type="checkbox"]:not(:checked) + .checkbox-custom {
       </tr>
     </thead>
     <tbody>
-      <!-- ข้อมูลจะถูกเติมโดย JavaScript -->
+
     </tbody>
   </table>
 </div>
@@ -714,6 +711,7 @@ input[type="checkbox"]:not(:checked) + .checkbox-custom {
   ">ปิดหน้าดูข้อมูล</button>
 </div>
 
+<script>
   <script>
     const queueDB = {}; // เก็บข้อมูลคิวใน session นี้
     let currentTicket = null; // เก็บใบคิวล่าสุด
@@ -788,18 +786,8 @@ Reference No: ${currentTicket.referenceId}`;
       window.open("https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx", "_blank");
     }
 
-    // Admin Link - เปิด Admin Login Popup
-
-
-    // ตรวจสอบรหัสผ่านแอดมิน
-  
-    // แสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
-// ฟังก์ชันที่เพิ่มปุ่มสำหรับขยายและย่อ
-// ฟังก์ชันที่เพิ่มปุ่มสำหรับขยายและย่อ
-// ฟังก์ชันที่เพิ่มปุ่มสำหรับขยายและย่อ
-// ฟังก์ชันที่เพิ่มปุ่มสำหรับขยายและย่อ
-function toggleRowDetails(button, referenceId) {
-  const rowDetails = document.getElementById(referenceId);
+function toggleRowDetails(button, rowId) {
+  const rowDetails = document.getElementById(rowId);
   if (rowDetails.style.display === "none" || rowDetails.style.display === "") {
     rowDetails.style.display = "table-row"; // ขยายแถว
     button.innerText = "ย่อ"; // เปลี่ยนข้อความปุ่ม
@@ -809,16 +797,16 @@ function toggleRowDetails(button, referenceId) {
   }
 }
 
-// ฟังก์ชันแสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
+
 async function showAdminSection() {
   const adminTableBody = document.getElementById("adminTable").querySelector("tbody");
   adminTableBody.innerHTML = ""; // ล้างตารางเดิม
 
   try {
     const snapshot = await db.collection("queues").orderBy("date", "desc").get();
-    snapshot.forEach((doc) => {
+    snapshot.forEach((doc, index) => {
       const ticket = doc.data();
-      const rowId = `row-details-${ticket.referenceId}`; // ใช้ referenceId เป็น rowId
+      const rowId = `row-details-${index}`; // ID สำหรับแต่ละแถว
 
       const row = document.createElement("tr");
       row.innerHTML = `
@@ -841,7 +829,7 @@ async function showAdminSection() {
       `;
       adminTableBody.appendChild(row);
 
-      // แถวรายละเอียดเพิ่มเติม (ย่อหรือขยายได้)
+
       const rowDetails = document.createElement("tr");
       rowDetails.id = rowId;
       rowDetails.style.display = "none"; // ซ่อนแถวนี้เริ่มต้น
@@ -893,7 +881,7 @@ async function showDashboard() {
   const snapshot = await db.collection("queues").get();
   const data = snapshot.docs.map(doc => doc.data());
 
-  // สร้างข้อมูลนับตามวันที่
+
   const dateMap = {};
   const categoryMap = {};
   data.forEach(item => {
@@ -901,7 +889,7 @@ async function showDashboard() {
     categoryMap[item.category] = (categoryMap[item.category] || 0) + 1;
   });
 
-  // กราฟเส้น - จำนวนคิวต่อวัน
+
   const dateLabels = Object.keys(dateMap).sort();
   const queueCounts = dateLabels.map(date => dateMap[date]);
 
@@ -926,7 +914,7 @@ async function showDashboard() {
     }
   });
 
-  // กราฟวงกลม - หมวดหมู่ยอดนิยม
+
   const categoryLabels = Object.keys(categoryMap);
   const categoryCounts = categoryLabels.map(cat => categoryMap[cat]);
 
@@ -958,23 +946,23 @@ async function showDashboard() {
 function closeDashboard() {
   document.getElementById("dashboardSection").style.display = "none";
 }
-// ฟังก์ชันสำหรับการอัพเดตยอดผู้จองและเวลาปัจจุบัน
+
 async function updateLiveStats() {
   const snapshot = await db.collection("queues").get();
   const queueCount = snapshot.size; // จำนวนผู้จองคิวทั้งหมด
 
-  // แสดงยอดผู้จอง
+
   document.getElementById("queueCount").innerText = `ยอดผู้จองคิวทั้งหมด: ${queueCount} คน`;
 
-  // อัพเดตเวลาปัจจุบัน
+
   const currentTime = new Date().toLocaleString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
   document.getElementById("currentTime").innerText = `เวลาปัจจุบัน(🇹🇭): ${currentTime}`;
 }
 
-// เรียกใช้งานฟังก์ชันทุก 1 วินาที
+
 setInterval(updateLiveStats, 1000);
 
-// เมื่อโหลดหน้าเว็บ ให้เรียกฟังก์ชันทันที
+
 window.addEventListener("load", updateLiveStats);
 async function calculateBookingStats() {
     const querySnapshot = await db.collection("horoscopeBookings").get();
@@ -1002,7 +990,10 @@ async function calculateBookingStats() {
     document.getElementById("total-bookings").textContent = totalBookings;
     document.getElementById("not-yet-booked").textContent = notYetBooked;
     document.getElementById("completed-bookings").textContent = completedBookings;
-window.addEventListener("load", calculateBookingStats);
+  }
+
+  window.onload = calculateBookingStats;
+  </script>
   </script>
   <script>
   let percent = 0;
@@ -1016,7 +1007,7 @@ window.addEventListener("load", calculateBookingStats);
       clearInterval(loadingInterval);
       document.getElementById("preloader").style.display = "none";
     }
-  }, 2); // โหลดเร็วขึ้นหรือลดความเร็วได้ตรงนี้
+  }, 2); 
 
 function showIGPopup(igUsername) {
     const popup = document.createElement('div');
