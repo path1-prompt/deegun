@@ -1003,7 +1003,7 @@ async function calculateBookingStats() {
     document.getElementById("total-bookings").textContent = totalBookings;
     document.getElementById("not-yet-booked").textContent = notYetBooked;
     document.getElementById("completed-bookings").textContent = completedBookings;
-  window.onload = calculateBookingStats;
+    window.addEventListener("load", calculateBookingStats);
   </script>
   <script>
   let percent = 0;
