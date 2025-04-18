@@ -613,25 +613,15 @@ Reference No: ${currentTicket.referenceId}`;
     function goInstagram() {
       window.open("https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx", "_blank");
     }
-
-    // Admin Link - เปิด Admin Login Popup
-
-
-    // ตรวจสอบรหัสผ่านแอดมิน
-   
-
-    // แสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
 // ฟังก์ชันที่เพิ่มปุ่มสำหรับขยายและย่อ
 function toggleRowDetails(button, referenceId) {
   const rowDetails = document.getElementById(referenceId);
-  const isVisible = rowDetails.classList.contains("show");
-
-  if (!isVisible) {
-    rowDetails.classList.add("show");
-    button.innerText = "ย่อ";
+  if (rowDetails.style.display === "none" || rowDetails.style.display === "") {
+    rowDetails.style.display = "table-row"; // ขยายแถว
+    button.innerText = "ย่อ"; // เปลี่ยนข้อความปุ่ม
   } else {
-    rowDetails.classList.remove("show");
-    button.innerText = "ขยาย";
+    rowDetails.style.display = "none"; // ย่อแถว
+    button.innerText = "ขยาย"; // เปลี่ยนข้อความปุ่ม
   }
 }
 
