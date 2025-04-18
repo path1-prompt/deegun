@@ -11,22 +11,6 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-/* Styling for checkbox */
-.urgentLabel {
-  display: inline-flex;
-  align-items: center;
-  font-size: 16px;
-  color: #fff;
-  cursor: pointer;
-  background-color: #ff3366;
-  padding: 10px 15px;
-  border-radius: 25px;
-  transition: background-color 0.3s ease;
-}
-
-.urgentLabel:hover {
-  background-color: #e6004d;
-}
 
 .checkbox-custom {
   width: 20px;
@@ -809,12 +793,6 @@ Reference No: ${currentTicket.referenceId}`;
 
     // ตรวจสอบรหัสผ่านแอดมิน
   
-  function toggleUrgent() {
-    const checkbox = document.getElementById("urgentCheckbox");
-    const section = document.getElementById("urgentSection");
-    section.style.display = checkbox.checked ? "block" : "none";
-  }
-
     // แสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
 // ฟังก์ชันที่เพิ่มปุ่มสำหรับขยายและย่อ
 // ฟังก์ชันที่เพิ่มปุ่มสำหรับขยายและย่อ
