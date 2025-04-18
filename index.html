@@ -25,6 +25,19 @@
   const db = firebase.firestore();
 </script>
   <style>
+  
+  .row-details {
+  transition: all 0.3s ease;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+}
+.row-details.show {
+  opacity: 1;
+  height: auto;
+  padding: 10px;
+}
+  
    button:active {
   box-shadow: 0 0 25px #ff66ff, 0 0 50px #aa00ff;
   transition: 0.1s;
@@ -608,35 +621,70 @@ Reference No: ${currentTicket.referenceId}`;
    
 
     // แสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
-    async function showAdminSection() {
+// ฟังก์ชันที่เพิ่มปุ่มสำหรับขยายและย่อ
+function toggleRowDetails(button, referenceId) {
+  const rowDetails = document.getElementById(referenceId);
+  const isVisible = rowDetails.classList.contains("show");
+
+  if (!isVisible) {
+    rowDetails.classList.add("show");
+    button.innerText = "ย่อ";
+  } else {
+    rowDetails.classList.remove("show");
+    button.innerText = "ขยาย";
+  }
+}
+
+// ฟังก์ชันแสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
+async function showAdminSection() {
   const adminTableBody = document.getElementById("adminTable").querySelector("tbody");
-  adminTableBody.innerHTML = "";
+  adminTableBody.innerHTML = ""; // ล้างตารางเดิม
 
   try {
     const snapshot = await db.collection("queues").orderBy("date", "desc").get();
-    snapshot.forEach(doc => {
+    snapshot.forEach((doc) => {
       const ticket = doc.data();
+      const rowId = `row-details-${ticket.referenceId}`; // ใช้ referenceId เป็น rowId
+
       const row = document.createElement("tr");
-row.innerHTML = `
-  <td>${ticket.name}</td>
-  <td>${ticket.age}</td>
-  <td>${ticket.category}</td>
-  <td>${ticket.date}</td>
-  <td>${ticket.queueNumber}</td>
-  <td>${ticket.referenceId ? ticket.referenceId.slice(0, 6) + '...' : '-'}</td>
-  <td>
-    ${ticket.igUsername
-      ? (ticket.igUsername.length > 10 ? ticket.igUsername.slice(0, 10) + "..." : ticket.igUsername)
-      : `<span style="color:#ccc;">ไม่แสดงข้อมูล</span>
-         <span 
-          onclick="alert('หมายเหตุ : ระบบพึ่งอัปเดตขึ้นสำหรับลูกดวงที่เข้าระบบจองคิวหลังจากวันที่ 17 เมษายน 2568')"
-          style="cursor:pointer; color:#ff99ff; text-decoration: underline; margin-left:4px;"
-         >(ดู)</span>`}
-  </td>
-`;
+      row.innerHTML = `
+        <td>${ticket.name}</td>
+        <td>${ticket.age}</td>
+        <td>${ticket.category}</td>
+        <td>${ticket.date}</td>
+        <td>${ticket.queueNumber}</td>
+        <td>${ticket.referenceId ? ticket.referenceId.slice(0, 6) + '...' : '-'}</td>
+        <td>
+          ${ticket.igUsername 
+            ? `<a href="https://www.instagram.com/${ticket.igUsername}" target="_blank" style="color: #ff99ff; text-decoration: none;">${ticket.igUsername}</a>`
+            : `<span style="color:#ccc;">ไม่แสดงข้อมูล</span>`
+          }
+          <button onclick="toggleRowDetails(this, '${rowId}')" 
+            style="background-color: #ff99ff; color: black; border: none; border-radius: 4px; padding: 2px 6px; cursor: pointer; margin-top: 5px;">
+            ขยาย
+          </button>
+        </td>
+      `;
       adminTableBody.appendChild(row);
+
+      // แถวรายละเอียดเพิ่มเติม (ย่อหรือขยายได้)
+      const rowDetails = document.createElement("tr");
+      rowDetails.id = rowId;
+      rowDetails.style.display = "none"; // ซ่อนแถวนี้เริ่มต้น
+      rowDetails.innerHTML = `
+        <td colspan="7">
+          <p><b>ชื่อ:</b> ${ticket.name}</p>
+          <p><b>อายุ:</b> ${ticket.age}</p>
+          <p><b>หมวดหมู่:</b> ${ticket.category}</p>
+          <p><b>ลำดับคิว:</b> ${ticket.queueNumber}</p>
+          <p><b>วันที่จอง:</b> ${ticket.date}</p>
+          <p><b>เลขอ้างอิง:</b> ${ticket.referenceId}</p>
+          <p><b>IG:</b> ${ticket.igUsername || "ไม่มี"}</p>
+        </td>
+      `;
+      adminTableBody.appendChild(rowDetails);
     });
-    document.getElementById("adminSection").style.display = "block";
+    document.getElementById("adminSection").style.display = "block"; // แสดงส่วนแอดมิน
   } catch (error) {
     alert("เกิดข้อผิดพลาดในการโหลดข้อมูล: " + error.message);
   }
