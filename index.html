@@ -11,6 +11,37 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyD0o88iBVuKsj-2qgEFlP-V3FwArPHCrkY",
+    authDomain: "horoscopequeue.firebaseapp.com",
+    projectId: "horoscopequeue",
+    storageBucket: "horoscopequeue.appspot.com",
+    messagingSenderId: "30274669281",
+    appId: "1:30274669281:web:45b08e0c48e58680d3b351",
+    measurementId: "G-48X2FPNBYZ"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+  <style>
+  
+  /* Styling for checkbox */
+.urgentLabel {
+  display: inline-flex;
+  align-items: center;
+  font-size: 16px;
+  color: #fff;
+  cursor: pointer;
+  background-color: #ff3366;
+  padding: 10px 15px;
+  border-radius: 25px;
+  transition: background-color 0.3s ease;
+}
+
+.urgentLabel:hover {
+  background-color: #e6004d;
+}
 
 .checkbox-custom {
   width: 20px;
@@ -28,21 +59,7 @@ input[type="checkbox"]:checked + .checkbox-custom {
 input[type="checkbox"]:not(:checked) + .checkbox-custom {
   background-color: #ff3366;
 }
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyD0o88iBVuKsj-2qgEFlP-V3FwArPHCrkY",
-    authDomain: "horoscopequeue.firebaseapp.com",
-    projectId: "horoscopequeue",
-    storageBucket: "horoscopequeue.appspot.com",
-    messagingSenderId: "30274669281",
-    appId: "1:30274669281:web:45b08e0c48e58680d3b351",
-    measurementId: "G-48X2FPNBYZ"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-</script>
-  <style>
+  
    button:active {
   box-shadow: 0 0 25px #ff66ff, 0 0 50px #aa00ff;
   transition: 0.1s;
@@ -1001,12 +1018,13 @@ async function calculateBookingStats() {
     document.getElementById("total-bookings").textContent = totalBookings;
     document.getElementById("not-yet-booked").textContent = notYetBooked;
     document.getElementById("completed-bookings").textContent = completedBookings;
-  }
-function toggleUrgent() {
+
+  function toggleUrgent() {
     const checkbox = document.getElementById("urgentCheckbox");
     const section = document.getElementById("urgentSection");
     section.style.display = checkbox.checked ? "block" : "none";
   }
+
   if (isUrgent) {
   document.getElementById("ticketData").innerHTML = `
     <h3>คำขอจองเร่งด่วนสำเร็จ</h3>
