@@ -875,6 +875,93 @@ button:hover {
   color: #e2ccff;
   font-size: 16px;
 }
+.con {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+}
+
+.hd h1 {
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 10px rgba(255, 0, 0, 0.8);
+}
+
+.hd p {
+    font-size: 1.2rem;
+    margin-top: 10px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.q-sec {
+    margin-top: 30px;
+}
+
+h2 {
+    font-size: 1.8rem;
+    color: #ffb6c1;
+}
+
+.q-sec input {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    margin: 10px 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: #fff;
+}
+
+.q-sec button {
+    font-size: 1.5rem;
+    padding: 10px 20px;
+    background-color: #b32d3a;
+    border: none;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.q-sec button:hover {
+    background-color: #ff4d59;
+}
+
+.ans-sec {
+    margin-top: 20px;
+    display: none;
+}
+
+.warn {
+    background-color: #2c2c2c;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    display: none;
+}
+
+#cd {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    color: #ff4d59;
+}
+
+#clear-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #b32d3a;
+    border: none;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: none;
+}
+
+#clear-btn:hover {
+    background-color: #ff4d59;
+}
 </style>
 </head>
 <body>
@@ -992,6 +1079,35 @@ button:hover {
   </a>
 </div>
       <div class="laser-divider">
+    <div class="laser-effect"></div>
+  </div>
+  
+      <div class="con">
+        <div class="hd">
+            <h1>คำทำนายสุดลับจากอนาคต</h1>
+            <p>คำเตือน: การอ่านคำทำนายนี้อาจทำให้คุณรู้สึกขนลุกและมีผลกระทบทางจิตใจ!</p>
+        </div>
+
+        <div class="q-sec">
+            <h2>กรอกวันเดือนปีเกิดและเวลาเกิด:</h2>
+            <input type="date" id="dob" required>
+            <input type="time" id="time" required>
+            <button onclick="genAns()">ทำนาย</button>
+        </div>
+
+        <div class="ans-sec" id="ans-sec">
+            <h2>คำทำนาย:</h2>
+            <p id="ans"></p>
+        </div>
+
+        <div class="warn" id="warn-sec">
+            <h3>คำเตือน!</h3>
+            <p id="warn">สิ่งที่คุณกำลังจะรู้มันจะทำให้จิตใจคุณตกต่ำ และบางทีคุณอาจไม่อยากรู้มันเลย...</p>
+            <p id="cd"></p>
+            <button onclick="clearAns()" id="clear-btn">ลบการแสดงผล</button>
+        </div>
+    </div>
+          <div class="laser-divider">
     <div class="laser-effect"></div>
   </div>
 <div class="admin-section" id="adminSection" style="display: block;">
@@ -1513,7 +1629,74 @@ function submitWish() {
   showAdminSection();
   calculateBookingStats();
 });
+let predTime = localStorage.getItem("predTime");
+if (!predTime) {
+    predTime = Date.now();  // ถ้ายังไม่เคยทำนาย ให้เก็บเวลาปัจจุบัน
+    localStorage.setItem("predTime", predTime);
+}
 
+// คำถามและคำทำนาย
+const qList = [
+    "คุณเคยฝันถึงบางสิ่งที่ไม่สามารถอธิบายได้หรือไม่?",
+    "ในอนาคตที่คุณเห็นตัวเอง คุณรู้สึกหวาดกลัวหรือไม่?",
+    "คุณเคยเห็นเงาที่เคลื่อนไหวในมุมมืดหรือไม่?",
+    "ถ้าคุณสามารถเห็นอนาคตได้, คุณกลัวไหมที่จะรู้ผลลัพธ์?",
+    "คุณเคยสัมผัสถึงความมืดที่ไม่สามารถหลีกหนีได้หรือไม่?"
+];
+
+const ansList = [
+    "อนาคตของคุณไม่เป็นไปตามที่คุณคาดหวัง… สิ่งที่รอคุณอยู่จะทำให้คุณไม่สามารถหลีกหนีได้… อะไรที่ดูเหมือนจะเป็นทางเลือกที่ดีที่สุด มันจะกลายเป็นกับดักที่ยากจะหนี…",
+    "ในอนาคตคุณจะพบความจริงที่แสนเจ็บปวด… สิ่งที่คุณคิดว่าเป็นความหวังจะพังทลายลงต่อหน้าคุณ… คุณจะต้องเผชิญหน้ากับความเสียใจที่ไม่สามารถหาทางกลับ…",
+    "ความลับในอดีตของคุณกำลังจะถูกเปิดเผย… คุณจะต้องเผชิญหน้ากับสิ่งที่คุณพยายามหลีกหนีมาตลอดชีวิต… และมันจะตามคุณไปทุกย่างก้าว…",
+    "ความมืดมิดจะกลืนกินทุกสิ่งที่คุณรัก… อนาคตจะเต็มไปด้วยความเศร้าโศกที่ไม่อาจหลีกเลี่ยงได้… ทุกการตัดสินใจที่คุณทำ จะพาคุณไปสู่จุดที่ไม่มีทางออก…",
+    "สิ่งที่คุณไม่เคยเชื่อว่าจะเกิดขึ้น จะมาในวันที่คุณไม่ทันตั้งตัว… สิ่งที่คุณเคยหลีกหนีจะกลับมาหาคุณ… และคุณจะไม่สามารถหลีกหนีจากมันได้…"
+];
+
+// คำเตือนที่หลอนและน่ากลัว
+const warnings = [
+    "การทำนายนี้จะพาคุณไปยังจุดที่คุณไม่เคยคิดว่าจะเกิดขึ้น! ทุกอย่างที่คุณคิดว่าเป็นความจริงจะถูกพลิกผัน… และคุณจะพบกับสิ่งที่มันจะทิ้งไว้ในจิตใจของคุณ…",
+    "บางทีคุณอาจจะไม่ควรทำนาย… สิ่งที่คุณจะรู้มันจะกลายเป็นเงาที่คอยตามคุณไปตลอดชีวิต… คุณจะไม่สามารถหลีกหนีจากมันได้อีกต่อไป!",
+    "การทำนายครั้งนี้อาจจะทำให้คุณไม่สามารถหลับตาลงได้อีก… ความจริงที่คุณต้องรู้จะทำให้คุณหมดหวัง… คุณไม่อาจหลีกหนีจากมันได้…"
+];
+
+// คำตอบสุ่ม
+let currentIndex = 0;
+
+function genAns() {
+    currentIndex = Math.floor(Math.random() * qList.length);
+    document.getElementById('q').innerText = qList[currentIndex];
+    document.getElementById('ans').innerText = ansList[currentIndex];
+    document.getElementById('warn').innerText = warnings[Math.floor(Math.random() * warnings.length)];
+    document.getElementById('ans-sec').style.display = 'block';
+    document.getElementById('warn-sec').style.display = 'block';
+    document.getElementById('clear-btn').style.display = 'block';
+
+    document.querySelector('.q-sec button').disabled = true;
+    updateCd();
+}
+
+function updateCd() {
+    const now = Date.now();
+    const oneMonth = 30 * 24 * 60 * 60 * 1000;  // 1 เดือนในมิลลิวินาที
+    const timeLeft = predTime + oneMonth - now;
+
+    if (timeLeft > 0) {
+        const daysLeft = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        document.getElementById('cd').innerText = `คุณสามารถทำนายได้อีกครั้งใน ${daysLeft} วัน`;
+    } else {
+        document.getElementById('cd').innerText = 'คุณสามารถทำนายได้แล้ว!';
+        document.querySelector('.q-sec button').disabled = false;
+    }
+}
+
+function clearAns() {
+    document.getElementById('ans-sec').style.display = 'none';
+    document.getElementById('warn-sec').style.display = 'none';
+    document.querySelector('.q-sec button').disabled = false;
+    localStorage.removeItem("predTime");  // ลบเวลา
+}
+
+updateCd();  // อัพเดตการนับถอยหลังทุกครั้งเมื่อโหลดหน้า
   </script>
 </body>
 </html> 
