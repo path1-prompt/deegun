@@ -1079,34 +1079,107 @@ button:hover {
     <div class="laser-effect"></div>
   </div>
   
-<div class="con">
-  <div class="hd">
-    <h1>คำทำนายสุดลับจากอนาคต</h1>
-    <p class="warn-red">คำเตือน: ข้อมูลนี้อาจกระทบจิตใจของคุณอย่างรุนแรง</p>
-  </div>
+const predStorageKey = "lastPredTime";
+const resultStorageKey = "lastPrediction"; // สำหรับเก็บผลทำนาย
 
-  <div class="qs">
-    <h2>กรอกวันเดือนปีเกิดและเวลาเกิด:</h2>
-    <input type="date" id="dob">
-    <input type="time" id="tob">
-    <button onclick="genPred()">ทำนาย</button>
-  </div>
+const predWarnings = [
+  "อย่าบอกใครสิ่งที่คุณจะได้เห็น… มันจะตามหลอกหลอนคุณ",
+  "การเปิดเผยครั้งนี้อาจทำให้คุณไม่สามารถเป็นคนเดิมได้อีก",
+  "คุณจะรู้ความจริง… ที่อาจไม่ควรรู้",
+  "จงเตรียมใจไว้ เพราะมันอาจเปลี่ยนคุณไปตลอดกาล"
+];
 
-  <div class="res">
-    <h2>คำทำนาย:</h2>
-    <p id="res-text"></p>
-  </div>
+const predResults = [
+  "คุณจะเห็นใบหน้าของใครบางคนในกระจก… แต่นั่นไม่ใช่คุณ",
+  "สิ่งที่คุณทำไว้ในอดีต… กำลังตามกลับมาแบบที่คุณไม่ทันตั้งตัว",
+  "เสียงกระซิบในความเงียบ… คือสิ่งที่พยายามเตือนคุณถึงอันตรายที่ใกล้เข้ามา",
+  "คุณจะสูญเสียสิ่งสำคัญที่สุดในเวลาที่คุณต้องการมันมากที่สุด",
+  "คำโกหกที่คุณเคยพูด… กำลังจะกลายเป็นคำสาป",
+  "ใครบางคนที่คุณลืมไปแล้ว… กำลังจะกลับมา",
+  "คืนหนึ่งในเดือนนี้… คุณจะฝันถึงบางสิ่งที่ไม่ใช่ฝัน"
+];
 
-  <div class="warning" id="warn">
-    <p id="warn-text"></p>
-    <p id="cd-text" class="countdown-text"></p>
-    <button onclick="clearRes()" id="clr-btn">ลบการแสดงผล</button>
-  </div>
+function genPred() {
+  const btn = document.querySelector(".qs button");
+  const lastPred = localStorage.getItem(predStorageKey);
+  const now = Date.now();
+  const oneMonth = 30 * 24 * 60 * 60 * 1000;
 
-  <div class="laser-divider">
+  // ตรวจสอบเวลาทำนายล่าสุด
+  if (lastPred && now - parseInt(lastPred) < oneMonth) {
+    const daysLeft = Math.ceil((oneMonth - (now - parseInt(lastPred))) / (1000 * 60 * 60 * 24));
+    document.getElementById("cd-text").innerText = `คุณสามารถทำนายได้อีกครั้งใน ${daysLeft} วัน`;
+    document.getElementById("warn").style.display = "block";
+    return;
+  }
+
+  // ผลทำนายและคำเตือนแบบสุ่ม
+  const result = predResults[Math.floor(Math.random() * predResults.length)];
+  const warning = predWarnings[Math.floor(Math.random() * predWarnings.length)];
+
+  // บันทึกผลทำนายและคำเตือนใน localStorage
+  localStorage.setItem(resultStorageKey, result);
+  localStorage.setItem("lastWarning", warning);
+
+  document.getElementById("res-text").innerText = result;
+  document.getElementById("warn-text").innerText = warning;
+
+  // แสดงผลทำนายและคำเตือน
+  document.querySelector(".res").style.display = "block";
+  document.getElementById("warn").style.display = "block";
+  document.getElementById("clr-btn").style.display = "inline-block";
+
+  // ปิดปุ่มทำนายและบันทึกเวลาทำนาย
+  btn.disabled = true;
+  btn.style.display = "none"; // ซ่อนปุ่มทำนายหลังจากทำนายเสร็จ
+  localStorage.setItem(predStorageKey, now.toString());
+  updateCountdown();
+}
+
+function updateCountdown() {
+  const predTime = parseInt(localStorage.getItem(predStorageKey));
+  const now = Date.now();
+  const oneMonth = 30 * 24 * 60 * 60 * 1000;
+  const timeLeft = predTime + oneMonth - now;
+
+  if (timeLeft > 0) {
+    const daysLeft = Math.ceil(timeLeft / (1000 * 60 * 60 * 24));
+    document.getElementById("cd-text").innerText = `คุณสามารถทำนายได้อีกครั้งใน ${daysLeft} วัน`;
+  } else {
+    document.getElementById("cd-text").innerText = 'คุณสามารถทำนายได้แล้ว!';
+    document.querySelector(".qs button").disabled = false;
+  }
+}
+
+function clearRes() {
+  document.querySelector(".res").style.display = "none";
+  document.getElementById("warn").style.display = "none";
+  document.querySelector(".qs button").disabled = false;
+  document.getElementById("clr-btn").style.display = "none";
+  localStorage.removeItem(predStorageKey);
+  localStorage.removeItem(resultStorageKey); // ลบผลทำนายจาก localStorage
+  localStorage.removeItem("lastWarning"); // ลบคำเตือนจาก localStorage
+}
+
+// เช็คว่ามีการทำนายก่อนหน้านี้หรือไม่เมื่อโหลดหน้าใหม่
+window.onload = function() {
+  const lastPrediction = localStorage.getItem(resultStorageKey);
+  const lastWarning = localStorage.getItem("lastWarning");
+  
+  if (lastPrediction && lastWarning) {
+    document.getElementById("res-text").innerText = lastPrediction;
+    document.getElementById("warn-text").innerText = lastWarning;
+
+    // ซ่อนปุ่มทำนายและแสดงผลทำนาย
+    document.querySelector(".qs button").style.display = "none";
+    document.querySelector(".res").style.display = "block";
+    document.getElementById("warn").style.display = "block";
+    document.getElementById("clr-btn").style.display = "inline-block";
+  }
+}
+      <div class="laser-divider">
     <div class="laser-effect"></div>
   </div>
-</div>
 <div class="admin-section" id="adminSection" style="display: block;">
     <h2>ข้อมูลใบคิวทั้งหมด</h2>
 <div style="overflow-x: auto;">
