@@ -1216,6 +1216,7 @@ window.onload = function() {
   <script>
   
 const predStorageKey = "lastPredTime";
+const resultStorageKey = "lastPrediction"; // สำหรับเก็บผลทำนาย
 
 const predWarnings = [
   "อย่าบอกใครสิ่งที่คุณจะได้เห็น… มันจะตามหลอกหลอนคุณ",
@@ -1252,6 +1253,10 @@ function genPred() {
   const result = predResults[Math.floor(Math.random() * predResults.length)];
   const warning = predWarnings[Math.floor(Math.random() * predWarnings.length)];
 
+  // บันทึกผลทำนายและคำเตือนใน localStorage
+  localStorage.setItem(resultStorageKey, result);
+  localStorage.setItem("lastWarning", warning);
+
   document.getElementById("res-text").innerText = result;
   document.getElementById("warn-text").innerText = warning;
 
@@ -1279,6 +1284,8 @@ function updateCountdown() {
   } else {
     document.getElementById("cd-text").innerText = 'คุณสามารถทำนายได้แล้ว!';
     document.querySelector(".qs button").disabled = false;
+    document.querySelector(".qs button").style.display = "inline-block"; // แสดงปุ่มทำนาย
+    document.getElementById("clr-btn").style.display = "none"; // ซ่อนปุ่มลบคำทำนาย
   }
 }
 
@@ -1286,8 +1293,39 @@ function clearRes() {
   document.querySelector(".res").style.display = "none";
   document.getElementById("warn").style.display = "none";
   document.querySelector(".qs button").disabled = false;
+  document.querySelector(".qs button").style.display = "inline-block"; // แสดงปุ่มทำนายใหม่
   document.getElementById("clr-btn").style.display = "none";
   localStorage.removeItem(predStorageKey);
+  localStorage.removeItem(resultStorageKey); // ลบผลทำนายจาก localStorage
+  localStorage.removeItem("lastWarning"); // ลบคำเตือนจาก localStorage
+}
+
+// เช็คว่ามีการทำนายก่อนหน้านี้หรือไม่เมื่อโหลดหน้าใหม่
+window.onload = function() {
+  const lastPrediction = localStorage.getItem(resultStorageKey);
+  const lastWarning = localStorage.getItem("lastWarning");
+  const lastPredTime = localStorage.getItem(predStorageKey);
+
+  if (lastPrediction && lastWarning && lastPredTime) {
+    const now = Date.now();
+    const oneMonth = 30 * 24 * 60 * 60 * 1000;
+
+    if (now - parseInt(lastPredTime) < oneMonth) {
+      document.getElementById("res-text").innerText = lastPrediction;
+      document.getElementById("warn-text").innerText = lastWarning;
+
+      // ซ่อนปุ่มทำนายและแสดงผลทำนาย
+      document.querySelector(".qs button").style.display = "none";
+      document.querySelector(".res").style.display = "block";
+      document.getElementById("warn").style.display = "block";
+      document.getElementById("clr-btn").style.display = "inline-block";
+      updateCountdown(); // อัพเดตการนับถอยหลัง
+    } else {
+      // หากหมดเวลาให้แสดงปุ่มทำนายใหม่
+      document.querySelector(".qs button").style.display = "inline-block";
+      document.getElementById("clr-btn").style.display = "none"; // ซ่อนปุ่มลบ
+    }
+  }
 }
 
   const releaseBtn = document.getElementById('releaseBtn');
