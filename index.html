@@ -1102,10 +1102,10 @@ button:hover {
     <p id="cd-text" class="countdown-text"></p>
     <button onclick="clearRes()" id="clr-btn">ลบการแสดงผล</button>
   </div>
-</div>
 
-<div class="laser-divider">
-  <div class="laser-effect"></div>
+  <div class="laser-divider">
+    <div class="laser-effect"></div>
+  </div>
 </div>
 <div class="admin-section" id="adminSection" style="display: block;">
     <h2>ข้อมูลใบคิวทั้งหมด</h2>
@@ -1142,7 +1142,7 @@ button:hover {
 
   <script>
   
-  const predStorageKey = "lastPredTime";
+const predStorageKey = "lastPredTime";
 
 const predWarnings = [
   "อย่าบอกใครสิ่งที่คุณจะได้เห็น… มันจะตามหลอกหลอนคุณ",
@@ -1167,6 +1167,7 @@ function genPred() {
   const now = Date.now();
   const oneMonth = 30 * 24 * 60 * 60 * 1000;
 
+  // ตรวจสอบเวลาทำนายล่าสุด
   if (lastPred && now - parseInt(lastPred) < oneMonth) {
     const daysLeft = Math.ceil((oneMonth - (now - parseInt(lastPred))) / (1000 * 60 * 60 * 24));
     document.getElementById("cd-text").innerText = `คุณสามารถทำนายได้อีกครั้งใน ${daysLeft} วัน`;
@@ -1174,17 +1175,21 @@ function genPred() {
     return;
   }
 
+  // ผลทำนายและคำเตือนแบบสุ่ม
   const result = predResults[Math.floor(Math.random() * predResults.length)];
   const warning = predWarnings[Math.floor(Math.random() * predWarnings.length)];
 
   document.getElementById("res-text").innerText = result;
   document.getElementById("warn-text").innerText = warning;
 
+  // แสดงผลทำนายและคำเตือน
   document.querySelector(".res").style.display = "block";
   document.getElementById("warn").style.display = "block";
   document.getElementById("clr-btn").style.display = "inline-block";
 
+  // ปิดปุ่มทำนายและบันทึกเวลาทำนาย
   btn.disabled = true;
+  btn.style.display = "none"; // ซ่อนปุ่มทำนายหลังจากทำนายเสร็จ
   localStorage.setItem(predStorageKey, now.toString());
   updateCountdown();
 }
