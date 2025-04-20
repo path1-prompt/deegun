@@ -875,6 +875,91 @@ button:hover {
   color: #e2ccff;
   font-size: 16px;
 }
+.crystal-ball {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, #a600ff, #000);
+  box-shadow: 0 0 50px #a600ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  color: white;
+  font-family: 'Cinzel', serif;
+  font-size: 20px;
+  transition: transform 0.5s ease;
+}
+
+.crystal-ball.spin {
+  animation: spin 1.5s ease forwards;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg) scale(1); }
+  100% { transform: rotate(720deg) scale(0); opacity: 0; }
+}
+
+.smoke {
+  position: absolute;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(255,255,255,0.2), transparent);
+  opacity: 0;
+  animation: none;
+}
+
+.smoke.show {
+  animation: smokeRise 3s forwards;
+}
+
+@keyframes smokeRise {
+  0% { opacity: 0; transform: scale(1) translateY(0); }
+  100% { opacity: 1; transform: scale(1.3) translateY(-100px); }
+}
+
+.prophecy-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(10, 0, 20, 0.9);
+  border: 3px solid #ff00cc;
+  box-shadow: 0 0 40px #a600ff;
+  padding: 30px;
+  border-radius: 15px;
+  max-width: 400px;
+  display: none;
+  z-index: 999;
+  color: white;
+  font-family: 'Cinzel', serif;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.prophecy-text {
+  font-size: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.countdown {
+  text-align: center;
+  font-size: 16px;
+  color: #bbb;
+}
 </style>
 </head>
 <body>
@@ -996,7 +1081,17 @@ button:hover {
   </div>
   
 
+<div class="crystal-ball" id="crystalBall" onclick="handleCrystalClick()">
+  <span class="crystal-text">ขูด<br>ลูกแก้ว</span>
+  <div class="smoke" id="smoke"></div>
+</div>
 
+<!-- กล่องคำทำนาย -->
+<div id="prophecyBox" class="prophecy-box">
+  <button class="close-btn" onclick="closeProphecy()">×</button>
+  <div id="prophecyText" class="prophecy-text"></div>
+  <div id="countdown" class="countdown"></div>
+</div>
 
       <div class="laser-divider">
     <div class="laser-effect"></div>
@@ -1035,6 +1130,83 @@ button:hover {
 </div>
 
   <script>
+  const prophecies = [
+  "เงาแห่งอดีตกำลังตามมา... ระวังตัวไว้ใน 3 วันข้างหน้า",
+  "แสงสีแดงจากทิศตะวันตกจะนำโชคลาภมาให้",
+  "คุณจะพบกับใครบางคนที่เปลี่ยนชะตาชีวิตของคุณไปตลอดกาล",
+  "ระวังความคิดลบในคืนนี้ มันอาจเรียกบางอย่างมา...",
+  "ผู้เฝ้าดูในเงามืดกำลังรอฟังความลับของคุณ",
+  "คำพูดที่คุณพูดในวันนี้ จะย้อนกลับมาหาคุณในอนาคต"
+];
+
+const crystal = document.getElementById('crystalBall');
+const prophecyBox = document.getElementById('prophecyBox');
+const prophecyText = document.getElementById('prophecyText');
+const smoke = document.getElementById('smoke');
+const countdown = document.getElementById('countdown');
+
+function handleCrystalClick() {
+  const savedTime = localStorage.getItem('prophecyTime');
+  const now = new Date().getTime();
+
+  if (savedTime && now < parseInt(savedTime)) {
+    showProphecy();
+    return;
+  }
+
+  // เริ่มอนิเมชัน
+  crystal.classList.add('spin');
+  smoke.classList.add('show');
+
+  setTimeout(() => {
+    const randomProphecy = prophecies[Math.floor(Math.random() * prophecies.length)];
+    localStorage.setItem('prophecyText', randomProphecy);
+    localStorage.setItem('prophecyTime', now + 7 * 24 * 60 * 60 * 1000); // 7 วัน
+
+    showProphecy();
+  }, 1500);
+}
+
+function showProphecy() {
+  prophecyText.textContent = localStorage.getItem('prophecyText');
+  prophecyBox.style.display = 'block';
+  updateCountdown();
+}
+
+function closeProphecy() {
+  prophecyBox.style.display = 'none';
+}
+
+function updateCountdown() {
+  const interval = setInterval(() => {
+    const endTime = parseInt(localStorage.getItem('prophecyTime') || 0);
+    const now = new Date().getTime();
+    const distance = endTime - now;
+
+    if (distance < 0) {
+      countdown.textContent = "คุณสามารถขูดลูกแก้วได้อีกครั้งแล้ว";
+      localStorage.removeItem('prophecyText');
+      localStorage.removeItem('prophecyTime');
+      clearInterval(interval);
+    } else {
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      countdown.textContent = `สามารถขูดได้อีกใน ${days} วัน ${hours} ชม. ${minutes} นาที ${seconds} วินาที`;
+    }
+  }, 1000);
+}
+
+// โหลดหน้าเว็บแล้วให้แสดงคำทำนายถ้ามี
+window.onload = () => {
+  const text = localStorage.getItem('prophecyText');
+  const time = parseInt(localStorage.getItem('prophecyTime') || 0);
+  const now = new Date().getTime();
+  if (text && now < time) {
+    showProphecy();
+  }
+};
   
   const releaseBtn = document.getElementById('releaseBtn');
 const bird = document.getElementById('bird');
