@@ -5,63 +5,11 @@
   <title>ระบบจองคิวดูดวง & หน้าแอดมิน</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- jsPDF Library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
-window.onload = () => {
-  updateMessage?.();
-  updateTimer?.();
-  updateLiveStats?.();
-  showAdminSection?.();
-  calculateBookingStats?.();
-  const savedTime = localStorage.getItem('prophecyTime');
-  const savedText = localStorage.getItem('prophecyText');
-  const now = Date.now();
-  if (savedTime && savedText && now < parseInt(savedTime)) showProphecy();
-};
-
-</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <!-- Firebase App (core) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">
-window.onload = () => {
-  updateMessage?.();
-  updateTimer?.();
-  updateLiveStats?.();
-  showAdminSection?.();
-  calculateBookingStats?.();
-  const savedTime = localStorage.getItem('prophecyTime');
-  const savedText = localStorage.getItem('prophecyText');
-  const now = Date.now();
-  if (savedTime && savedText && now < parseInt(savedTime)) showProphecy();
-};
-
-</script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js">
-window.onload = () => {
-  updateMessage?.();
-  updateTimer?.();
-  updateLiveStats?.();
-  showAdminSection?.();
-  calculateBookingStats?.();
-  const savedTime = localStorage.getItem('prophecyTime');
-  const savedText = localStorage.getItem('prophecyText');
-  const now = Date.now();
-  if (savedTime && savedText && now < parseInt(savedTime)) showProphecy();
-};
-
-</script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js">
-window.onload = () => {
-  updateMessage?.();
-  updateTimer?.();
-  updateLiveStats?.();
-  showAdminSection?.();
-  calculateBookingStats?.();
-  const savedTime = localStorage.getItem('prophecyTime');
-  const savedText = localStorage.getItem('prophecyText');
-  const now = Date.now();
-  if (savedTime && savedText && now < parseInt(savedTime)) showProphecy();
-};
-
-</script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   const firebaseConfig = {
     apiKey: "AIzaSyD0o88iBVuKsj-2qgEFlP-V3FwArPHCrkY",
@@ -76,17 +24,7 @@ window.onload = () => {
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 
-window.onload = () => {
-  updateMessage?.();
-  updateTimer?.();
-  updateLiveStats?.();
-  showAdminSection?.();
-  calculateBookingStats?.();
-  const savedTime = localStorage.getItem('prophecyTime');
-  const savedText = localStorage.getItem('prophecyText');
-  const now = Date.now();
-  if (savedTime && savedText && now < parseInt(savedTime)) showProphecy();
-};
+
 
 </script>
   <style>
@@ -1811,7 +1749,12 @@ function submitWish() {
 });
 
   
-window.onload = () => {
+
+
+</script>
+
+<script>
+  window.onload = () => {
   updateMessage?.();
   updateTimer?.();
   updateLiveStats?.();
@@ -1821,8 +1764,17 @@ window.onload = () => {
   const savedText = localStorage.getItem('prophecyText');
   const now = Date.now();
   if (savedTime && savedText && now < parseInt(savedTime)) showProphecy();
-};
-
+  updateMessage?.();
+  updateTimer?.();
+  updateLiveStats?.();
+  showAdminSection?.();
+  calculateBookingStats?.();
+  const savedTime = localStorage.getItem('prophecyTime');
+  const savedText = localStorage.getItem('prophecyText');
+  const now = Date.now();
+  if (savedTime && savedText && now < parseInt(savedTime)) showProphecy();
+  };
 </script>
+
 </body>
 </html> 
