@@ -5,11 +5,63 @@
   <title>ระบบจองคิวดูดวง & หน้าแอดมิน</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- jsPDF Library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+window.onload = () => {
+  updateMessage?.();
+  updateTimer?.();
+  updateLiveStats?.();
+  showAdminSection?.();
+  calculateBookingStats?.();
+  const savedTime = localStorage.getItem('prophecyTime');
+  const savedText = localStorage.getItem('prophecyText');
+  const now = Date.now();
+  if (savedTime && savedText && now < parseInt(savedTime)) showProphecy();
+};
+
+</script>
   <!-- Firebase App (core) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">
+window.onload = () => {
+  updateMessage?.();
+  updateTimer?.();
+  updateLiveStats?.();
+  showAdminSection?.();
+  calculateBookingStats?.();
+  const savedTime = localStorage.getItem('prophecyTime');
+  const savedText = localStorage.getItem('prophecyText');
+  const now = Date.now();
+  if (savedTime && savedText && now < parseInt(savedTime)) showProphecy();
+};
+
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js">
+window.onload = () => {
+  updateMessage?.();
+  updateTimer?.();
+  updateLiveStats?.();
+  showAdminSection?.();
+  calculateBookingStats?.();
+  const savedTime = localStorage.getItem('prophecyTime');
+  const savedText = localStorage.getItem('prophecyText');
+  const now = Date.now();
+  if (savedTime && savedText && now < parseInt(savedTime)) showProphecy();
+};
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js">
+window.onload = () => {
+  updateMessage?.();
+  updateTimer?.();
+  updateLiveStats?.();
+  showAdminSection?.();
+  calculateBookingStats?.();
+  const savedTime = localStorage.getItem('prophecyTime');
+  const savedText = localStorage.getItem('prophecyText');
+  const now = Date.now();
+  if (savedTime && savedText && now < parseInt(savedTime)) showProphecy();
+};
+
+</script>
 <script>
   const firebaseConfig = {
     apiKey: "AIzaSyD0o88iBVuKsj-2qgEFlP-V3FwArPHCrkY",
@@ -23,6 +75,19 @@
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
+
+window.onload = () => {
+  updateMessage?.();
+  updateTimer?.();
+  updateLiveStats?.();
+  showAdminSection?.();
+  calculateBookingStats?.();
+  const savedTime = localStorage.getItem('prophecyTime');
+  const savedText = localStorage.getItem('prophecyText');
+  const now = Date.now();
+  if (savedTime && savedText && now < parseInt(savedTime)) showProphecy();
+};
+
 </script>
   <style>
   
@@ -1250,8 +1315,7 @@ function startCountdown() {
   }, 1000);
 }
 
-window.onload = () => {
-  const savedTime = localStorage.getItem('prophecyTime');
+
   const savedText = localStorage.getItem('prophecyText');
   const now = Date.now();
 
@@ -1298,7 +1362,7 @@ releaseBtn.addEventListener('click', () => {
   releaseBtn.disabled = true;
 });
 
-window.onload = updateMessage;
+
 
   window.addEventListener("load", function() {
   document.getElementById("maintenancePopup").style.display = "flex";
@@ -1349,7 +1413,7 @@ const ticket = {
     <button onclick="goInstagram()">ส่งผลทาง IG</button>
   `;
   document.getElementById("ticketData").innerHTML = ticketHTML;
-  document.getElementById("popup").classList.add("show");
+  document.getElementById("popupTicket").classList.add("show");
 });
 
     function downloadPDF() {
@@ -1488,7 +1552,8 @@ async function showDashboard() {
   const dateLabels = Object.keys(dateMap).sort();
   const queueCounts = dateLabels.map(date => dateMap[date]);
 
-  new Chart(document.getElementById("lineChart"), {
+  if (window.lineChart) window.lineChart.destroy();
+  window.lineChart = new Chart(document.getElementById("lineChart"), {
     type: 'line',
     data: {
       labels: dateLabels,
@@ -1513,7 +1578,8 @@ async function showDashboard() {
   const categoryLabels = Object.keys(categoryMap);
   const categoryCounts = categoryLabels.map(cat => categoryMap[cat]);
 
-  new Chart(document.getElementById("pieChart"), {
+  if (window.pieChart) window.pieChart.destroy();
+  window.pieChart = new Chart(document.getElementById("pieChart"), {
     type: 'pie',
     data: {
       labels: categoryLabels,
@@ -1560,7 +1626,7 @@ setInterval(updateLiveStats, 1000);
 // เมื่อโหลดหน้าเว็บ ให้เรียกฟังก์ชันทันที
 window.addEventListener("load", updateLiveStats);
 async function calculateBookingStats() {
-    const querySnapshot = await db.collection("horoscopeBookings").get();
+    const querySnapshot = await db.collection("queues").get();
     const now = new Date();
 
     let totalBookings = 0;
@@ -1589,7 +1655,7 @@ async function calculateBookingStats() {
 
   
 
-const response = wishMessages[Math.floor(Math.random() * wishMessages.length)];
+
     const btn = document.getElementById('btn');
     const msg = document.getElementById('msg');
     const timer = document.getElementById('timer');
@@ -1636,8 +1702,7 @@ const response = wishMessages[Math.floor(Math.random() * wishMessages.length)];
     }
 
     // ป้องกันกดหลายรอบด้วยการโหลดสถานะเมื่อเปิดหน้า
-    window.onload = () => {
-      updateTimer();
+    
       const last = localStorage.getItem('lastFortuneTime');
       if (last && Date.now() - last < cooldownMs) {
         btn.disabled = true;
@@ -1713,7 +1778,7 @@ function submitWish() {
   localStorage.setItem("lastWishTime", now);
   localStorage.setItem("wishText", wishText); // ถ้าใช้ Firebase ก็ส่งแทน
 
-  const response = wishMessages[Math.floor(Math.random() * messages.length)];
+  
   document.getElementById("responseMessage").innerText = response;
   document.getElementById("wishInput").value = "";
   document.getElementById("countdownTimer").innerText = "คำอธิษฐานของเจ้าได้ถูกส่งแล้ว";
@@ -1745,6 +1810,19 @@ function submitWish() {
   calculateBookingStats();
 });
 
-  </script>
+  
+window.onload = () => {
+  updateMessage?.();
+  updateTimer?.();
+  updateLiveStats?.();
+  showAdminSection?.();
+  calculateBookingStats?.();
+  const savedTime = localStorage.getItem('prophecyTime');
+  const savedText = localStorage.getItem('prophecyText');
+  const now = Date.now();
+  if (savedTime && savedText && now < parseInt(savedTime)) showProphecy();
+};
+
+</script>
 </body>
 </html> 
