@@ -1140,7 +1140,11 @@ button:hover {
   }
 }
 </style>
-</head>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;700&amp;display=swap" rel="stylesheet"/><style>
+body, input, select, button, textarea {
+  font-family: 'Noto Serif Thai', serif !important;
+}
+</style></head>
 <body>
 <div class="live-stats" id="liveStats">
 <div class="stats-title">สถานะพลังจองคิว</div>
@@ -1179,12 +1183,7 @@ button:hover {
 <div class="laser-divider">
 <div class="laser-effect"></div>
 </div>
-<div class="container ref-check-magical">
-<h2>ตรวจสอบใบคิว</h2>
-<input id="refInput" placeholder="ใส่เลขอ้างอิง" type="text"/>
-<button onclick="checkReference()">ตรวจสอบ</button>
-<div id="refResult"></div>
-</div>
+
 </div>
 <!-- ช่องทางการติดต่อ Instagram -->
 <div class="laser-divider">
@@ -1204,8 +1203,6 @@ button:hover {
 <div id="ticketData"></div>
 <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
 </div>
-
-
 <div class="laser-divider">
 <div class="laser-effect"></div>
 </div>
@@ -1236,9 +1233,13 @@ button:hover {
 <div class="laser-divider">
 <div class="laser-effect"></div>
 </div>
-<div class="admin-section magical-admin" id="adminSection" style="display: block;">
+<div class="admin-section magical-admin" id="adminSection" style="display: block; max-width: 95%; margin: auto;">
 <h2>ข้อมูลใบคิวทั้งหมด</h2>
 <div style="overflow-x: auto;">
+
+<div style="margin-bottom: 15px; text-align: center;">
+<input id="searchQueue" placeholder="ค้นหาโดยชื่อ, IG, หมวดหมู่..." style="padding: 8px; width: 300px; border-radius: 8px; border: 1px solid #aaa;" type="text"/>
+</div>
 <table id="adminTable">
 <thead>
 <tr>
@@ -1377,5 +1378,14 @@ button:hover {
 </div>
 <div style="text-align: center; margin-top: 20px;">
 </div>
-</div></body>
+</div><script>
+document.getElementById("searchQueue").addEventListener("input", function () {
+  const filter = this.value.toLowerCase();
+  const rows = document.querySelectorAll("#adminTable tbody tr");
+  rows.forEach(row => {
+    const text = row.innerText.toLowerCase();
+    row.style.display = text.includes(filter) ? "" : "none";
+  });
+});
+</script></body>
 </html> 
