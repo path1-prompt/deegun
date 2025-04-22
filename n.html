@@ -37,7 +37,7 @@
       overflow: hidden;
       backdrop-filter: blur(10px);
       box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
-      table-layout: fixed; /* ปรับให้ตารางยืดหยุ่น */
+      table-layout: auto; /* ปรับให้ตารางยืดหยุ่น */
     }
 
     th, td {
@@ -65,9 +65,9 @@
     }
 
     .back-btn {
-      display: block;
-      width: fit-content;
-      margin: 30px auto 0;
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
       padding: 10px 25px;
       font-size: 1em;
       background: #8a2be2;
@@ -219,3 +219,5 @@
 
 </body>
 </html>
+
+
