@@ -44,34 +44,33 @@ document.getElementById("bookingForm").addEventListener("submit", async function
     showCountdownToNextBooking(new Date(lastBooked));
     return;
   }
-  // ดำเนินการจองต่อที่นี่...
-const age = document.getElementById("age").value;
-const category = document.getElementById("category").value;
-const date = document.getElementById("date").value;
-const igUsername = document.getElementById("igUsername").value;
-const timestamp = new Date();
-const referenceId = 'REF-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+  
+  const age = document.getElementById("age").value;
+  const category = document.getElementById("category").value;
+  const date = document.getElementById("date").value;
+  const igUsername = document.getElementById("igUsername").value;
+  const timestamp = new Date();
+  const referenceId = 'REF-' + Math.random().toString(36).substr(2, 9).toUpperCase();
 
-// หาจำนวนคิวในวันนั้นเพื่อนำมาคำนวณลำดับคิว
-const snapshot = await db.collection("queues").where("date", "==", date).get();
-const queueNumber = snapshot.size + 1;
+  const snapshot = await db.collection("queues").where("date", "==", date).get();
+  const queueNumber = snapshot.size + 1;
 
-await db.collection("queues").add({
-  name,
-  age,
-  category,
-  date,
-  igUsername,
-  referenceId,
-  timestamp,
-  queueNumber
-});
+  await db.collection("queues").add({
+    name,
+    age,
+    category,
+    date,
+    igUsername,
+    referenceId,
+    timestamp,
+    queueNumber
+  });
 
-alert("จองคิวสำเร็จ! หมายเลขคิวของคุณคือ " + queueNumber + " (Ref: " + referenceId + ")");
-document.getElementById("bookingForm").reset();
-
-});
-
+  alert("จองคิวสำเร็จ! หมายเลขคิวของคุณคือ " + queueNumber + " (Ref: " + referenceId + ")");
+  document.getElementById("bookingForm").reset();
+  updateLiveStats();
+  showAdminSection();
+            
 });
 function showCountdownToNextBooking(lastBookingTime) {
   const countdownEl = document.getElementById("countdownArea");
