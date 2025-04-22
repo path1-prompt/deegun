@@ -878,75 +878,9 @@ button:hover {
   color: #e2ccff;
   font-size: 16px;
 }
-.magic-orb-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 100px;
-  perspective: 1000px;
-}
 
-.magic-orb {
-  width: 250px;
-  height: 250px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #8e2de2, #1a001f);
-  position: relative;
-  box-shadow: 0 0 40px 15px #a600ff, inset 0 0 50px #ff00cc;
-  cursor: pointer;
-  transform-style: preserve-3d;
-  transition: transform 1s ease;
-  overflow: hidden;
-}
 
-.magic-orb.spin {
-  animation: orbSpin 1.2s ease-out forwards;
-}
 
-@keyframes orbSpin {
-  0% { transform: rotateY(0deg) scale(1); }
-  100% { transform: rotateY(720deg) scale(0); opacity: 0; }
-}
-
-.inner-glow {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 10%, transparent 70%);
-  animation: pulseGlow 2s infinite ease-in-out;
-}
-
-@keyframes pulseGlow {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
-}
-
-.orb-reflection {
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  top: 20px;
-  left: 20px;
-  background: radial-gradient(circle, white, transparent);
-  border-radius: 50%;
-  opacity: 0.2;
-  filter: blur(5px);
-}
-
-.crystal-text {
-  position: absolute;
-  width: 100%;
-  text-align: center;
-  top: 40%;
-  font-size: 20px;
-  color: white;
-  text-shadow: 0 0 10px #fff, 0 0 30px #ff00cc;
-  pointer-events: none;
-  animation: flicker 1.5s infinite alternate;
-}
-
-@keyframes flicker {
-  from { opacity: 1; }
   to { opacity: 0.6; }
 }
 
@@ -966,47 +900,11 @@ button:hover {
   animation: smokeUp 2.5s ease forwards;
 }
 
-@keyframes smokeUp {
-  0% { opacity: 0; transform: scale(1) translateY(0); }
+
   100% { opacity: 1; transform: scale(1.5) translateY(-120px); }
 }
 
-.prophecy-box {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(30, 0, 50, 0.98);
-  border: 3px solid #ff00cc;
-  box-shadow: 0 0 30px #a600ff;
-  padding: 30px;
-  border-radius: 20px;
-  display: none;
-  z-index: 999;
-  text-align: center;
-  max-width: 400px;
-}
 
-.close-btn {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  background: none;
-  border: none;
-  font-size: 24px;
-  color: #fff;
-  cursor: pointer;
-}
-
-.prophecy-text {
-  font-size: 20px;
-  margin-bottom: 20px;
-}
-
-.countdown {
-  font-size: 16px;
-  color: #aaa;
-}
 </style>
 </head>
 <body>
@@ -1127,20 +1025,7 @@ button:hover {
     <div class="laser-effect"></div>
   </div>
   
-<div class="magic-orb-container">
-  <div class="magic-orb" id="crystalBall">
-    <div class="inner-glow"></div>
-    <div class="orb-reflection"></div>
-    <div class="crystal-text">ขูด<br>ลูกแก้ว</div>
-    <div class="smoke" id="smoke"></div>
-  </div>
-</div>
 
-<div id="prophecyBox" class="prophecy-box">
-  <button class="close-btn" onclick="closeProphecy()">×</button>
-  <div id="prophecyText" class="prophecy-text"></div>
-  <div id="countdown" class="countdown"></div>
-</div>
 
       <div class="laser-divider">
     <div class="laser-effect"></div>
@@ -1197,11 +1082,7 @@ const prophecies = [
 ];
 
 crystal.addEventListener('click', () => {
-  const savedTime = localStorage.getItem('prophecyTime');
-  const now = Date.now();
-
-  if (savedTime && now < parseInt(savedTime)) {
-    showProphecy();
+  
     return;
   }
 
@@ -1220,36 +1101,8 @@ crystal.addEventListener('click', () => {
   }, 1200);
 });
 
-function showProphecy() {
-  clearInterval(countdownInterval);
-  const prophecy = localStorage.getItem('prophecyText');
-  prophecyText.textContent = prophecy;
-  prophecyBox.style.display = 'block';
-  startCountdown();
-}
 
-function closeProphecy() {
-  prophecyBox.style.display = 'none';
-}
 
-function startCountdown() {
-  countdownInterval = setInterval(() => {
-    const endTime = parseInt(localStorage.getItem('prophecyTime') || 0);
-    const now = Date.now();
-    const diff = endTime - now;
-
-    if (diff <= 0) {
-      countdown.textContent = "คุณสามารถขูดลูกแก้วได้อีกแล้ว";
-      localStorage.removeItem('prophecyText');
-      localStorage.removeItem('prophecyTime');
-      clearInterval(countdownInterval);
-    } else {
-      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const s = Math.floor((diff % (1000 * 60)) / 1000);
-      countdown.textContent = `เหลือเวลา ${d} วัน ${h} ชม. ${m} นาที ${s} วิ`;
-    }
   }, 1000);
 }
 
@@ -1760,19 +1613,13 @@ function submitWish() {
   updateLiveStats?.();
   showAdminSection?.();
   calculateBookingStats?.();
-  const savedTime = localStorage.getItem('prophecyTime');
-  const savedText = localStorage.getItem('prophecyText');
-  const now = Date.now();
-  if (savedTime && savedText && now < parseInt(savedTime)) showProphecy();
+  
   updateMessage?.();
   updateTimer?.();
   updateLiveStats?.();
   showAdminSection?.();
   calculateBookingStats?.();
-  const savedTime = localStorage.getItem('prophecyTime');
-  const savedText = localStorage.getItem('prophecyText');
-  const now = Date.now();
-  if (savedTime && savedText && now < parseInt(savedTime)) showProphecy();
+  
   };
 </script>
 
