@@ -6,12 +6,12 @@
   <title>คลังชื่อมงคล</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet"/>
   <style>
-    body {
+body {
       margin: 0;
       font-family: 'Cinzel', serif;
       background: radial-gradient(circle, #1b0033, #2c0052);
       color: #fff;
-      overflow-x: auto;
+      overflow-x: hidden;
     }
 
     h1 {
@@ -25,8 +25,8 @@
     .container {
       padding: 0 20px 50px;
       width: 100%;
+      max-width: 100%;
       box-sizing: border-box;
-      overflow-x: auto;
     }
 
     table {
@@ -34,18 +34,19 @@
       border-collapse: collapse;
       background-color: rgba(255, 255, 255, 0.05);
       border-radius: 10px;
-      overflow: hidden;
       backdrop-filter: blur(10px);
       box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
-      table-layout: auto;
+      table-layout: fixed; /* ทำให้คอลัมน์เท่ากัน */
     }
 
     th, td {
       padding: 10px 12px;
       text-align: left;
       border: 2px solid rgba(255, 255, 255, 0.2);
-      font-size: 0.85em;
-      white-space: normal; /* ให้ข้อความขึ้นบรรทัดใหม่ได้ */
+      font-size: 0.7em; /* ลดขนาดตัวอักษรให้พอดี */
+      white-space: nowrap; /* บังคับไม่ให้ตัดบรรทัด */
+      overflow: hidden;
+      text-overflow: ellipsis; /* ตัดด้วย ... ถ้ายาว */
     }
 
     th {
@@ -58,7 +59,7 @@
       color: #e0c8ff;
     }
 
-    /* ปุ่มย้อนกลับแบบลอยและตามหน้าจอ */
+    /* ปุ่มย้อนกลับลอยตรงกลางซ้าย */
     .back-btn {
       position: fixed;
       left: 10px;
