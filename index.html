@@ -1144,6 +1144,50 @@ button:hover {
 body, input, select, button, textarea {
   font-family: 'Noto Serif Thai', serif !important;
 }
+</style><link href="https://fonts.googleapis.com/css2?family=Thasadith&amp;display=swap" rel="stylesheet"/><style>
+body, input, select, button, textarea, h1, h2, h3, label {
+  font-family: 'Thasadith', sans-serif !important;
+}
+</style><style>
+button {
+  background: linear-gradient(45deg, #660066, #9900cc);
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 0 12px #cc66ff, 0 0 25px #660066 inset;
+  transition: all 0.3s ease-in-out;
+}
+button:hover {
+  background: linear-gradient(45deg, #9900cc, #cc33ff);
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #ff99ff, 0 0 30px #aa00ff inset;
+}
+</style><style>
+.container, .poster, .admin-section, .magical-donation, .contact-section {
+  margin-top: 50px !important;
+  margin-bottom: 50px !important;
+}
+
+#mainContainer {
+  margin-top: 100px !important;
+}
+
+.contact-section a {
+  display: inline-block;
+  margin: 10px auto;
+}
+
+#bookingForm {
+  margin-top: 30px;
+}
+
+.review-container, .ref-check-magical, .magical-admin {
+  margin-top: 60px !important;
+}
 </style></head>
 <body>
 <div class="live-stats" id="liveStats">
@@ -1157,7 +1201,13 @@ body, input, select, button, textarea {
 <div class="magic-animal"></div>
 <div class="container" id="mainContainer">
 <h2>จองคิวดูดวงอัตโนมัติ</h2>
-<form id="bookingForm">
+<form id="bookingForm" style="
+    background: linear-gradient(135deg, #1a001f, #2f0036);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 0 20px #cc66ff;
+    color: #fff;
+    ">
 <label>ชื่อเล่น:</label>
 <input id="name" required="" type="text"/>
 <label>อายุ:</label>
@@ -1179,22 +1229,15 @@ body, input, select, button, textarea {
 <label>Instagram (@username):</label>
 <input id="igUsername" placeholder="@yourusername" type="text"/>
 <button type="submit">จองคิว</button>
-</form><div id="countdownArea" style="text-align:center; display:none; margin-top:10px;"></div>
-<div class="laser-divider">
-<div class="laser-effect"></div>
-</div>
-
+<p style="color: #ffccff; font-size: 13px; margin-top: 15px; font-style: italic;">หมายเหตุ: ห้ามจองซ้ำภายใน 24 ชั่วโมง กรุณาตรวจสอบชื่อก่อนกดยืนยัน</p></form><div id="countdownArea" style="text-align:center; display:none; margin-top:10px;"></div>
 </div>
 <!-- ช่องทางการติดต่อ Instagram -->
-<div class="laser-divider">
-<div class="laser-effect"></div>
-</div>
-<div class="contact-section">
+<hr style="border: none; height: 2px; background: linear-gradient(to right, #660066, #cc33ff); box-shadow: 0 0 10px #aa00ff; margin: 60px auto; width: 90%;"/><div class="contact-section">
 <a class="ig-link" href="https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx" target="_blank">
     ติดต่อแม่หมอผ่าน IG: @horoscope_1308 <span class="click-hint">(หรือคลิกที่นี่)</span>
 </a>
 </div>
-<div class="contact-section">
+<hr style="border: none; height: 2px; background: linear-gradient(to right, #660066, #cc33ff); box-shadow: 0 0 10px #aa00ff; margin: 60px auto; width: 90%;"/><div class="contact-section">
 <a class="ig-link" href="https://www.instagram.com/honey.prom?igsh=ZGYzZ2ozYnI0Ynlt&amp;utm_source=qr" target="_blank">
     ติดต่อผู้ดูแลระบบผ่าน IG: @honey.prom <span class="click-hint">(หรือคลิกที่นี่)</span>
 </a>
@@ -1203,40 +1246,21 @@ body, input, select, button, textarea {
 <div id="ticketData"></div>
 <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
 </div>
-<div class="laser-divider">
-<div class="laser-effect"></div>
-</div>
-<div class="poster magical-donation">
+<hr style="border: none; height: 2px; background: linear-gradient(to right, #660066, #cc33ff); box-shadow: 0 0 10px #aa00ff; margin: 60px auto; width: 90%;"/><div class="poster magical-donation">
 <h1>บริจาคตามจิตศรัทธา</h1>
 <p>เพียง <span class="highlight">10 บาทขึ้นไป</span></p>
 <p>รับบริการสุดพิเศษจาก <span class="highlight">แม่หมอ</span> ทันที!</p>
 <p>จำนวนจำกัด อย่าพลาดโอกาสดีๆ นี้</p>
 <a class="cta-button" href="pp.html">ร่วมบริจาคเลย</a>
 </div>
-<div class="laser-divider">
-<div class="laser-effect"></div>
-</div>
-<div class="laser-divider">
-<div class="laser-effect"></div>
-</div>
-<div class="laser-divider">
-<div class="laser-effect"></div>
-</div>
-<div class="contact-section">
+<hr style="border: none; height: 2px; background: linear-gradient(to right, #660066, #cc33ff); box-shadow: 0 0 10px #aa00ff; margin: 60px auto; width: 90%;"/><div class="contact-section">
 <a class="ig-link" href="n.html" target="_blank">
    🆕 คลังชื่อมงคล<span class="click-hint">(คลิกที่นี่)</span>
 </a>
 </div>
-<div class="laser-divider">
-<div class="laser-effect"></div>
-</div>
-<div class="laser-divider">
-<div class="laser-effect"></div>
-</div>
-<div class="admin-section magical-admin" id="adminSection" style="display: block; max-width: 95%; margin: auto;">
+<hr style="border: none; height: 2px; background: linear-gradient(to right, #660066, #cc33ff); box-shadow: 0 0 10px #aa00ff; margin: 60px auto; width: 90%;"/><div class="admin-section magical-admin" id="adminSection" style="display: block; max-width: 98%; margin: 40px auto;">
 <h2>ข้อมูลใบคิวทั้งหมด</h2>
 <div style="overflow-x: auto;">
-
 <div style="margin-bottom: 15px; text-align: center;">
 <input id="searchQueue" placeholder="ค้นหาโดยชื่อ, IG, หมวดหมู่..." style="padding: 8px; width: 300px; border-radius: 8px; border: 1px solid #aaa;" type="text"/>
 </div>
