@@ -6,7 +6,7 @@
   <title>คลังชื่อมงคล</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet"/>
   <style>
-body {
+    body {
       margin: 0;
       font-family: 'Cinzel', serif;
       background: radial-gradient(circle, #1b0033, #2c0052);
@@ -16,17 +16,17 @@ body {
 
     h1 {
       text-align: center;
-      font-size: 2em;
-      margin: 30px 0 20px;
+      font-size: 1.5em;
+      margin: 20px 0 10px;
       color: #ffccff;
       text-shadow: 0 0 15px #ff00ff, 0 0 30px #aa00ff;
     }
 
     .container {
-      padding: 0 20px 50px;
-      width: 100%;
-      max-width: 100%;
+      padding: 0 10px 50px;
       box-sizing: border-box;
+      width: 100%;
+      overflow-y: auto;
     }
 
     table {
@@ -34,19 +34,20 @@ body {
       border-collapse: collapse;
       background-color: rgba(255, 255, 255, 0.05);
       border-radius: 10px;
+      overflow: hidden;
       backdrop-filter: blur(10px);
       box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
-      table-layout: fixed; /* ทำให้คอลัมน์เท่ากัน */
+      table-layout: auto; /* ตารางขยายตามเนื้อหา */
     }
 
     th, td {
-      padding: 10px 12px;
+      padding: 8px 10px;
       text-align: left;
       border: 2px solid rgba(255, 255, 255, 0.2);
-      font-size: 0.7em; /* ลดขนาดตัวอักษรให้พอดี */
-      white-space: nowrap; /* บังคับไม่ให้ตัดบรรทัด */
-      overflow: hidden;
-      text-overflow: ellipsis; /* ตัดด้วย ... ถ้ายาว */
+      font-size: 0.75em;
+      white-space: nowrap; /* ห้ามขึ้นบรรทัดใหม่ */
+      overflow: visible;    /* แสดงเนื้อหาเต็ม */
+      text-overflow: unset; /* ไม่ตัดเป็น ... */
     }
 
     th {
@@ -59,7 +60,6 @@ body {
       color: #e0c8ff;
     }
 
-    /* ปุ่มย้อนกลับลอยตรงกลางซ้าย */
     .back-btn {
       position: fixed;
       left: 10px;
