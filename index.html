@@ -24,6 +24,45 @@
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
+
+async function hasBookedWithin24Hours(name) {
+  const now = new Date();
+  const limit = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+  const snapshot = await db.collection("queues")
+    .where("name", "==", name)
+    .where("timestamp", ">", firebase.firestore.Timestamp.fromDate(limit))
+    .get();
+  return !snapshot.empty ? snapshot.docs[0].data().timestamp.toDate() : null;
+}
+
+document.getElementById("bookingForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+  const name = document.getElementById("name").value;
+  const lastBooked = await hasBookedWithin24Hours(name);
+  if (lastBooked) {
+    alert("คุณสามารถจองได้อีกครั้งหลังจาก 24 ชั่วโมงเท่านั้น");
+    showCountdownToNextBooking(new Date(lastBooked));
+    return;
+  }
+  // ดำเนินการจองต่อที่นี่...
+});
+function showCountdownToNextBooking(lastBookingTime) {
+  const countdownEl = document.getElementById("countdownArea");
+  countdownEl.style.display = "block";
+  const interval = setInterval(() => {
+    const now = new Date();
+    const diff = 24 * 60 * 60 * 1000 - (now - lastBookingTime);
+    if (diff <= 0) {
+      countdownEl.innerHTML = "คุณสามารถจองได้แล้ว!";
+      clearInterval(interval);
+      return;
+    }
+    const h = Math.floor(diff / (1000 * 60 * 60));
+    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const s = Math.floor((diff % (1000 * 60)) / 1000);
+    countdownEl.innerHTML = `เหลือเวลา ${h} ชม. ${m} นาที ${s} วินาที`;
+  }, 1000);
+}
 </script>
 <style>
   
@@ -1005,6 +1044,101 @@ button:hover {
   font-size: 16px;
   color: #aaa;
 }
+
+.magical-donation {
+  background: linear-gradient(145deg, #1a001f, #3c0066);
+  border: 3px solid #ff00ff;
+  box-shadow: 0 0 25px #aa00ff;
+  color: #fff;
+  font-family: 'Cinzel', serif;
+  padding: 30px 20px;
+  text-align: center;
+  border-radius: 20px;
+  animation: glowPulse 2s infinite;
+}
+.magical-donation h1 {
+  color: #ffccff;
+  text-shadow: 0 0 10px #ff66ff;
+}
+.magical-donation p {
+  color: #ddd;
+}
+.magical-donation .cta-button {
+  background: #aa00ff;
+  box-shadow: 0 0 15px #ff33cc;
+}
+
+.ref-check-magical {
+  background: linear-gradient(135deg, #1f0033, #000);
+  border: 3px solid #cc33ff;
+  border-radius: 15px;
+  box-shadow: 0 0 25px #aa00ff;
+  padding: 25px;
+  margin-top: 30px;
+}
+.ref-check-magical h2 {
+  color: #ffccff;
+  font-family: 'Cinzel', serif;
+  text-shadow: 0 0 10px #ff66ff;
+}
+.ref-check-magical input, .ref-check-magical button {
+  background-color: #1a001f;
+  color: #fff;
+  border: 1px solid #aa00ff;
+  box-shadow: 0 0 10px #ff33cc;
+}
+.ref-check-magical button:hover {
+  background: #cc00ff;
+}
+
+.magical-admin {
+  background: linear-gradient(to right, #1a001f, #2d0036);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 30px #aa00ff;
+  margin-top: 40px;
+}
+
+.magical-admin h2 {
+  text-align: center;
+  color: #ffccff;
+  font-family: 'Cinzel', serif;
+  text-shadow: 0 0 10px #ff66ff;
+}
+
+.magical-admin table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 20px #aa00ff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.magical-admin th, .magical-admin td {
+  padding: 12px 8px;
+  border: 1px solid #cc33ff;
+  text-align: center;
+  color: #fff;
+}
+
+.magical-admin th {
+  background: linear-gradient(90deg, #9900cc, #cc33ff);
+  color: #ffccff;
+  font-weight: bold;
+  text-shadow: 0 0 8px #fff;
+}
+
+.magical-admin tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  transition: background-color 0.3s ease;
+}
+
+@media screen and (max-width: 768px) {
+  .magical-admin table {
+    font-size: 12px;
+  }
+}
 </style>
 </head>
 <body>
@@ -1041,11 +1175,11 @@ button:hover {
 <label>Instagram (@username):</label>
 <input id="igUsername" placeholder="@yourusername" type="text"/>
 <button type="submit">จองคิว</button>
-</form>
+</form><div id="countdownArea" style="text-align:center; display:none; margin-top:10px;"></div>
 <div class="laser-divider">
 <div class="laser-effect"></div>
 </div>
-<div class="container">
+<div class="container ref-check-magical">
 <h2>ตรวจสอบใบคิว</h2>
 <input id="refInput" placeholder="ใส่เลขอ้างอิง" type="text"/>
 <button onclick="checkReference()">ตรวจสอบ</button>
@@ -1070,17 +1204,12 @@ button:hover {
 <div id="ticketData"></div>
 <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
 </div>
-<button onclick="showDashboard()">ดูแดชบอร์ด</button>
-<div class="admin-section" id="dashboardSection">
-<h2>แดชบอร์ดการจองคิว</h2>
-<canvas id="lineChart" style="max-width:100%; margin-bottom:30px;"></canvas>
-<canvas id="pieChart" style="max-width:100%;"></canvas>
-<button onclick="closeDashboard()">ปิดแดชบอร์ด</button>
-</div>
+
+
 <div class="laser-divider">
 <div class="laser-effect"></div>
 </div>
-<div class="poster">
+<div class="poster magical-donation">
 <h1>บริจาคตามจิตศรัทธา</h1>
 <p>เพียง <span class="highlight">10 บาทขึ้นไป</span></p>
 <p>รับบริการสุดพิเศษจาก <span class="highlight">แม่หมอ</span> ทันที!</p>
@@ -1104,12 +1233,10 @@ button:hover {
 <div class="laser-divider">
 <div class="laser-effect"></div>
 </div>
-
-
 <div class="laser-divider">
 <div class="laser-effect"></div>
 </div>
-<div class="admin-section" id="adminSection" style="display: block;">
+<div class="admin-section magical-admin" id="adminSection" style="display: block;">
 <h2>ข้อมูลใบคิวทั้งหมด</h2>
 <div style="overflow-x: auto;">
 <table id="adminTable">
@@ -1250,6 +1377,5 @@ button:hover {
 </div>
 <div style="text-align: center; margin-top: 20px;">
 </div>
-
 </div></body>
 </html> 
