@@ -15,6 +15,8 @@
       align-items: center;
       height: 100vh;
       color: white;
+      padding: 0 20px; /* Added padding to prevent text from sticking to edges */
+      box-sizing: border-box;
     }
     .poster {
       background: rgba(255, 255, 255, 0.1);
@@ -25,15 +27,17 @@
       text-align: center;
       position: relative;
       backdrop-filter: blur(10px);
+      width: 100%; /* Ensures the poster is responsive */
+      box-sizing: border-box;
     }
     .poster h1 {
       color: #9b59b6;
-      font-size: 2.5em;
+      font-size: 2.2em;
       margin-bottom: 20px;
       text-shadow: 0 0 15px #e74c3c, 0 0 30px #8e44ad;
     }
     .poster p {
-      font-size: 1.2em;
+      font-size: 1.1em;
       color: #ddd;
       margin: 15px 0;
     }
@@ -97,17 +101,6 @@
     .close-button:hover {
       background-color: #c0392b;
     }
-    @media (max-width: 600px) {
-      .poster {
-        padding: 30px 20px;
-      }
-      .poster h1 {
-        font-size: 2em;
-      }
-      .poster p {
-        font-size: 1em;
-      }
-    }
     .back-button {
       display: inline-block;
       margin-top: 20px;
@@ -123,6 +116,31 @@
     .back-button:hover {
       background-color: #2980b9;
       transform: scale(1.05);
+    }
+
+    /* Adjustments for mobile */
+    @media (max-width: 600px) {
+      .poster {
+        padding: 25px 15px;
+      }
+      .poster h1 {
+        font-size: 2em;
+      }
+      .poster p {
+        font-size: 1em;
+      }
+      .cta-button {
+        padding: 10px 20px;
+        font-size: 1em;
+      }
+      .back-button {
+        padding: 8px 15px;
+        font-size: 0.9em;
+      }
+      .popup-content {
+        width: 90%;
+        max-width: 350px;
+      }
     }
   </style>
 </head>
