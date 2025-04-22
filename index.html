@@ -10,6 +10,21 @@
 <!-- Firebase App (core) -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyD0o88iBVuKsj-2qgEFlP-V3FwArPHCrkY",
+    authDomain: "horoscopequeue.firebaseapp.com",
+    projectId: "horoscopequeue",
+    storageBucket: "horoscopequeue.appspot.com",
+    messagingSenderId: "30274669281",
+    appId: "1:30274669281:web:45b08e0c48e58680d3b351",
+    measurementId: "G-48X2FPNBYZ"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
@@ -1471,6 +1486,105 @@ document.getElementById("popupTicket").classList.add("show");
 
 });
 </script>
+
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+
+const firebaseConfig = {
+    apiKey: "AIzaSyD0o88iBVuKsj-2qgEFlP-V3FwArPHCrkY",
+    authDomain: "horoscopequeue.firebaseapp.com",
+    projectId: "horoscopequeue",
+    storageBucket: "horoscopequeue.appspot.com",
+    messagingSenderId: "30274669281",
+    appId: "1:30274669281:web:45b08e0c48e58680d3b351",
+    measurementId: "G-48X2FPNBYZ"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  
+  async function hasBookedWithin24Hours(name) {
+  const snapshot = await db.collection("queues")
+    .where("name", "==", name)
+    .orderBy("timestamp", "desc")
+    .limit(1)
+    .get();
+
+  if (!snapshot.empty) {
+    const lastBooking = snapshot.docs[0].data();
+    const now = new Date();
+    const lastTime = lastBooking.timestamp.toDate();
+    const diff = (now - lastTime) / (1000 * 60 * 60); // ชั่วโมง
+    return diff < 24 ? lastTime : null;
+  }
+  return null;
+}
+document.getElementById("bookingForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const name = document.getElementById("name").value.trim();
+  const age = document.getElementById("age").value.trim();
+  const category = document.getElementById("category").value;
+const rawDate = document.getElementById("date").value;
+const formattedDate = new Date(rawDate).toISOString().split('T')[0];
+  const igUsername = document.getElementById("igUsername").value.trim();
+  const timestamp = new Date();
+  const referenceId = 'REF-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+
+  const lastBooked = await hasBookedWithin24Hours(name);
+  if (lastBooked) {
+    alert("คุณสามารถจองได้อีกครั้งหลังจาก 24 ชั่วโมงเท่านั้น");
+    showCountdownToNextBooking(new Date(lastBooked));
+    return;
+  }
+
+  try {
+const snapshot = await db.collection("queues").where("date", "==", formattedDate).get();
+    const queueNumber = snapshot.size + 1;
+
+await db.collection("queues").add({
+  name,
+  age,
+  category,
+  date: formattedDate,
+  igUsername,
+  referenceId,
+  timestamp,
+  queueNumber
+});
+
+    alert("จองคิวสำเร็จ! หมายเลขคิวของคุณคือ " + queueNumber + " (Ref: " + referenceId + ")");
+
+// สร้าง HTML สำหรับใบคิว
+document.getElementById("ticketData").innerHTML = `
+  <h3>ใบคิวของคุณ</h3>
+  <p><strong>ชื่อ:</strong> ${name}</p>
+  <p><strong>อายุ:</strong> ${age}</p>
+  <p><strong>หมวดหมู่:</strong> ${category}</p>
+  <p><strong>วันที่:</strong> ${date}</p>
+  <p><strong>เลขคิว:</strong> ${queueNumber}</p>
+  <p><strong>เลขอ้างอิง:</strong> ${referenceId}</p>
+  <p><strong>IG:</strong> ${igUsername || '-'}</p>
+  <button onclick="downloadPDF()">ดาวน์โหลด PDF</button>
+  <button onclick="document.getElementById('popupTicket').classList.remove('show')">ปิด</button>
+`;
+
+// แสดง popup
+document.getElementById("popupTicket").classList.add("show");
+
+    document.getElementById("bookingForm").reset();
+    updateLiveStats();
+    showAdminSection();
+
+  } catch (error) {
+    console.error("เกิดข้อผิดพลาดในการจอง:", error);
+    alert("เกิดข้อผิดพลาดในการจองคิว กรุณาลองใหม่อีกครั้ง");
+  }
+});
+
+});
+</script>
 </body>
 </html>
+
  
