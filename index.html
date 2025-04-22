@@ -1,12 +1,13 @@
 <!DOCTYPE html>
+
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <title>ระบบจองคิวดูดวง & หน้าแอดมิน</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- jsPDF Library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <!-- Firebase App (core) -->
+<meta charset="utf-8"/>
+<title>ระบบจองคิวดูดวง &amp; หน้าแอดมิน</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<!-- jsPDF Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- Firebase App (core) -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -24,10 +25,69 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 
+  async function checkReference() {
+    const ref = document.getElementById("refInput").value.trim().toUpperCase();
+    const snapshot = await db.collection("queues").where("referenceId", "==", ref).get();
+    if (!snapshot.empty) {
+      const data = snapshot.docs[0].data();
+      document.getElementById("refResult").innerHTML = `
+        <p>ชื่อ: ${data.name}</p>
+        <p>วันที่จอง: ${data.date}</p>
+        <p>ลำดับคิว: ${data.queueNumber}</p>
+        <p>หมวดหมู่: ${data.category}</p>
+        <p>อายุ: ${data.age}</p>
+        <p>IG: ${data.igUsername}</p>
+      `;
+    } else {
+      document.getElementById("refResult").innerText = "ไม่พบข้อมูล";
+    }
+  }
 
+  async function updateLiveStats() {
+    const snapshot = await db.collection("queues").get();
+    const queueCount = snapshot.size;
+    document.getElementById("queueCount").innerText = `ยอดรวมผู้จองคิวทั้งหมด: ${queueCount} คน`;
 
+    const currentTime = new Date().toLocaleString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    document.getElementById("currentTime").innerText = `เวลาปัจจุบัน(🇹🇭): ${currentTime}`;
+  }
+
+  setInterval(updateLiveStats, 1000);
+  window.addEventListener("load", updateLiveStats);
+
+  async function calculateBookingStats() {
+    const querySnapshot = await db.collection("queues").get();
+    const now = new Date();
+
+    let totalBookings = 0;
+    let notYetBooked = 0;
+    let completedBookings = 0;
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      totalBookings++;
+
+      const bookingDateStr = data.date;
+      const [year, month, day] = bookingDateStr.split("-");
+      const bookingEndTime = new Date(year, month - 1, day, 19, 0, 0);
+
+      if (now < bookingEndTime) {
+        notYetBooked++;
+      } else {
+        completedBookings++;
+      }
+    });
+
+    if (document.getElementById("total-bookings")) {
+      document.getElementById("total-bookings").textContent = totalBookings;
+      document.getElementById("not-yet-booked").textContent = notYetBooked;
+      document.getElementById("completed-bookings").textContent = completedBookings;
+    }
+  }
+
+  window.addEventListener("load", calculateBookingStats);
 </script>
-  <style>
+<style>
   
   .row-details {
   transition: all 0.3s ease;
@@ -878,9 +938,75 @@ button:hover {
   color: #e2ccff;
   font-size: 16px;
 }
+.magic-orb-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 100px;
+  perspective: 1000px;
+}
 
+.magic-orb {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #8e2de2, #1a001f);
+  position: relative;
+  box-shadow: 0 0 40px 15px #a600ff, inset 0 0 50px #ff00cc;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 1s ease;
+  overflow: hidden;
+}
 
+.magic-orb.spin {
+  animation: orbSpin 1.2s ease-out forwards;
+}
 
+@keyframes orbSpin {
+  0% { transform: rotateY(0deg) scale(1); }
+  100% { transform: rotateY(720deg) scale(0); opacity: 0; }
+}
+
+.inner-glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 10%, transparent 70%);
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.orb-reflection {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  top: 20px;
+  left: 20px;
+  background: radial-gradient(circle, white, transparent);
+  border-radius: 50%;
+  opacity: 0.2;
+  filter: blur(5px);
+}
+
+.crystal-text {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 40%;
+  font-size: 20px;
+  color: white;
+  text-shadow: 0 0 10px #fff, 0 0 30px #ff00cc;
+  pointer-events: none;
+  animation: flicker 1.5s infinite alternate;
+}
+
+@keyframes flicker {
+  from { opacity: 1; }
   to { opacity: 0.6; }
 }
 
@@ -900,728 +1026,173 @@ button:hover {
   animation: smokeUp 2.5s ease forwards;
 }
 
-
+@keyframes smokeUp {
+  0% { opacity: 0; transform: scale(1) translateY(0); }
   100% { opacity: 1; transform: scale(1.5) translateY(-120px); }
 }
 
+.prophecy-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(30, 0, 50, 0.98);
+  border: 3px solid #ff00cc;
+  box-shadow: 0 0 30px #a600ff;
+  padding: 30px;
+  border-radius: 20px;
+  display: none;
+  z-index: 999;
+  text-align: center;
+  max-width: 400px;
+}
 
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.prophecy-text {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.countdown {
+  font-size: 16px;
+  color: #aaa;
+}
 </style>
 </head>
 <body>
 <div class="live-stats" id="liveStats">
-    <div class="stats-title">สถานะพลังจองคิว</div>
-  <div class="stats-item" id="queueCount">ยอดผู้จองคิวทั้งหมด: 0 คน</div>
-  <div class="stats-item" id="currentTime">เวลาปัจจุบัน: --:--</div>
+<div class="stats-title">สถานะพลังจองคิว</div>
+<div class="stats-item" id="queueCount">ยอดผู้จองคิวทั้งหมด: 0 คน</div>
+<div class="stats-item" id="currentTime">เวลาปัจจุบัน: --:--</div>
 </div>
 <div>
-    <img src="IMG_0920.JPG" alt="โลโก้" class="logo-glow">
+<img alt="โลโก้" class="logo-glow" src="IMG_0920.JPG"/>
 </div>
-  <div class="magic-animal"></div>
-  <div class="container" id="mainContainer">
-    <h2>จองคิวดูดวงอัตโนมัติ</h2>
-    <form id="bookingForm">
-      <label>ชื่อเล่น:</label>
-      <input type="text" id="name" required>
-      <label>อายุ:</label>
-      <input type="number" id="age" required min="1">
-      <label>หมวดหมู่:</label>
-      <select id="category">
-        <option>ดูดวงส่วนตัว</option>
-        <option>โชคชะตา</option>
-        <option>ความฝัน</option>
-        <option>อดีตและอนาคต</option>
-        <option>ความรัก</option>
-        <option>การงาน</option>
-        <option>การเงิน</option>
-        <option>การเรียน</option>
-        <option>สุขภาพ</option>
-      </select>
-      <label>เลือกวัน:</label>
-      <input type="date" id="date" required>
-        <label>Instagram (@username):</label>
-<input type="text" id="igUsername" placeholder="@yourusername">
-
-      <button type="submit">จองคิว</button>
-    </form>
-      <div class="laser-divider">
-    <div class="laser-effect"></div>
-  </div>
-          <div class="container">
-  <h2>ตรวจสอบใบคิว</h2>
-  <input type="text" id="refInput" placeholder="ใส่เลขอ้างอิง">
-  <button onclick="checkReference()">ตรวจสอบ</button>
-  <div id="refResult"></div>
+<div class="magic-animal"></div>
+<div class="container" id="mainContainer">
+<h2>จองคิวดูดวงอัตโนมัติ</h2>
+<form id="bookingForm">
+<label>ชื่อเล่น:</label>
+<input id="name" required="" type="text"/>
+<label>อายุ:</label>
+<input id="age" min="1" required="" type="number"/>
+<label>หมวดหมู่:</label>
+<select id="category">
+<option>ดูดวงส่วนตัว</option>
+<option>โชคชะตา</option>
+<option>ความฝัน</option>
+<option>อดีตและอนาคต</option>
+<option>ความรัก</option>
+<option>การงาน</option>
+<option>การเงิน</option>
+<option>การเรียน</option>
+<option>สุขภาพ</option>
+</select>
+<label>เลือกวัน:</label>
+<input id="date" required="" type="date"/>
+<label>Instagram (@username):</label>
+<input id="igUsername" placeholder="@yourusername" type="text"/>
+<button type="submit">จองคิว</button>
+</form>
+<div class="laser-divider">
+<div class="laser-effect"></div>
 </div>
-  </div>
-  <!-- ช่องทางการติดต่อ Instagram -->
-  <div class="laser-divider">
-    <div class="laser-effect"></div>
-  </div>
+<div class="container">
+<h2>ตรวจสอบใบคิว</h2>
+<input id="refInput" placeholder="ใส่เลขอ้างอิง" type="text"/>
+<button onclick="checkReference()">ตรวจสอบ</button>
+<div id="refResult"></div>
+</div>
+</div>
+<!-- ช่องทางการติดต่อ Instagram -->
+<div class="laser-divider">
+<div class="laser-effect"></div>
+</div>
 <div class="contact-section">
-  <a href="https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx" target="_blank" class="ig-link">
+<a class="ig-link" href="https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx" target="_blank">
     ติดต่อแม่หมอผ่าน IG: @horoscope_1308 <span class="click-hint">(หรือคลิกที่นี่)</span>
-  </a>
+</a>
 </div>
 <div class="contact-section">
-  <a href="https://www.instagram.com/honey.prom?igsh=ZGYzZ2ozYnI0Ynlt&utm_source=qr" target="_blank" class="ig-link">
+<a class="ig-link" href="https://www.instagram.com/honey.prom?igsh=ZGYzZ2ozYnI0Ynlt&amp;utm_source=qr" target="_blank">
     ติดต่อผู้ดูแลระบบผ่าน IG: @honey.prom <span class="click-hint">(หรือคลิกที่นี่)</span>
-  </a>
+</a>
 </div>
-
 <div class="popup" id="popupTicket">
-    <div id="ticketData"></div>
-    <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
-  </div>
+<div id="ticketData"></div>
+<p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
+</div>
 <button onclick="showDashboard()">ดูแดชบอร์ด</button>
 <div class="admin-section" id="dashboardSection">
-  <h2>แดชบอร์ดการจองคิว</h2>
-  <canvas id="lineChart" style="max-width:100%; margin-bottom:30px;"></canvas>
-  <canvas id="pieChart" style="max-width:100%;"></canvas>
-  <button onclick="closeDashboard()">ปิดแดชบอร์ด</button>
+<h2>แดชบอร์ดการจองคิว</h2>
+<canvas id="lineChart" style="max-width:100%; margin-bottom:30px;"></canvas>
+<canvas id="pieChart" style="max-width:100%;"></canvas>
+<button onclick="closeDashboard()">ปิดแดชบอร์ด</button>
 </div>
-  <div class="laser-divider">
-    <div class="laser-effect"></div>
-  </div>
-      <div class="poster">
-    <h1>บริจาคตามจิตศรัทธา</h1>
-    <p>เพียง <span class="highlight">10 บาทขึ้นไป</span></p>
-    <p>รับบริการสุดพิเศษจาก <span class="highlight">แม่หมอ</span> ทันที!</p>
-    <p>จำนวนจำกัด อย่าพลาดโอกาสดีๆ นี้</p>
-    <a href="pp.html" class="cta-button">ร่วมบริจาคเลย</a>
-  </div>
-    <div class="laser-divider">
-    <div class="laser-effect"></div>
-  </div>
-
-  <div class="wish-box">
-  <h2>กล่องอธิษฐานของแม่หมอ</h2>
-  <textarea id="wishInput" placeholder="พิมพ์คำอธิษฐานของเจ้า..."></textarea>
-  <button onclick="submitWish()">ส่งคำอธิษฐาน</button>
-  <div class="magic-effect" id="magicEffect"></div>
-  <p id="responseMessage"></p>
-  <p id="countdownTimer"></p>
+<div class="laser-divider">
+<div class="laser-effect"></div>
 </div>
-
-    <div class="laser-divider">
-    <div class="laser-effect"></div>
-  </div>
-  
-<div id="bird-container">
-  <div id="cage">
-    <div id="bird"></div>
-  </div>
-  <button id="releaseBtn">ปล่อยนก</button>
-  <p id="message"></p>
+<div class="poster">
+<h1>บริจาคตามจิตศรัทธา</h1>
+<p>เพียง <span class="highlight">10 บาทขึ้นไป</span></p>
+<p>รับบริการสุดพิเศษจาก <span class="highlight">แม่หมอ</span> ทันที!</p>
+<p>จำนวนจำกัด อย่าพลาดโอกาสดีๆ นี้</p>
+<a class="cta-button" href="pp.html">ร่วมบริจาคเลย</a>
 </div>
-      <div class="laser-divider">
-    <div class="laser-effect"></div>
-  </div>
-  <div class="contact-section">
-  <a href="n.html" target="_blank" class="ig-link">
+<div class="laser-divider">
+<div class="laser-effect"></div>
+</div>
+<div class="laser-divider">
+<div class="laser-effect"></div>
+</div>
+<div class="laser-divider">
+<div class="laser-effect"></div>
+</div>
+<div class="contact-section">
+<a class="ig-link" href="n.html" target="_blank">
    🆕 คลังชื่อมงคล<span class="click-hint">(คลิกที่นี่)</span>
-  </a>
+</a>
 </div>
-      <div class="laser-divider">
-    <div class="laser-effect"></div>
-  </div>
-  
+<div class="laser-divider">
+<div class="laser-effect"></div>
+</div>
 
 
-      <div class="laser-divider">
-    <div class="laser-effect"></div>
-  </div>
+<div class="laser-divider">
+<div class="laser-effect"></div>
+</div>
 <div class="admin-section" id="adminSection" style="display: block;">
-    <h2>ข้อมูลใบคิวทั้งหมด</h2>
+<h2>ข้อมูลใบคิวทั้งหมด</h2>
 <div style="overflow-x: auto;">
-  <table id="adminTable">
-    <thead>
-      <tr>
-        <th>ชื่อ</th>
-        <th>อายุ</th>
-        <th>หมวดหมู่</th>
-        <th>วันที่</th>
-        <th>คิว</th>
-        <th>เลขอ้างอิง</th>
-        <th>IG</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- ข้อมูลจะถูกเติมโดย JavaScript -->
-    </tbody>
-  </table>
+<table id="adminTable">
+<thead>
+<tr>
+<th>ชื่อ</th>
+<th>อายุ</th>
+<th>หมวดหมู่</th>
+<th>วันที่</th>
+<th>คิว</th>
+<th>เลขอ้างอิง</th>
+<th>IG</th>
+</tr>
+</thead>
+<tbody>
+<!-- ข้อมูลจะถูกเติมโดย JavaScript -->
+</tbody>
+</table>
 </div>
 <div style="text-align: center; margin-top: 20px;">
-  <button onclick="closeAdmin()" style="
-    padding: 10px 20px;
-    border-radius: 10px;
-    background: #cc00ff;
-    color: #fff;
-    font-weight: bold;
-    box-shadow: 0 0 12px #ff99ff;
-    border: none;
-    cursor: pointer;
-  ">ปิดหน้าดูข้อมูล</button>
 </div>
 
-  <script>
-
-const crystal = document.getElementById('crystalBall');
-const smoke = document.getElementById('smoke');
-const prophecyBox = document.getElementById('prophecyBox');
-const prophecyText = document.getElementById('prophecyText');
-const countdown = document.getElementById('countdown');
-let countdownInterval;
-
-const prophecies = [
-  "คุณกำลังจะได้รับข้อความจากโลกที่คุณลืมไปแล้ว",
-  "อย่าไว้ใจเงาที่อยู่ข้างหลังคุณในวันอังคาร",
-  "เส้นทางลึกลับกำลังจะปรากฏในฝันของคุณ",
-  "คนที่คุณคิดถึง เขาก็คิดถึงคุณเหมือนกัน",
-  "แสงในความมืด จะพาคุณไปสู่สิ่งที่ซ่อนอยู่",
-  "หลีกเลี่ยงการตัดสินใจสำคัญในคืนนี้"
-];
-
-crystal.addEventListener('click', () => {
-  
-    return;
-  }
-
-  crystal.classList.add('spin');
-  smoke.classList.add('show');
-
-  setTimeout(() => {
-    crystal.classList.remove('spin');
-    smoke.classList.remove('show');
-
-    const prophecy = prophecies[Math.floor(Math.random() * prophecies.length)];
-    localStorage.setItem('prophecyText', prophecy);
-    localStorage.setItem('prophecyTime', now + 7 * 24 * 60 * 60 * 1000); // 7 วัน
-
-    showProphecy();
-  }, 1200);
-});
-
-
-
-  }, 1000);
-}
-
-
-  const savedText = localStorage.getItem('prophecyText');
-  const now = Date.now();
-
-  if (savedTime && savedText && now < parseInt(savedTime)) {
-    showProphecy();
-  }
-};
-  
-  const releaseBtn = document.getElementById('releaseBtn');
-const bird = document.getElementById('bird');
-const message = document.getElementById('message');
-
-function canReleaseBird() {
-  const lastRelease = localStorage.getItem('lastBirdRelease');
-  if (!lastRelease) return true;
-
-  const now = new Date().getTime();
-  return now - parseInt(lastRelease) > 12 * 60 * 60 * 1000; // 12 ชม.
-}
-
-function updateMessage() {
-  const lastRelease = localStorage.getItem('lastBirdRelease');
-  if (!lastRelease) return;
-
-  const now = new Date().getTime();
-  const diff = now - parseInt(lastRelease);
-  const remaining = (12 * 60 * 60 * 1000 - diff) / 1000;
-
-  if (remaining > 0) {
-    const hours = Math.floor(remaining / 3600);
-    const minutes = Math.floor((remaining % 3600) / 60);
-    message.innerText = `ปล่อยนกได้อีกครั้งใน ${hours} ชม. ${minutes} นาที`;
-    releaseBtn.disabled = true;
-  }
-}
-
-releaseBtn.addEventListener('click', () => {
-  if (!canReleaseBird()) return;
-
-  bird.classList.add('fly-away');
-  localStorage.setItem('lastBirdRelease', new Date().getTime());
-  message.innerText = 'คุณได้ปล่อยสิ่งชั่วร้ายออกไปแล้ว รับสิ่งดีๆ เข้ามา';
-
-  releaseBtn.disabled = true;
-});
-
-
-
-  window.addEventListener("load", function() {
-  document.getElementById("maintenancePopup").style.display = "flex";
-});
-
-    const queueDB = {}; // เก็บข้อมูลคิวใน session นี้
-    let currentTicket = null; // เก็บใบคิวล่าสุด
-
-document.getElementById("bookingForm").addEventListener("submit", async function(e) {
-  e.preventDefault();
-  const name = document.getElementById("name").value.trim();
-  const age = document.getElementById("age").value.trim();
-  const category = document.getElementById("category").value;
-  let date = document.getElementById("date").value;
-  if (!name || !age || !category || !date) return;
-
-  // โหลดจำนวนคิวจาก Firestore
-  const snapshot = await db.collection("queues")
-    .where("date", "==", date)
-    .get();
-
-  if (snapshot.size >= 5) {
-    alert("เต็มแล้วสำหรับวันนี้ กรุณาเลือกวันอื่น");
-    return;
-  }
-
-  const queueNumber = snapshot.size + 1;
-  const referenceId = Math.random().toString(36).substring(2, 10).toUpperCase();
-const igUsername = document.getElementById("igUsername").value.trim();
-const ticket = {
-  name, age, category, date, queueNumber,
-  referenceId, timestamp: new Date(),
-  igUsername: igUsername || null
-};
-
-  await db.collection("queues").add(ticket);
-  currentTicket = ticket;
-
-  const ticketHTML = `
-    <h3>ใบคิวดูดวง</h3>
-    <p><b>ชื่อ:</b> ${ticket.name}</p>
-    <p><b>อายุ:</b> ${ticket.age}</p>
-    <p><b>หมวดหมู่:</b> ${ticket.category}</p>
-    <p><b>ลำดับคิว:</b> ${ticket.queueNumber}</p>
-    <p><b>วันที่ดูดวง:</b> ${ticket.date}</p>
-    <p><b>เลขอ้างอิง:</b> ${ticket.referenceId}</p>
-    <button onclick="downloadPDF()">ดาวน์โหลด PDF</button>
-    <button onclick="goInstagram()">ส่งผลทาง IG</button>
-  `;
-  document.getElementById("ticketData").innerHTML = ticketHTML;
-  document.getElementById("popupTicket").classList.add("show");
-});
-
-    function downloadPDF() {
-      if (!currentTicket) return;
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const englishText = 
-`Ticket for Fortune Telling
-Name: ${currentTicket.name}
-Age: ${currentTicket.age}
-Category: ${currentTicket.category}
-Queue No: ${currentTicket.queueNumber}
-Appointment Date: ${currentTicket.date}
-Reference No: ${currentTicket.referenceId}`;
-      const lines = englishText.split("\n");
-      let y = 20;
-      lines.forEach(line => {
-        doc.text(line, 10, y);
-        y += 10;
-      });
-      doc.save("Ticket.pdf");
-    }
-
-    function goInstagram() {
-      window.open("https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx", "_blank");
-    }
-
-// ฟังก์ชันที่เพิ่มปุ่มสำหรับขยายและย่อ
-function toggleRowDetails(button, referenceId) {
-  const rowDetails = document.getElementById(referenceId);
-  if (rowDetails.style.display === "none" || rowDetails.style.display === "") {
-    rowDetails.style.display = "table-row"; // ขยายแถว
-    button.innerText = "ย่อ"; // เปลี่ยนข้อความปุ่ม
-  } else {
-    rowDetails.style.display = "none"; // ย่อแถว
-    button.innerText = "ขยาย"; // เปลี่ยนข้อความปุ่ม
-  }
-}
-
-// ฟังก์ชันแสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
-async function showAdminSection() {
-  const adminTableBody = document.getElementById("adminTable").querySelector("tbody");
-  adminTableBody.innerHTML = ""; // ล้างตารางเดิม
-
-  try {
-    const snapshot = await db.collection("queues").orderBy("date", "desc").get();
-    snapshot.forEach((doc) => {
-      const ticket = doc.data();
-      const rowId = `row-details-${ticket.referenceId}`; // ใช้ referenceId เป็น rowId
-
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${ticket.name}</td>
-        <td>${ticket.age}</td>
-        <td>${ticket.category}</td>
-        <td>${ticket.date}</td>
-        <td>${ticket.queueNumber}</td>
-        <td>${ticket.referenceId ? ticket.referenceId.slice(0, 6) + '...' : '-'}</td>
-        <td>
-          ${ticket.igUsername 
-            ? `<a href="https://www.instagram.com/${ticket.igUsername}" target="_blank" style="color: #ff99ff; text-decoration: none;">${ticket.igUsername}</a>`
-            : `<span style="color:#ccc;">ไม่แสดงข้อมูล</span>`
-          }
-          <button onclick="toggleRowDetails(this, '${rowId}')" 
-            style="background-color: #ff99ff; color: black; border: none; border-radius: 4px; padding: 2px 6px; cursor: pointer; margin-top: 5px;">
-            ขยาย
-          </button>
-        </td>
-      `;
-      adminTableBody.appendChild(row);
-
-      // แถวรายละเอียดเพิ่มเติม (ย่อหรือขยายได้)
-      const rowDetails = document.createElement("tr");
-      rowDetails.id = rowId;
-      rowDetails.style.display = "none"; // ซ่อนแถวนี้เริ่มต้น
-      rowDetails.innerHTML = `
-        <td colspan="7">
-          <p><b>ชื่อ:</b> ${ticket.name}</p>
-          <p><b>อายุ:</b> ${ticket.age}</p>
-          <p><b>หมวดหมู่:</b> ${ticket.category}</p>
-          <p><b>ลำดับคิว:</b> ${ticket.queueNumber}</p>
-          <p><b>วันที่จอง:</b> ${ticket.date}</p>
-          <p><b>เลขอ้างอิง:</b> ${ticket.referenceId}</p>
-          <p><b>IG:</b> ${ticket.igUsername || "ไม่มี"}</p>
-            <p>บริจาคตามจิตศรัทธา ( 10 บาทขึ้นไป )</p>
-            <p>จะได้รับการบริการสุดพิเศษ <b>จำนวนจำกัด</p>
-            <p>ปรึกษา,ดูดวง จากแม่หมอได้ทันที</p>
-        </td>
-      `;
-      adminTableBody.appendChild(rowDetails);
-    });
-    document.getElementById("adminSection").style.display = "block"; // แสดงส่วนแอดมิน
-  } catch (error) {
-    alert("เกิดข้อผิดพลาดในการโหลดข้อมูล: " + error.message);
-  }
-}
-
-    function closeAdmin() {
-      document.getElementById("adminSection").style.display = "none";
-    }
-    window.addEventListener("load", showAdminSection);
-    async function checkReference() {
-  const ref = document.getElementById("refInput").value.trim().toUpperCase();
-  const snapshot = await db.collection("queues").where("referenceId", "==", ref).get();
-  if (!snapshot.empty) {
-    const data = snapshot.docs[0].data();
-    document.getElementById("refResult").innerHTML = `
-      <p>ชื่อ: ${data.name}</p>
-      <p>วันที่จอง: ${data.date}</p>
-      <p>ลำดับคิว: ${data.queueNumber}</p>
-      <p>หมวดหมู่: ${data.category}</p>
-            <p>อายุ: ${data.age}</p>
-            <p>IG: ${data.igUsername}</p>
-            
-    `;
-  } else {
-    document.getElementById("refResult").innerText = "ไม่พบข้อมูล";
-  }
-}
-async function showDashboard() {
-  const dashboard = document.getElementById("dashboardSection");
-  dashboard.style.display = "block";
-
-  const snapshot = await db.collection("queues").get();
-  const data = snapshot.docs.map(doc => doc.data());
-
-  // สร้างข้อมูลนับตามวันที่
-  const dateMap = {};
-  const categoryMap = {};
-  data.forEach(item => {
-    dateMap[item.date] = (dateMap[item.date] || 0) + 1;
-    categoryMap[item.category] = (categoryMap[item.category] || 0) + 1;
-  });
-
-  // กราฟเส้น - จำนวนคิวต่อวัน
-  const dateLabels = Object.keys(dateMap).sort();
-  const queueCounts = dateLabels.map(date => dateMap[date]);
-
-  if (window.lineChart) window.lineChart.destroy();
-  window.lineChart = new Chart(document.getElementById("lineChart"), {
-    type: 'line',
-    data: {
-      labels: dateLabels,
-      datasets: [{
-        label: 'จำนวนคิวแต่ละวัน',
-        data: queueCounts,
-        borderColor: '#ff66ff',
-        backgroundColor: 'rgba(255,102,255,0.3)',
-        tension: 0.3
-      }]
-    },
-    options: {
-      plugins: { legend: { labels: { color: "#fff" } } },
-      scales: {
-        x: { ticks: { color: "#fff" } },
-        y: { ticks: { color: "#fff" } }
-      }
-    }
-  });
-
-  // กราฟวงกลม - หมวดหมู่ยอดนิยม
-  const categoryLabels = Object.keys(categoryMap);
-  const categoryCounts = categoryLabels.map(cat => categoryMap[cat]);
-
-  if (window.pieChart) window.pieChart.destroy();
-  window.pieChart = new Chart(document.getElementById("pieChart"), {
-    type: 'pie',
-    data: {
-      labels: categoryLabels,
-      datasets: [{
-        label: 'หมวดหมู่',
-        data: categoryCounts,
-        backgroundColor: [
-          '#ff66cc', '#ff99cc', '#cc99ff', '#9966cc', '#6600cc',
-          '#ff66ff', '#cc33ff', '#9933cc', '#660066'
-        ]
-      }]
-    },
-    options: {
-      plugins: {
-        legend: {
-          labels: {
-            color: '#fff'
-          }
-        }
-      }
-    }
-  });
-}
-
-function closeDashboard() {
-  document.getElementById("dashboardSection").style.display = "none";
-}
-// ฟังก์ชันสำหรับการอัพเดตยอดผู้จองและเวลาปัจจุบัน
-async function updateLiveStats() {
-  const snapshot = await db.collection("queues").get();
-  const queueCount = snapshot.size; // จำนวนผู้จองคิวทั้งหมด
-
-  // แสดงยอดผู้จอง
-  document.getElementById("queueCount").innerText = `ยอดรวมผู้จองคิวทั้งหมด: ${queueCount} คน`;
-
-  // อัพเดตเวลาปัจจุบัน
-  const currentTime = new Date().toLocaleString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-  document.getElementById("currentTime").innerText = `เวลาปัจจุบัน(🇹🇭): ${currentTime}`;
-}
-
-// เรียกใช้งานฟังก์ชันทุก 1 วินาที
-setInterval(updateLiveStats, 1000);
-
-// เมื่อโหลดหน้าเว็บ ให้เรียกฟังก์ชันทันที
-window.addEventListener("load", updateLiveStats);
-async function calculateBookingStats() {
-    const querySnapshot = await db.collection("queues").get();
-    const now = new Date();
-
-    let totalBookings = 0;
-    let notYetBooked = 0;
-    let completedBookings = 0;
-
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      totalBookings++;
-
-      const bookingDateStr = data.date; // เช่น "2025-04-17"
-      const [year, month, day] = bookingDateStr.split("-");
-      const bookingEndTime = new Date(year, month - 1, day, 19, 0, 0); // 19:00 ของวันนั้น
-
-      if (now < bookingEndTime) {
-        notYetBooked++;
-      } else {
-        completedBookings++;
-      }
-    });
-
-    document.getElementById("total-bookings").textContent = totalBookings;
-    document.getElementById("not-yet-booked").textContent = notYetBooked;
-    document.getElementById("completed-bookings").textContent = completedBookings;
-  }
-
-  
-
-
-    const btn = document.getElementById('btn');
-    const msg = document.getElementById('msg');
-    const timer = document.getElementById('timer');
-    const cooldownMs = 24 * 60 * 60 * 1000; // 24 ชั่วโมง
-
-    function getMessage() {
-      const now = Date.now();
-      const lastTime = localStorage.getItem('lastFortuneTime');
-
-      if (lastTime && now - lastTime < cooldownMs) {
-        updateTimer();
-        return;
-      }
-
-      const randomIndex = Math.floor(Math.random() * messages.length);
-      msg.textContent = messages[randomIndex];
-      localStorage.setItem('lastFortuneTime', now);
-      updateTimer();
-    }
-
-    function updateTimer() {
-      const last = parseInt(localStorage.getItem('lastFortuneTime'));
-      if (!last) return;
-
-      const now = Date.now();
-      const diff = cooldownMs - (now - last);
-
-      if (diff > 0) {
-        btn.disabled = true;
-
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-        timer.textContent = `รอรับพลังใหม่ได้ในอีก ${hours} ชม. ${minutes} นาที ${seconds} วินาที`;
-
-        setTimeout(updateTimer, 1000);
-      } else {
-        timer.textContent = "";
-        btn.disabled = false;
-        msg.textContent = "เธอสามารถขอพลังจากแม่หมอได้อีกครั้งแล้วนะ";
-        localStorage.removeItem('lastFortuneTime');
-      }
-    }
-
-    // ป้องกันกดหลายรอบด้วยการโหลดสถานะเมื่อเปิดหน้า
-    
-      const last = localStorage.getItem('lastFortuneTime');
-      if (last && Date.now() - last < cooldownMs) {
-        btn.disabled = true;
-      }
-    };
-    
-    function showMagicEffect() {
-  const magic = document.getElementById("magicEffect");
-  magic.style.display = "block";
-  setTimeout(() => {
-    magic.style.display = "none";
-  }, 2000);
-}
-const messages = [
-  "เธอทำได้ดีมากแล้วนะ",
-  "ทุกอย่างจะดีขึ้นในไม่ช้า",
-  "จักรวาลกำลังฟังเสียงของเธออยู่",
-  "แม่หมอส่งพลังให้เธอจากที่ไกลแสนไกล",
-  "ขอให้วันนี้เต็มไปด้วยแสงสว่าง"
-];
-
-const wishMessages = [
-  // เวทมนตร์ลี้ลับ
-  "พลังงานแห่งดวงจันทร์ได้โอบรับคำอธิษฐานของเจ้าแล้ว",
-  "กลุ่มดาวลับกำลังเคลื่อนตัวตามเสียงของหัวใจเจ้า…",
-  "แสงเรืองรองแห่งจิตวิญญาณโบราณกำลังเดินทางมาหาเจ้า",
-  "จักรวาลกำลังเขียนบทใหม่ให้เจ้าด้วยความอ่อนโยน",
-  "แม่หมอขอเรียกพลังแห่งดวงอาทิตย์มาโอบอุ้มเจ้าในวันที่เหนื่อยล้า",
-
-  // กำลังใจแบบหวานละมุน
-  "แม่หมอกำลังลูบหัวเจ้าเบา ๆ ผ่านลมคืนนี้นะ",
-  "เจ้าทำได้ดีแล้ว ไม่ว่าจะเหนื่อยแค่ไหน แม่หมอรับรู้ได้หมด",
-  "ไม่มีคำอธิษฐานไหนไร้ความหมาย ทุกความหวังคือเวทมนตร์ที่แท้จริง",
-  "บางครั้งความเงียบก็เป็นคำตอบจากจักรวาลว่า 'จงเชื่อมั่นต่อไป'",
-  "แม่หมอเห็นแววตาเจ้าในแสงดวงดาว มันสวยงามกว่าที่เจ้าคิด",
-
-  // แนวพลังบวกแอบฟรุ้งฟริ้ง
-  "แม่หมอกำลังเป่า ‘ฝุ่นดาว’ ใส่ใจเจ้าเพื่อให้มันพองฟูอีกครั้ง",
-  "คำอธิษฐานของเจ้า...กำลังลอยหมุนกลางอากาศ เหมือนผีเสื้อแห่งความหวัง",
-  "มีวิญญาณแมวน้อยกำลังนำความอบอุ่นมาส่งให้เจ้าจากอีกโลกหนึ่ง",
-  "หัวใจเจ้าสั่นสะเทือนเบา ๆ จักรวาลตอบรับแล้วล่ะ",
-  "เจ้าได้รับคาถา: ‘ใจอ่อนโยน – พลังใจ +99’",
-
-  // คำปลอบโยนอย่างลึกซึ้ง
-  "แม้เสียงของเจ้าจะเงียบงัน แต่พลังของมันดังลั่นถึงดาวไกล",
-  "แม่หมออยากให้เจ้าจำไว้นะว่า ‘อยู่ต่อ’ ก็คือความกล้ารูปแบบหนึ่ง",
-  "ไม่ต้องรีบหายดี แค่ยังอยากมีชีวิตอยู่ต่อก็นับว่ากล้าหาญ",
-  "เจ้าสวยงามแม้ในวันที่น้ำตาเปื้อนแก้ม",
-  "แค่กล้าหวังอีกครั้ง ก็คือปาฏิหาริย์หนึ่งแล้ว"
-];
-
-
-function submitWish() {
-  const wishText = document.getElementById("wishInput").value;
-  const lastWishTime = localStorage.getItem("lastWishTime");
-  const now = Date.now();
-
-  if (lastWishTime && now - lastWishTime < 86400000) {
-    const remaining = 86400000 - (now - lastWishTime);
-    const hours = Math.floor(remaining / (1000 * 60 * 60));
-    const mins = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
-    document.getElementById("countdownTimer").innerText = 
-      `เจ้าสามารถอธิษฐานอีกครั้งใน ${hours} ชั่วโมง ${mins} นาที`;
-    return;
-  }
-
-  if (wishText.trim() === "") {
-    alert("เจ้าต้องพิมพ์คำอธิษฐานก่อนนะ");
-    return;
-  }
-
-  // เก็บข้อมูลลง localStorage หรือส่งไป Firebase
-  localStorage.setItem("lastWishTime", now);
-  localStorage.setItem("wishText", wishText); // ถ้าใช้ Firebase ก็ส่งแทน
-
-  
-  document.getElementById("responseMessage").innerText = response;
-  document.getElementById("wishInput").value = "";
-  document.getElementById("countdownTimer").innerText = "คำอธิษฐานของเจ้าได้ถูกส่งแล้ว";
-}
-  const targetDate = new Date("April 20, 2025 00:00:00").getTime();
-
-  const countdown = document.getElementById("countdown");
-  const interval = setInterval(function() {
-    const now = new Date().getTime();
-    const distance = targetDate - now;
-
-    if (distance < 0) {
-      clearInterval(interval);
-      countdown.innerHTML = "ระบบกลับมาให้บริการแล้ว";
-      return;
-    }
-
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    countdown.innerHTML = "เหลือเวลา " + days + " วัน " + hours + " ชั่วโมง " + minutes + " นาที " + seconds + " วินาที";
-  }, 1000);
-  window.addEventListener("load", () => {
-  updateTimer();
-  updateLiveStats();
-  showAdminSection();
-  calculateBookingStats();
-});
-
-  
-
-
-</script>
-
-<script>
-  window.onload = () => {
-  updateMessage?.();
-  updateTimer?.();
-  updateLiveStats?.();
-  showAdminSection?.();
-  calculateBookingStats?.();
-  
-  updateMessage?.();
-  updateTimer?.();
-  updateLiveStats?.();
-  showAdminSection?.();
-  calculateBookingStats?.();
-  
-  };
-</script>
-
-</body>
+</div></body>
 </html> 
