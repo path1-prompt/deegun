@@ -59,6 +59,23 @@ document.getElementById("bookingForm").addEventListener("submit", async function
 
     alert("จองคิวสำเร็จ! หมายเลขคิวของคุณคือ " + queueNumber + " (Ref: " + referenceId + ")");
 
+// สร้าง HTML สำหรับใบคิว
+document.getElementById("ticketData").innerHTML = `
+  <h3>ใบคิวของคุณ</h3>
+  <p><strong>ชื่อ:</strong> ${name}</p>
+  <p><strong>อายุ:</strong> ${age}</p>
+  <p><strong>หมวดหมู่:</strong> ${category}</p>
+  <p><strong>วันที่:</strong> ${date}</p>
+  <p><strong>เลขคิว:</strong> ${queueNumber}</p>
+  <p><strong>เลขอ้างอิง:</strong> ${referenceId}</p>
+  <p><strong>IG:</strong> ${igUsername || '-'}</p>
+  <button onclick="downloadPDF()">ดาวน์โหลด PDF</button>
+  <button onclick="document.getElementById('popupTicket').classList.remove('show')">ปิด</button>
+`;
+
+// แสดง popup
+document.getElementById("popupTicket").classList.add("show");
+
     document.getElementById("bookingForm").reset();
     updateLiveStats();
     showAdminSection();
@@ -1416,5 +1433,18 @@ document.getElementById("searchQueue").addEventListener("input", function () {
     row.style.display = text.includes(filter) ? "" : "none";
   });
 });
-</script></body>
+</script>
+<script>
+function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  const content = document.getElementById("ticketData").innerText;
+  const lines = doc.splitTextToSize(content, 180); // ให้ข้อความตัดบรรทัดอัตโนมัติ
+  doc.text(lines, 10, 10);
+  doc.save("ใบคิวดูดวง.pdf");
+}
+</script>
+
+</body>
 </html> 
