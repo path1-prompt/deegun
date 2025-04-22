@@ -1170,6 +1170,58 @@ button:hover {
 }
 </style></head>
 <body>
+  <!-- Maintenance Popup -->
+<div id="maintenancePopup" style="
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle, rgba(50, 0, 80, 0.95), rgba(0, 0, 0, 0.95));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+">
+  <div style="
+    padding: 40px 50px;
+    background: #1a0028;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 0 30px #ff00cc, 0 0 60px #cc00ff;
+    color: white;
+    font-family: 'Kanit', sans-serif;
+    max-width: 500px;
+    width: 90%;
+    font-size: 18px;
+    line-height: 1.6;
+  ">
+    <h2 style="color:#ffccff;">แจ้งปิดปรับปรุงระบบ</h2>
+    <p>ขณะนี้ระบบ <strong style="color:#ff99ff;">ปิดปรับปรุง</strong></p>
+    <p>กรุณาจองคิวผ่านทาง<br/>
+      <a href="https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx" 
+         target="_blank"
+         style="color:#ffd6ff; text-decoration: underline;">
+        Instagram @horoscope_1308
+      </a>
+    </p>
+    <p><strong style="color:#ffccff;">เวลา 09:00 - 17:00</strong><br/>
+    จนกว่าระบบจะเปิดอีกครั้ง<br/>
+    <em style="font-size: 14px;">ขออภัยในความไม่สะดวก</em></p>
+
+    <!-- ปุ่มเข้าสู่เว็บไซต์ -->
+    <button onclick="document.getElementById('maintenancePopup').style.display='none'" style="
+      margin-top: 25px;
+      background: linear-gradient(45deg, #9900cc, #cc33ff);
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 0 12px #ff99ff;
+    ">เข้าสู่เว็บไซต์</button>
+  </div>
+</div>
 <div class="live-stats" id="liveStats">
 <div class="stats-title">สถานะพลังจองคิว</div>
 <div class="stats-item" id="queueCount">ยอดผู้จองคิวทั้งหมด: 0 คน</div>
