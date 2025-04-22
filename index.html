@@ -12,83 +12,50 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyD0o88iBVuKsj-2qgEFlP-V3FwArPHCrkY",
-    authDomain: "horoscopequeue.firebaseapp.com",
-    projectId: "horoscopequeue",
-    storageBucket: "horoscopequeue.appspot.com",
-    messagingSenderId: "30274669281",
-    appId: "1:30274669281:web:45b08e0c48e58680d3b351",
-    measurementId: "G-48X2FPNBYZ"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-
-async function hasBookedWithin24Hours(name) {
-  const now = new Date();
-  const limit = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-  const snapshot = await db.collection("queues")
-    .where("name", "==", name)
-    .where("timestamp", ">", firebase.firestore.Timestamp.fromDate(limit))
-    .get();
-  return !snapshot.empty ? snapshot.docs[0].data().timestamp.toDate() : null;
-}
-
 document.getElementById("bookingForm").addEventListener("submit", async function (e) {
   e.preventDefault();
-  const name = document.getElementById("name").value;
+
+  const name = document.getElementById("name").value.trim();
+  const age = document.getElementById("age").value.trim();
+  const category = document.getElementById("category").value;
+  const date = document.getElementById("date").value;
+  const igUsername = document.getElementById("igUsername").value.trim();
+  const timestamp = new Date();
+  const referenceId = 'REF-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+
   const lastBooked = await hasBookedWithin24Hours(name);
   if (lastBooked) {
     alert("คุณสามารถจองได้อีกครั้งหลังจาก 24 ชั่วโมงเท่านั้น");
     showCountdownToNextBooking(new Date(lastBooked));
     return;
   }
-  
-  const age = document.getElementById("age").value;
-  const category = document.getElementById("category").value;
-  const date = document.getElementById("date").value;
-  const igUsername = document.getElementById("igUsername").value;
-  const timestamp = new Date();
-  const referenceId = 'REF-' + Math.random().toString(36).substr(2, 9).toUpperCase();
 
-  const snapshot = await db.collection("queues").where("date", "==", date).get();
-  const queueNumber = snapshot.size + 1;
+  try {
+    const snapshot = await db.collection("queues").where("date", "==", date).get();
+    const queueNumber = snapshot.size + 1;
 
-  await db.collection("queues").add({
-    name,
-    age,
-    category,
-    date,
-    igUsername,
-    referenceId,
-    timestamp,
-    queueNumber
-  });
+    await db.collection("queues").add({
+      name,
+      age,
+      category,
+      date,
+      igUsername,
+      referenceId,
+      timestamp,
+      queueNumber
+    });
 
-  alert("จองคิวสำเร็จ! หมายเลขคิวของคุณคือ " + queueNumber + " (Ref: " + referenceId + ")");
-  document.getElementById("bookingForm").reset();
-  updateLiveStats();
-  showAdminSection();
-            
+    alert("จองคิวสำเร็จ! หมายเลขคิวของคุณคือ " + queueNumber + " (Ref: " + referenceId + ")");
+
+    document.getElementById("bookingForm").reset();
+    updateLiveStats();
+    showAdminSection();
+
+  } catch (error) {
+    console.error("เกิดข้อผิดพลาดในการจอง:", error);
+    alert("เกิดข้อผิดพลาดในการจองคิว กรุณาลองใหม่อีกครั้ง");
+  }
 });
-function showCountdownToNextBooking(lastBookingTime) {
-  const countdownEl = document.getElementById("countdownArea");
-  countdownEl.style.display = "block";
-  const interval = setInterval(() => {
-    const now = new Date();
-    const diff = 24 * 60 * 60 * 1000 - (now - lastBookingTime);
-    if (diff <= 0) {
-      countdownEl.innerHTML = "คุณสามารถจองได้แล้ว!";
-      clearInterval(interval);
-      return;
-    }
-    const h = Math.floor(diff / (1000 * 60 * 60));
-    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const s = Math.floor((diff % (1000 * 60)) / 1000);
-    countdownEl.innerHTML = `เหลือเวลา ${h} ชม. ${m} นาที ${s} วินาที`;
-  }, 1000);
-}
 </script>
 <style>
   
