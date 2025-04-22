@@ -6,135 +6,59 @@
   <title>คลังชื่อมงคล</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet"/>
   <style>
-    body {
-      margin: 0;
-      font-family: 'Cinzel', serif;
-      background: radial-gradient(circle, #1b0033, #2c0052);
-      color: #fff;
-      overflow-x: hidden;
-    }
+body {
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  background: radial-gradient(circle, #1b0033, #2c0052);
+  color: #fff;
+  overflow-x: hidden;
+}
 
-    h1 {
-      text-align: center;
-      font-size: 2em;
-      margin: 30px 0 20px;
-      color: #ffccff;
-      text-shadow: 0 0 15px #ff00ff, 0 0 30px #aa00ff;
-    }
+h1 {
+  text-align: center;
+  font-size: 1.5em; /* ลดขนาดตัวหนังสือ */
+  margin: 30px 0 20px;
+  color: #ffccff;
+  text-shadow: 0 0 15px #ff00ff, 0 0 30px #aa00ff;
+}
 
-    .container {
-      padding: 0 20px 50px;
-      max-width: 100%;
-      margin: auto;
-      box-sizing: border-box;
-    }
+.container {
+  padding: 0 20px 50px;
+  max-width: 100%;
+  margin: auto;
+  box-sizing: border-box;
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-      overflow: hidden;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
-      table-layout: auto; /* ปรับให้ตารางยืดหยุ่น */
-    }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+  table-layout: fixed; /* ปรับให้ตารางยืดหยุ่น */
+}
 
-    th, td {
-      padding: 12px 15px;
-      text-align: left;
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      white-space: normal; /* ไม่ให้ข้อความตัด */
-    }
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  white-space: normal; /* ไม่ให้ข้อความตัด */
+  word-wrap: break-word; /* ช่วยให้ข้อความยาวแตกบรรทัด */
+  font-size: 0.9em; /* ลดขนาดตัวหนังสือให้เล็กลง */
+}
 
-    th {
-      background-color: rgba(138, 43, 226, 0.4);
-      color: #ffccff;
-      font-size: 1em;
-      text-shadow: 0 0 8px #ffccff;
-    }
+th {
+  background-color: rgba(138, 43, 226, 0.4);
+  color: #ffccff;
+  font-size: 1em; /* ขนาดตัวหนังสือในส่วนหัว */
+  text-shadow: 0 0 8px #ffccff;
+}
 
-    td {
-      color: #e0c8ff;
-    }
-
-    tr:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-      transition: 0.3s ease;
-    }
-
-    .back-btn {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      padding: 10px 25px;
-      font-size: 1em;
-      background: #8a2be2;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      box-shadow: 0 0 12px #ff00ff, 0 0 20px #aa00ff;
-      cursor: pointer;
-      transition: 0.3s ease;
-      text-decoration: none;
-    }
-
-    .back-btn:hover {
-      background: #6b1fa7;
-      box-shadow: 0 0 20px #ff00ff, 0 0 30px #aa00ff;
-    }
-
-    /* Media Query สำหรับมือถือ */
-    @media screen and (max-width: 768px) {
-      h1 {
-        font-size: 1.8em;
-        margin: 20px 0;
-      }
-
-      .container {
-        padding: 0 10px;
-      }
-
-      table {
-        font-size: 0.9em;
-        box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
-      }
-
-      th, td {
-        padding: 10px 12px;
-      }
-
-      .back-btn {
-        padding: 8px 20px;
-        font-size: 0.9em;
-      }
-    }
-
-    @media screen and (max-width: 480px) {
-      h1 {
-        font-size: 1.6em;
-        margin: 15px 0;
-      }
-
-      table {
-        font-size: 0.8em;
-      }
-
-      th, td {
-        padding: 8px 10px;
-      }
-
-      .back-btn {
-        padding: 6px 15px;
-        font-size: 0.8em;
-      }
-    }
-            td:nth-child(1), td:nth-child(2) {
-            width: 50%; /* กำหนดความกว้างสำหรับคอลัมน์ชื่อและชื่อเล่น */
-        }
-        td:nth-child(3), td:nth-child(4) {
-            width: 50%; /* กำหนดความกว้างสำหรับคอลัมน์คำอธิบายและการเสริม */
-        }
+td {
+  color: #e0c8ff;
+}
   </style>
 </head>
 <body>
