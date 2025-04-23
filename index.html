@@ -1302,6 +1302,9 @@ async function showAdminSection() {
 
   try {
     logDebug("Starting queue submission...");
+    logDebug("Raw date: " + rawDate);
+logDebug("Formatted date: " + formattedDate);
+logDebug("Checking queue count for date...");
     const snapshot = await db.collection("queues").orderBy("date", "desc").get();
     snapshot.forEach((doc) => {
       const ticket = doc.data();
@@ -1485,7 +1488,14 @@ const formattedDate = new Date(rawDate).toISOString().split('T')[0];
 
   try {
     logDebug("Starting queue submission...");
-const snapshot = await db.collection("queues").where("date", "==", formattedDate).get();
+const snapshot = await db.collection("queues")
+  .where("date", "==", formattedDate)
+  .get()
+  .catch(err => {
+    logDebug("Error fetching queue: " + err.message);
+    throw err;
+  });
+
     const queueNumber = snapshot.size + 1;
 
 logDebug("Writing to Firestore...");
