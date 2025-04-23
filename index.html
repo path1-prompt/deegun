@@ -10,7 +10,6 @@
 <!-- Firebase App (core) -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyD0o88iBVuKsj-2qgEFlP-V3FwArPHCrkY",
@@ -26,9 +25,6 @@ const db = firebase.firestore();
 
 
 </script>
-
-
-
 <style>
   
   .row-details {
@@ -1155,67 +1151,11 @@ button:hover {
 }
 </style></head>
 <body>
-  <!-- Maintenance Popup -->
-<div id="maintenancePopup" style="
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: radial-gradient(circle, rgba(50, 0, 80, 0.95), rgba(0, 0, 0, 0.95));
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-">
-  <div style="
-    padding: 40px 50px;
-    background: #1a0028;
-    border-radius: 20px;
-    text-align: center;
-    box-shadow: 0 0 30px #ff00cc, 0 0 60px #cc00ff;
-    color: white;
-    font-family: 'Kanit', sans-serif;
-    max-width: 500px;
-    width: 90%;
-    font-size: 18px;
-    line-height: 1.6;
-  ">
-    <h2 style="color:#ffccff;">แจ้งปิดปรับปรุงระบบ</h2>
-    <p>ขณะนี้ระบบ <strong style="color:#ff99ff;">ปิดปรับปรุง</strong></p>
-    <p>กรุณาจองคิวผ่านทาง<br/>
-      <a href="https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx" 
-         target="_blank"
-         style="color:#ffd6ff; text-decoration: underline;">
-        Instagram @horoscope_1308
-      </a>
-    </p>
-    <p><strong style="color:#ffccff;">เวลา 09:00 - 17:00</strong><br/>
-    จนกว่าระบบจะเปิดอีกครั้ง<br/>
-    <em style="font-size: 14px;">ขออภัยในความไม่สะดวก</em></p>
+<!-- Maintenance Popup -->
 
-    <!-- ปุ่มเข้าสู่เว็บไซต์ -->
-    <button onclick="document.getElementById('maintenancePopup').style.display='none'" style="
-      margin-top: 25px;
-      background: linear-gradient(45deg, #9900cc, #cc33ff);
-      color: white;
-      padding: 12px 25px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      box-shadow: 0 0 12px #ff99ff;
-    ">เข้าสู่เว็บไซต์</button>
-  </div>
-</div>
-<div class="live-stats" id="liveStats">
-<div class="stats-title">สถานะพลังจองคิว</div>
-<div class="stats-item" id="queueCount">ยอดผู้จองคิวทั้งหมด: 0 คน</div>
-<div class="stats-item" id="currentTime">เวลาปัจจุบัน: --:--</div>
-</div>
-<div>
-<img alt="โลโก้" class="logo-glow" src="IMG_0920.JPG"/>
-</div>
-<div class="magic-animal"></div>
+
+
+
 <div class="container" id="mainContainer">
 <h2>จองคิวดูดวงอัตโนมัติ</h2>
 <form id="bookingForm" style="
@@ -1246,41 +1186,18 @@ button:hover {
 <label>Instagram (@username):</label>
 <input id="igUsername" placeholder="@yourusername" type="text"/>
 <button type="submit">จองคิว</button>
-<p style="color: #ffccff; font-size: 13px; margin-top: 15px; font-style: italic;">หมายเหตุ: ห้ามจองซ้ำภายใน 24 ชั่วโมง กรุณาตรวจสอบชื่อก่อนกดยืนยัน</p></form><div id="countdownArea" style="text-align:center; display:none; margin-top:10px;"></div>
+<p style="color: #ffccff; font-size: 13px; margin-top: 15px; font-style: italic;">หมายเหตุ: ห้ามจองซ้ำภายใน 24 ชั่วโมง กรุณาตรวจสอบชื่อก่อนกดยืนยัน</p></form>
 </div>
 <!-- ช่องทางการติดต่อ Instagram -->
-<hr style="border: none; height: 2px; background: linear-gradient(to right, #660066, #cc33ff); box-shadow: 0 0 10px #aa00ff; margin: 60px auto; width: 90%;"/><div class="contact-section">
-<a class="ig-link" href="https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx" target="_blank">
-    ติดต่อแม่หมอผ่าน IG: @horoscope_1308 <span class="click-hint">(หรือคลิกที่นี่)</span>
-</a>
-</div>
-<hr style="border: none; height: 2px; background: linear-gradient(to right, #660066, #cc33ff); box-shadow: 0 0 10px #aa00ff; margin: 60px auto; width: 90%;"/><div class="contact-section">
-<a class="ig-link" href="https://www.instagram.com/honey.prom?igsh=ZGYzZ2ozYnI0Ynlt&amp;utm_source=qr" target="_blank">
-    ติดต่อผู้ดูแลระบบผ่าน IG: @honey.prom <span class="click-hint">(หรือคลิกที่นี่)</span>
-</a>
-</div>
-<div class="popup" id="popupTicket">
-<div id="ticketData"></div>
-<p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
-</div>
-<hr style="border: none; height: 2px; background: linear-gradient(to right, #660066, #cc33ff); box-shadow: 0 0 10px #aa00ff; margin: 60px auto; width: 90%;"/><div class="poster magical-donation">
-<h1>บริจาคตามจิตศรัทธา</h1>
-<p>เพียง <span class="highlight">10 บาทขึ้นไป</span></p>
-<p>รับบริการสุดพิเศษจาก <span class="highlight">แม่หมอ</span> ทันที!</p>
-<p>จำนวนจำกัด อย่าพลาดโอกาสดีๆ นี้</p>
-<a class="cta-button" href="pp.html">ร่วมบริจาคเลย</a>
-</div>
-<hr style="border: none; height: 2px; background: linear-gradient(to right, #660066, #cc33ff); box-shadow: 0 0 10px #aa00ff; margin: 60px auto; width: 90%;"/><div class="contact-section">
-<a class="ig-link" href="n.html" target="_blank">
-   🆕 คลังชื่อมงคล<span class="click-hint">(คลิกที่นี่)</span>
-</a>
-</div>
+<hr style="border: none; height: 2px; background: linear-gradient(to right, #660066, #cc33ff); box-shadow: 0 0 10px #aa00ff; margin: 60px auto; width: 90%;"/>
+<hr style="border: none; height: 2px; background: linear-gradient(to right, #660066, #cc33ff); box-shadow: 0 0 10px #aa00ff; margin: 60px auto; width: 90%;"/>
+
+<hr style="border: none; height: 2px; background: linear-gradient(to right, #660066, #cc33ff); box-shadow: 0 0 10px #aa00ff; margin: 60px auto; width: 90%;"/>
+<hr style="border: none; height: 2px; background: linear-gradient(to right, #660066, #cc33ff); box-shadow: 0 0 10px #aa00ff; margin: 60px auto; width: 90%;"/>
 <hr style="border: none; height: 2px; background: linear-gradient(to right, #660066, #cc33ff); box-shadow: 0 0 10px #aa00ff; margin: 60px auto; width: 90%;"/><div class="admin-section magical-admin" id="adminSection" style="display: block; max-width: 98%; margin: 40px auto;">
 <h2>ข้อมูลใบคิวทั้งหมด</h2>
 <div style="overflow-x: auto;">
-<div style="margin-bottom: 15px; text-align: center;">
-<input id="searchQueue" placeholder="ค้นหาโดยชื่อ, IG, หมวดหมู่..." style="padding: 8px; width: 300px; border-radius: 8px; border: 1px solid #aaa;" type="text"/>
-</div>
+
 <table id="adminTable">
 <thead>
 <tr>
@@ -1302,7 +1219,7 @@ async function showAdminSection() {
 
   try {
     logDebug("Starting queue submission...");
-    // logDebug("Raw date: " + rawDate); // FIXED: rawDate is not defined here
+    logDebug("Raw date: " + rawDate);
 logDebug("Formatted date: " + formattedDate);
 logDebug("Checking queue count for date...");
     const snapshot = await db.collection("queues").orderBy("date", "desc").get();
@@ -1422,8 +1339,7 @@ logDebug("Checking queue count for date...");
 </tbody>
 </table>
 </div>
-<div style="text-align: center; margin-top: 20px;">
-</div>
+
 </div><script>
 document.getElementById("searchQueue").addEventListener("input", function () {
   const filter = this.value.toLowerCase();
@@ -1445,8 +1361,6 @@ function downloadPDF() {
   doc.save("ใบคิวดูดวง.pdf");
 }
 </script>
-
-
 <script>
 window.onload = function () {
   logDebug("Page loaded.");
@@ -1478,7 +1392,7 @@ document.getElementById("bookingForm").addEventListener("submit", async function
   const igUsername = document.getElementById("igUsername").value.trim();
 
   // ✅ ใส่ log หลังประกาศทั้งหมด
-  // logDebug("Raw date: " + rawDate); // FIXED: rawDate is not defined here
+  logDebug("Raw date: " + rawDate);
   logDebug("Formatted date: " + formattedDate);
   logDebug("Category: " + category);
   logDebug("IG: " + igUsername);
@@ -1494,29 +1408,11 @@ document.getElementById("bookingForm").addEventListener("submit", async function
 
   try {
     logDebug("Starting queue submission...");
-
-logDebug("Querying Firebase ด้วยวันที่: " + formattedDate);
-
-// ตั้ง timeout 5 วินาที ถ้า Firebase ไม่ตอบสนอง
-const timeout = setTimeout(() => {
-  logDebug("คำสั่ง Firebase ค้างเกิน 5 วินาที");
-  alert("ระบบ Firebase อาจขัดข้อง ลองใหม่อีกครั้งในภายหลัง");
-}, 5000);
-
-let snapshot;
-try {
-  snapshot = await db.collection("queues")
-    .where("date", "==", formattedDate)
-    .get();
-  clearTimeout(timeout); // ถ้าทำงานเสร็จทันเวลาให้ clear timeout
-  logDebug("Firebase ตอบกลับแล้ว จำนวนคิว: " + snapshot.size);
-} catch (err) {
-  clearTimeout(timeout);
-  logDebug("เกิดข้อผิดพลาดในการอ่าน Firestore: " + err.message);
-  alert("ไม่สามารถเชื่อมต่อ Firebase ได้ กรุณาลองใหม่");
-  return;
-}
-
+const snapshot = await db.collection("queues")
+  .where("date", "==", formattedDate)
+  .get()
+  .catch(err => {
+    logDebug("Error fetching queue: " + err.message);
     throw err;
   });
 
@@ -1566,13 +1462,8 @@ document.getElementById("popupTicket").classList.add("show");
 });
 });
 </script>
-
-
 <!-- Debug Panel -->
-<div id="debugPanel" style="position:fixed; bottom:0; left:0; width:100%; background:#1a001f; color:#ffccff; font-family:monospace; font-size:12px; padding:10px; box-shadow:0 -2px 10px #ff00cc; z-index:9999; max-height:150px; overflow-y:auto;">
-  <strong>DEBUG LOG:</strong>
-  <div id="debugLog"></div>
-</div>
+
 <script>
   function logDebug(msg) {
     const logEl = document.getElementById('debugLog');
@@ -1582,6 +1473,5 @@ document.getElementById("popupTicket").classList.add("show");
     logEl.appendChild(entry);
   }
 </script>
-
 </body>
 </html> 
