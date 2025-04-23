@@ -1475,7 +1475,7 @@ document.getElementById("bookingForm").addEventListener("submit", async function
   const age = document.getElementById("age").value.trim();
   const category = document.getElementById("category").value;
   const rawDate = document.getElementById("date").value;
-  const formattedDate = new Date(rawDate).toISOString().split('T')[0];
+const formattedDate = new Date(rawDate).toISOString().split('T')[0];
   const igUsername = document.getElementById("igUsername").value.trim();
 
   // ✅ ใส่ log หลังประกาศทั้งหมด
@@ -1505,8 +1505,8 @@ const snapshot = await db.collection("queues")
 
     const queueNumber = snapshot.size + 1;
 
-logDebug("Writing to Firestore...");
-      await db.collection("queues").add({
+logDebug("เขียนข้อมูลลง Firestore...");
+await db.collection("queues").add({
   name,
   age,
   category,
@@ -1516,6 +1516,9 @@ logDebug("Writing to Firestore...");
   timestamp,
   queueNumber
 });
+logDebug("เขียนข้อมูลสำเร็จ");
+
+
 
     logDebug("Booking success. Queue: " + queueNumber);
       alert("จองคิวสำเร็จ! หมายเลขคิวของคุณคือ " + queueNumber + " (Ref: " + referenceId + ")");
