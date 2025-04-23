@@ -1302,8 +1302,6 @@ async function showAdminSection() {
 
   try {
     logDebug("Starting queue submission...");
-    // logDebug("Raw date: " + rawDate); // FIXED: rawDate not defined here
-logDebug("Formatted date: " + formattedDate);
 logDebug("Checking queue count for date...");
     const snapshot = await db.collection("queues").orderBy("date", "desc").get();
     snapshot.forEach((doc) => {
