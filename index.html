@@ -1302,7 +1302,7 @@ async function showAdminSection() {
 
   try {
     logDebug("Starting queue submission...");
-    logDebug("Raw date: " + rawDate);
+    // logDebug("Raw date: " + rawDate); // FIXED: rawDate is not defined here
 logDebug("Formatted date: " + formattedDate);
 logDebug("Checking queue count for date...");
     const snapshot = await db.collection("queues").orderBy("date", "desc").get();
@@ -1478,7 +1478,7 @@ document.getElementById("bookingForm").addEventListener("submit", async function
   const igUsername = document.getElementById("igUsername").value.trim();
 
   // ✅ ใส่ log หลังประกาศทั้งหมด
-  logDebug("Raw date: " + rawDate);
+  // logDebug("Raw date: " + rawDate); // FIXED: rawDate is not defined here
   logDebug("Formatted date: " + formattedDate);
   logDebug("Category: " + category);
   logDebug("IG: " + igUsername);
