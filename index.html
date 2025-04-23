@@ -23,8 +23,24 @@
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
+
+
+
 </script>
   <style>
+  
+  .row-details {
+  transition: all 0.3s ease;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+}
+.row-details.show {
+  opacity: 1;
+  height: auto;
+  padding: 10px;
+}
+  
    button:active {
   box-shadow: 0 0 25px #ff66ff, 0 0 50px #aa00ff;
   transition: 0.1s;
@@ -71,7 +87,10 @@
     @keyframes fadeIn {
       to { transform: translateY(0); opacity: 1; }
     }
-    
+    p {
+            color: #ffccff;
+            text-align: center;
+            }
     h2 {
       text-align: center;
       color: #ffccff;
@@ -281,7 +300,7 @@
   border-radius: 8px;
   box-shadow: 0 0 15px #ff66ff;
   z-index: 9999;
-  font-size: 16px;
+  font-size: 12px;
   font-family: 'Sarabun', sans-serif;
   animation: fadeIn 2s ease-out;
 }
@@ -295,7 +314,7 @@
   margin: 5px 0;
 }
 .stats-title {
-  font-size: 14px;
+  font-size: 10px;
   font-weight: bold;
   color: #ffccff;
   text-shadow: 0 0 6px #ff66ff;
@@ -309,7 +328,7 @@
   border-radius: 4px;
   margin-bottom: 4px;
   box-shadow: 0 0 6px #ff66ff;
-  font-size: 12px;
+  font-size: 9px;
   font-weight: 500;
   text-align: center;
 }
@@ -419,27 +438,587 @@
   }
 
   @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap');
+  
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+  width: 250px;
+  max-width: 90%;
+  padding: 8px 10px;
+  font-size: 14px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid #aaa;
+  background-color: #111;
+  color: #fff;
+  box-shadow: 0 0 6px #ff00cc66;
+}
+
+/* ปรับขนาดฟอร์มให้แคบลงและอยู่ตรงกลาง */
+#bookingForm {
+  max-width: 400px;
+  margin: auto;
+  text-align: center;
+}
+
+/* ปรับขนาด dropdown และกล่องตรวจสอบ */
+select,
+#refInput {
+  width: 250px;
+}
+
+      .poster {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      padding: 40px 30px;
+      max-width: 500px;
+      text-align: center;
+      animation: fadeIn 1.5s ease-in-out;
+      position: relative;
+    }
+    .poster::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      left: -50px;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, #f8b500, transparent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+      z-index: -1;
+    }
+    .poster h1 {
+      color: #d35400;
+      font-size: 2.0em;
+      margin-bottom: 20px;
+      animation: slideIn 1s ease-out;
+    }
+    .poster p {
+      font-size: 1.2em;
+      color: #333;
+      margin: 15px 0;
+      animation: fadeInUp 1s ease-in-out;
+    }
+    .highlight {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+    .cta-button {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 12px 25px;
+      background-color: #e67e22;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 1.1em;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      animation: bounce 2s infinite;
+    }
+    .cta-button:hover {
+      background-color: #d35400;
+      transform: scale(1.05);
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    @keyframes slideIn {
+      from {transform: translateY(-50px); opacity: 0;}
+      to {transform: translateY(0); opacity: 1;}
+    }
+    @keyframes fadeInUp {
+      from {transform: translateY(50px); opacity: 0;}
+      to {transform: translateY(0); opacity: 1;}
+    }
+    @keyframes pulse {
+      0% {transform: scale(0.9); opacity: 0.7;}
+      50% {transform: scale(1); opacity: 1;}
+      100% {transform: scale(0.9); opacity: 0.7;}
+    }
+    @keyframes bounce {
+      0%, 100% {transform: translateY(0);}
+      50% {transform: translateY(-5px);}
+    }
+    @media (max-width: 600px) {
+      .poster {
+        padding: 30px 20px;
+      }
+      .poster h1 {
+        font-size: 2em;
+      }
+      .poster p {
+        font-size: 1em;
+      }
+    }
+    .laser-divider {
+      position: relative;
+      height: 4px;
+      overflow: hidden;
+      margin: 40px 0;
+    }
+
+    .laser-effect {
+      position: absolute;
+      top: 0;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(to right,
+        rgba(0, 0, 0, 0) 0%,
+        #8a2be2 25%,
+        #ff0000 50%,
+        #ffffff 75%,
+        rgba(0, 0, 0, 0) 100%);
+      animation: laser-run 1.5s ease-in-out infinite alternate;
+      box-shadow: 0 0 12px #ff00ff, 0 0 22px #ff0000;
+    }
+
+    @keyframes laser-run {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+    .review-container {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 25px rgba(255, 0, 255, 0.6);
+  width: 350px;
+  text-align: center;
+  border: 3px solid #ff00ff;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.glow-title {
+  font-size: 30px;
+  color: #ff00ff;
+  text-shadow: 0 0 15px #ff00ff, 0 0 25px #ff0055, 0 0 35px #ff0000;
+  margin-bottom: 20px;
+}
+
+/* Rating Stars */
+.stars {
+  margin: 20px 0;
+}
+
+.star-rating {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.star-rating input {
+  -webkit-appearance: none;
+  background: #ccc;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.star-rating input:checked {
+  background: #ff00ff;
+}
+
+.star-rating input:hover {
+  background: #c44fff;
+}
+
+/* Message Section */
+.message {
+  margin-top: 20px;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  background-color: #333;
+  color: white;
+  border: 2px solid #ff00ff;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 10px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: transform 0.3s ease-in-out;
+}
+
+textarea:focus {
+  transform: scale(1.05);
+  border-color: #ff00ff;
+  outline: none;
+}
+
+/* Submit Button */
+.submit-btn button {
+  background-color: #ff00ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.submit-btn button:hover {
+  background-color: #c44fff;
+}
+
+/* Animation for review container */
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+
+    .card {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      max-width: 420px;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    h2 {
+      color: #a349a4;
+      margin-bottom: 15px;
+    }
+
+    #msg {
+      font-size: 1.2rem;
+      color: #444;
+      margin-bottom: 20px;
+      min-height: 60px;
+    }
+
+    #timer {
+      font-size: 0.9rem;
+      color: #888;
+      margin-top: 10px;
+    }
+
+    button {
+      background-color: #c084fc;
+      border: none;
+      color: white;
+      padding: 10px 25px;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    .wish-box {
+  background: linear-gradient(135deg, #2e003e, #000000);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px purple;
+  color: #fff;
+  max-width: 500px;
+  margin: auto;
+  font-family: 'Cinzel', serif;
+}
+textarea {
+  width: 100%;
+  height: 100px;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 16px;
+}
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background: #aa00ff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 0 10px #ff00f7;
+}
+button:hover {
+  background: #c400ff;
+}
+
+.magic-effect {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, #ffccff 0%, transparent 70%);
+  border-radius: 50%;
+  box-shadow: 0 0 50px 25px #aa00ff;
+  animation: magicGlow 2s ease-out forwards;
+  z-index: 999;
+}
+
+@keyframes magicGlow {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+.maintenance-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle, rgba(50, 0, 80, 0.95), rgba(0, 0, 0, 0.95));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.popup-inner {
+  padding: 40px 60px;
+  background: #1a0028;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow:
+    0 0 30px #ff00cc,
+    0 0 60px #cc00ff,
+    0 0 90px #9900ff;
+  animation: glowPulse 2s infinite alternate;
+}
+.popup-content {
+  background: rgba(30, 30, 30, 0.95);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 30px #9900ff, 0 0 60px #ff00cc;
+  text-align: center;
+  color: white;
+  font-family: 'Kanit', sans-serif;
+  max-width: 500px;
+  width: 90%;
+  font-size: 18px; /* ปรับขนาดให้เล็กลงเล็กน้อย */
+  line-height: 1.6; /* เพิ่มระยะห่างบรรทัดให้ดูอ่านง่าย */
+  white-space: normal; /* ป้องกันไม่ให้ตัดคำ */
+  word-break: keep-all; /* ไม่ตัดคำกลางคำ */
+}
+
+@keyframes glowPulse {
+  0% {
+    box-shadow: 0 0 30px #ff00cc, 0 0 60px #cc00ff, 0 0 90px #9900ff;
+  }
+  100% {
+    box-shadow: 0 0 60px #ff00cc, 0 0 90px #cc00ff, 0 0 120px #9900ff;
+  }
+}
+#bird-container {
+  text-align: center;
+  margin-top: 100px;
+}
+
+#cage {
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+  background: url('https://media2.giphy.com/media/l378wcSfS7eXWQgla/giphy.gif?cid=6c09b952r5448l9czexh7g0k2sqg4nb80hqv5sa5xdod7syn&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=g') no-repeat center;
+  background-size: contain;
+  position: relative;
+}
+
+#bird {
+  width: 300px;
+  height: 300px;
+  background: url('https://freeimage.host/i/3EcdFtV') no-repeat center;
+  background-size: cover;
+  position: absolute;
+  bottom: 0px;
+  left: 20px;
+  transition: transform 3s ease-in-out, opacity 2s;
+}
+
+.fly-away {
+  transform: translate(-300px, -300px) scale(1.5) rotate(-20deg);
+  opacity: 0;
+}
+
+#releaseBtn {
+  padding: 10px 25px;
+  font-size: 18px;
+  background: linear-gradient(45deg, #6f2da8, #9e3dfd);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  margin-top: 20px;
+  cursor: pointer;
+  box-shadow: 0 0 10px #8f45e5;
+}
+
+#message {
+  margin-top: 15px;
+  color: #e2ccff;
+  font-size: 16px;
+}
+.magic-orb-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 100px;
+  perspective: 1000px;
+}
+
+.magic-orb {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #8e2de2, #1a001f);
+  position: relative;
+  box-shadow: 0 0 40px 15px #a600ff, inset 0 0 50px #ff00cc;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 1s ease;
+  overflow: hidden;
+}
+
+.magic-orb.spin {
+  animation: orbSpin 1.2s ease-out forwards;
+}
+
+@keyframes orbSpin {
+  0% { transform: rotateY(0deg) scale(1); }
+  100% { transform: rotateY(720deg) scale(0); opacity: 0; }
+}
+
+.inner-glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 10%, transparent 70%);
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.orb-reflection {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  top: 20px;
+  left: 20px;
+  background: radial-gradient(circle, white, transparent);
+  border-radius: 50%;
+  opacity: 0.2;
+  filter: blur(5px);
+}
+
+.crystal-text {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 40%;
+  font-size: 20px;
+  color: white;
+  text-shadow: 0 0 10px #fff, 0 0 30px #ff00cc;
+  pointer-events: none;
+  animation: flicker 1.5s infinite alternate;
+}
+
+@keyframes flicker {
+  from { opacity: 1; }
+  to { opacity: 0.6; }
+}
+
+.smoke {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  top: -30px;
+  left: -30px;
+  background: radial-gradient(circle, rgba(255,255,255,0.3), transparent);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.smoke.show {
+  animation: smokeUp 2.5s ease forwards;
+}
+
+@keyframes smokeUp {
+  0% { opacity: 0; transform: scale(1) translateY(0); }
+  100% { opacity: 1; transform: scale(1.5) translateY(-120px); }
+}
+
+.prophecy-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(30, 0, 50, 0.98);
+  border: 3px solid #ff00cc;
+  box-shadow: 0 0 30px #a600ff;
+  padding: 30px;
+  border-radius: 20px;
+  display: none;
+  z-index: 999;
+  text-align: center;
+  max-width: 400px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.prophecy-text {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.countdown {
+  font-size: 16px;
+  color: #aaa;
+}
 </style>
 </head>
 <body>
-  <div id="preloader">
-  <div class="spell-circle"></div>
-  <div class="loading-text">กรุณารอสักครู่... <span id="loading-percent">0%</span></div>
-</div>
-
-<!-- CSS -->
-  <!-- ส่วนแสดงยอดผู้จองคิวและเวลาปัจจุบัน -->
-<!-- ส่วนแสดงยอดผู้จองคิวและเวลาปัจจุบัน -->
 <div class="live-stats" id="liveStats">
-  <div class="stats-title">สถานะพลังจองคิว</div>
+    <div class="stats-title">สถานะพลังจองคิว</div>
   <div class="stats-item" id="queueCount">ยอดผู้จองคิวทั้งหมด: 0 คน</div>
   <div class="stats-item" id="currentTime">เวลาปัจจุบัน: --:--</div>
 </div>
-  <img src="IMG_0920.JPG" alt="โลโก้" class="logo-glow">
-  <!-- Magical Animal -->
+<div>
+    <img src="IMG_0920.JPG" alt="โลโก้" class="logo-glow">
+</div>
   <div class="magic-animal"></div>
-
-  <!-- Main Booking Container -->
   <div class="container" id="mainContainer">
     <h2>จองคิวดูดวงอัตโนมัติ</h2>
     <form id="bookingForm">
@@ -466,6 +1045,9 @@
 
       <button type="submit">จองคิว</button>
     </form>
+      <div class="laser-divider">
+    <div class="laser-effect"></div>
+  </div>
           <div class="container">
   <h2>ตรวจสอบใบคิว</h2>
   <input type="text" id="refInput" placeholder="ใส่เลขอ้างอิง">
@@ -474,17 +1056,24 @@
 </div>
   </div>
   <!-- ช่องทางการติดต่อ Instagram -->
+  <div class="laser-divider">
+    <div class="laser-effect"></div>
+  </div>
 <div class="contact-section">
   <a href="https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx" target="_blank" class="ig-link">
     ติดต่อแม่หมอผ่าน IG: @horoscope_1308 <span class="click-hint">(หรือคลิกที่นี่)</span>
   </a>
 </div>
-  <!-- Popup for the ticket -->
-  <div class="popup" id="popup">
+<div class="contact-section">
+  <a href="https://www.instagram.com/honey.prom?igsh=ZGYzZ2ozYnI0Ynlt&utm_source=qr" target="_blank" class="ig-link">
+    ติดต่อผู้ดูแลระบบผ่าน IG: @honey.prom <span class="click-hint">(หรือคลิกที่นี่)</span>
+  </a>
+</div>
+
+<div class="popup" id="popupTicket">
     <div id="ticketData"></div>
     <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
   </div>
-
 <button onclick="showDashboard()">ดูแดชบอร์ด</button>
 <div class="admin-section" id="dashboardSection">
   <h2>แดชบอร์ดการจองคิว</h2>
@@ -492,8 +1081,70 @@
   <canvas id="pieChart" style="max-width:100%;"></canvas>
   <button onclick="closeDashboard()">ปิดแดชบอร์ด</button>
 </div>
+  <div class="laser-divider">
+    <div class="laser-effect"></div>
+  </div>
+      <div class="poster">
+    <h1>บริจาคตามจิตศรัทธา</h1>
+    <p>เพียง <span class="highlight">10 บาทขึ้นไป</span></p>
+    <p>รับบริการสุดพิเศษจาก <span class="highlight">แม่หมอ</span> ทันที!</p>
+    <p>จำนวนจำกัด อย่าพลาดโอกาสดีๆ นี้</p>
+    <a href="pp.html" class="cta-button">ร่วมบริจาคเลย</a>
+  </div>
+    <div class="laser-divider">
+    <div class="laser-effect"></div>
+  </div>
 
-  <!-- Admin Section -->
+  <div class="wish-box">
+  <h2>กล่องอธิษฐานของแม่หมอ</h2>
+  <textarea id="wishInput" placeholder="พิมพ์คำอธิษฐานของเจ้า..."></textarea>
+  <button onclick="submitWish()">ส่งคำอธิษฐาน</button>
+  <div class="magic-effect" id="magicEffect"></div>
+  <p id="responseMessage"></p>
+  <p id="countdownTimer"></p>
+</div>
+
+    <div class="laser-divider">
+    <div class="laser-effect"></div>
+  </div>
+  
+<div id="bird-container">
+  <div id="cage">
+    <div id="bird"></div>
+  </div>
+  <button id="releaseBtn">ปล่อยนก</button>
+  <p id="message"></p>
+</div>
+      <div class="laser-divider">
+    <div class="laser-effect"></div>
+  </div>
+  <div class="contact-section">
+  <a href="n.html" target="_blank" class="ig-link">
+   🆕 คลังชื่อมงคล<span class="click-hint">(คลิกที่นี่)</span>
+  </a>
+</div>
+      <div class="laser-divider">
+    <div class="laser-effect"></div>
+  </div>
+  
+<div class="magic-orb-container">
+  <div class="magic-orb" id="crystalBall">
+    <div class="inner-glow"></div>
+    <div class="orb-reflection"></div>
+    <div class="crystal-text">ขูด<br>ลูกแก้ว</div>
+    <div class="smoke" id="smoke"></div>
+  </div>
+</div>
+
+<div id="prophecyBox" class="prophecy-box">
+  <button class="close-btn" onclick="closeProphecy()">×</button>
+  <div id="prophecyText" class="prophecy-text"></div>
+  <div id="countdown" class="countdown"></div>
+</div>
+
+      <div class="laser-divider">
+    <div class="laser-effect"></div>
+  </div>
 <div class="admin-section" id="adminSection" style="display: block;">
     <h2>ข้อมูลใบคิวทั้งหมด</h2>
 <div style="overflow-x: auto;">
@@ -528,6 +1179,133 @@
 </div>
 
   <script>
+
+const crystal = document.getElementById('crystalBall');
+const smoke = document.getElementById('smoke');
+const prophecyBox = document.getElementById('prophecyBox');
+const prophecyText = document.getElementById('prophecyText');
+const countdown = document.getElementById('countdown');
+let countdownInterval;
+
+const prophecies = [
+  "คุณกำลังจะได้รับข้อความจากโลกที่คุณลืมไปแล้ว",
+  "อย่าไว้ใจเงาที่อยู่ข้างหลังคุณในวันอังคาร",
+  "เส้นทางลึกลับกำลังจะปรากฏในฝันของคุณ",
+  "คนที่คุณคิดถึง เขาก็คิดถึงคุณเหมือนกัน",
+  "แสงในความมืด จะพาคุณไปสู่สิ่งที่ซ่อนอยู่",
+  "หลีกเลี่ยงการตัดสินใจสำคัญในคืนนี้"
+];
+
+crystal.addEventListener('click', () => {
+  const savedTime = localStorage.getItem('prophecyTime');
+  const now = Date.now();
+
+  if (savedTime && now < parseInt(savedTime)) {
+    showProphecy();
+    return;
+  }
+
+  crystal.classList.add('spin');
+  smoke.classList.add('show');
+
+  setTimeout(() => {
+    crystal.classList.remove('spin');
+    smoke.classList.remove('show');
+
+    const prophecy = prophecies[Math.floor(Math.random() * prophecies.length)];
+    localStorage.setItem('prophecyText', prophecy);
+    localStorage.setItem('prophecyTime', now + 7 * 24 * 60 * 60 * 1000); // 7 วัน
+
+    showProphecy();
+  }, 1200);
+});
+
+function showProphecy() {
+  clearInterval(countdownInterval);
+  const prophecy = localStorage.getItem('prophecyText');
+  prophecyText.textContent = prophecy;
+  prophecyBox.style.display = 'block';
+  startCountdown();
+}
+
+function closeProphecy() {
+  prophecyBox.style.display = 'none';
+}
+
+function startCountdown() {
+  countdownInterval = setInterval(() => {
+    const endTime = parseInt(localStorage.getItem('prophecyTime') || 0);
+    const now = Date.now();
+    const diff = endTime - now;
+
+    if (diff <= 0) {
+      countdown.textContent = "คุณสามารถขูดลูกแก้วได้อีกแล้ว";
+      localStorage.removeItem('prophecyText');
+      localStorage.removeItem('prophecyTime');
+      clearInterval(countdownInterval);
+    } else {
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((diff % (1000 * 60)) / 1000);
+      countdown.textContent = `เหลือเวลา ${d} วัน ${h} ชม. ${m} นาที ${s} วิ`;
+    }
+  }, 1000);
+}
+
+
+  const savedText = localStorage.getItem('prophecyText');
+  const now = Date.now();
+
+  if (savedTime && savedText && now < parseInt(savedTime)) {
+    showProphecy();
+  }
+};
+  
+  const releaseBtn = document.getElementById('releaseBtn');
+const bird = document.getElementById('bird');
+const message = document.getElementById('message');
+
+function canReleaseBird() {
+  const lastRelease = localStorage.getItem('lastBirdRelease');
+  if (!lastRelease) return true;
+
+  const now = new Date().getTime();
+  return now - parseInt(lastRelease) > 12 * 60 * 60 * 1000; // 12 ชม.
+}
+
+function updateMessage() {
+  const lastRelease = localStorage.getItem('lastBirdRelease');
+  if (!lastRelease) return;
+
+  const now = new Date().getTime();
+  const diff = now - parseInt(lastRelease);
+  const remaining = (12 * 60 * 60 * 1000 - diff) / 1000;
+
+  if (remaining > 0) {
+    const hours = Math.floor(remaining / 3600);
+    const minutes = Math.floor((remaining % 3600) / 60);
+    message.innerText = `ปล่อยนกได้อีกครั้งใน ${hours} ชม. ${minutes} นาที`;
+    releaseBtn.disabled = true;
+  }
+}
+
+releaseBtn.addEventListener('click', () => {
+  if (!canReleaseBird()) return;
+
+  bird.classList.add('fly-away');
+  localStorage.setItem('lastBirdRelease', new Date().getTime());
+  message.innerText = 'คุณได้ปล่อยสิ่งชั่วร้ายออกไปแล้ว รับสิ่งดีๆ เข้ามา';
+
+  releaseBtn.disabled = true;
+});
+
+
+
+  window.addEventListener("load", function() {
+  document.getElementById("maintenancePopup").style.display = "flex";
+});
+
     const queueDB = {}; // เก็บข้อมูลคิวใน session นี้
     let currentTicket = null; // เก็บใบคิวล่าสุด
 
@@ -573,7 +1351,7 @@ const ticket = {
     <button onclick="goInstagram()">ส่งผลทาง IG</button>
   `;
   document.getElementById("ticketData").innerHTML = ticketHTML;
-  document.getElementById("popup").classList.add("show");
+  document.getElementById("popupTicket").classList.add("show");
 });
 
     function downloadPDF() {
@@ -601,42 +1379,71 @@ Reference No: ${currentTicket.referenceId}`;
       window.open("https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx", "_blank");
     }
 
-    // Admin Link - เปิด Admin Login Popup
+// ฟังก์ชันที่เพิ่มปุ่มสำหรับขยายและย่อ
+function toggleRowDetails(button, referenceId) {
+  const rowDetails = document.getElementById(referenceId);
+  if (rowDetails.style.display === "none" || rowDetails.style.display === "") {
+    rowDetails.style.display = "table-row"; // ขยายแถว
+    button.innerText = "ย่อ"; // เปลี่ยนข้อความปุ่ม
+  } else {
+    rowDetails.style.display = "none"; // ย่อแถว
+    button.innerText = "ขยาย"; // เปลี่ยนข้อความปุ่ม
+  }
+}
 
-
-    // ตรวจสอบรหัสผ่านแอดมิน
-   
-
-    // แสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
-    async function showAdminSection() {
+// ฟังก์ชันแสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
+async function showAdminSection() {
   const adminTableBody = document.getElementById("adminTable").querySelector("tbody");
-  adminTableBody.innerHTML = "";
+  adminTableBody.innerHTML = ""; // ล้างตารางเดิม
 
   try {
     const snapshot = await db.collection("queues").orderBy("date", "desc").get();
-    snapshot.forEach(doc => {
+    snapshot.forEach((doc) => {
       const ticket = doc.data();
+      const rowId = `row-details-${ticket.referenceId}`; // ใช้ referenceId เป็น rowId
+
       const row = document.createElement("tr");
-row.innerHTML = `
-  <td>${ticket.name}</td>
-  <td>${ticket.age}</td>
-  <td>${ticket.category}</td>
-  <td>${ticket.date}</td>
-  <td>${ticket.queueNumber}</td>
-  <td>${ticket.referenceId ? ticket.referenceId.slice(0, 6) + '...' : '-'}</td>
-  <td>
-    ${ticket.igUsername
-      ? (ticket.igUsername.length > 10 ? ticket.igUsername.slice(0, 10) + "..." : ticket.igUsername)
-      : `<span style="color:#ccc;">ไม่แสดงข้อมูล</span>
-         <span 
-          onclick="alert('หมายเหตุ : ระบบพึ่งอัปเดตขึ้นสำหรับลูกดวงที่เข้าระบบจองคิวหลังจากวันที่ 17 เมษายน 2568')"
-          style="cursor:pointer; color:#ff99ff; text-decoration: underline; margin-left:4px;"
-         >(ดู)</span>`}
-  </td>
-`;
+      row.innerHTML = `
+        <td>${ticket.name}</td>
+        <td>${ticket.age}</td>
+        <td>${ticket.category}</td>
+        <td>${ticket.date}</td>
+        <td>${ticket.queueNumber}</td>
+        <td>${ticket.referenceId ? ticket.referenceId.slice(0, 6) + '...' : '-'}</td>
+        <td>
+          ${ticket.igUsername 
+            ? `<a href="https://www.instagram.com/${ticket.igUsername}" target="_blank" style="color: #ff99ff; text-decoration: none;">${ticket.igUsername}</a>`
+            : `<span style="color:#ccc;">ไม่แสดงข้อมูล</span>`
+          }
+          <button onclick="toggleRowDetails(this, '${rowId}')" 
+            style="background-color: #ff99ff; color: black; border: none; border-radius: 4px; padding: 2px 6px; cursor: pointer; margin-top: 5px;">
+            ขยาย
+          </button>
+        </td>
+      `;
       adminTableBody.appendChild(row);
+
+      // แถวรายละเอียดเพิ่มเติม (ย่อหรือขยายได้)
+      const rowDetails = document.createElement("tr");
+      rowDetails.id = rowId;
+      rowDetails.style.display = "none"; // ซ่อนแถวนี้เริ่มต้น
+      rowDetails.innerHTML = `
+        <td colspan="7">
+          <p><b>ชื่อ:</b> ${ticket.name}</p>
+          <p><b>อายุ:</b> ${ticket.age}</p>
+          <p><b>หมวดหมู่:</b> ${ticket.category}</p>
+          <p><b>ลำดับคิว:</b> ${ticket.queueNumber}</p>
+          <p><b>วันที่จอง:</b> ${ticket.date}</p>
+          <p><b>เลขอ้างอิง:</b> ${ticket.referenceId}</p>
+          <p><b>IG:</b> ${ticket.igUsername || "ไม่มี"}</p>
+            <p>บริจาคตามจิตศรัทธา ( 10 บาทขึ้นไป )</p>
+            <p>จะได้รับการบริการสุดพิเศษ <b>จำนวนจำกัด</p>
+            <p>ปรึกษา,ดูดวง จากแม่หมอได้ทันที</p>
+        </td>
+      `;
+      adminTableBody.appendChild(rowDetails);
     });
-    document.getElementById("adminSection").style.display = "block";
+    document.getElementById("adminSection").style.display = "block"; // แสดงส่วนแอดมิน
   } catch (error) {
     alert("เกิดข้อผิดพลาดในการโหลดข้อมูล: " + error.message);
   }
@@ -683,7 +1490,8 @@ async function showDashboard() {
   const dateLabels = Object.keys(dateMap).sort();
   const queueCounts = dateLabels.map(date => dateMap[date]);
 
-  new Chart(document.getElementById("lineChart"), {
+  if (window.lineChart) window.lineChart.destroy();
+  window.lineChart = new Chart(document.getElementById("lineChart"), {
     type: 'line',
     data: {
       labels: dateLabels,
@@ -708,7 +1516,8 @@ async function showDashboard() {
   const categoryLabels = Object.keys(categoryMap);
   const categoryCounts = categoryLabels.map(cat => categoryMap[cat]);
 
-  new Chart(document.getElementById("pieChart"), {
+  if (window.pieChart) window.pieChart.destroy();
+  window.pieChart = new Chart(document.getElementById("pieChart"), {
     type: 'pie',
     data: {
       labels: categoryLabels,
@@ -755,7 +1564,7 @@ setInterval(updateLiveStats, 1000);
 // เมื่อโหลดหน้าเว็บ ให้เรียกฟังก์ชันทันที
 window.addEventListener("load", updateLiveStats);
 async function calculateBookingStats() {
-    const querySnapshot = await db.collection("horoscopeBookings").get();
+    const querySnapshot = await db.collection("queues").get();
     const now = new Date();
 
     let totalBookings = 0;
@@ -782,21 +1591,190 @@ async function calculateBookingStats() {
     document.getElementById("completed-bookings").textContent = completedBookings;
   }
 
-  window.onload = calculateBookingStats;
-  </script>
-  <script>
-  let percent = 0;
-  const loadingText = document.getElementById("loading-percent");
+  
 
-  const loadingInterval = setInterval(() => {
-    percent++;
-    loadingText.textContent = percent + "%";
 
-    if (percent >= 100) {
-      clearInterval(loadingInterval);
-      document.getElementById("preloader").style.display = "none";
+    const btn = document.getElementById('btn');
+    const msg = document.getElementById('msg');
+    const timer = document.getElementById('timer');
+    const cooldownMs = 24 * 60 * 60 * 1000; // 24 ชั่วโมง
+
+    function getMessage() {
+      const now = Date.now();
+      const lastTime = localStorage.getItem('lastFortuneTime');
+
+      if (lastTime && now - lastTime < cooldownMs) {
+        updateTimer();
+        return;
+      }
+
+      const randomIndex = Math.floor(Math.random() * messages.length);
+      msg.textContent = messages[randomIndex];
+      localStorage.setItem('lastFortuneTime', now);
+      updateTimer();
     }
-  }, 2); // โหลดเร็วขึ้นหรือลดความเร็วได้ตรงนี้
+
+    function updateTimer() {
+      const last = parseInt(localStorage.getItem('lastFortuneTime'));
+      if (!last) return;
+
+      const now = Date.now();
+      const diff = cooldownMs - (now - last);
+
+      if (diff > 0) {
+        btn.disabled = true;
+
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        timer.textContent = `รอรับพลังใหม่ได้ในอีก ${hours} ชม. ${minutes} นาที ${seconds} วินาที`;
+
+        setTimeout(updateTimer, 1000);
+      } else {
+        timer.textContent = "";
+        btn.disabled = false;
+        msg.textContent = "เธอสามารถขอพลังจากแม่หมอได้อีกครั้งแล้วนะ";
+        localStorage.removeItem('lastFortuneTime');
+      }
+    }
+
+    // ป้องกันกดหลายรอบด้วยการโหลดสถานะเมื่อเปิดหน้า
+    
+      const last = localStorage.getItem('lastFortuneTime');
+      if (last && Date.now() - last < cooldownMs) {
+        btn.disabled = true;
+      }
+    };
+    
+    function showMagicEffect() {
+  const magic = document.getElementById("magicEffect");
+  magic.style.display = "block";
+  setTimeout(() => {
+    magic.style.display = "none";
+  }, 2000);
+}
+const messages = [
+  "เธอทำได้ดีมากแล้วนะ",
+  "ทุกอย่างจะดีขึ้นในไม่ช้า",
+  "จักรวาลกำลังฟังเสียงของเธออยู่",
+  "แม่หมอส่งพลังให้เธอจากที่ไกลแสนไกล",
+  "ขอให้วันนี้เต็มไปด้วยแสงสว่าง"
+];
+
+const wishMessages = [
+  // เวทมนตร์ลี้ลับ
+  "พลังงานแห่งดวงจันทร์ได้โอบรับคำอธิษฐานของเจ้าแล้ว",
+  "กลุ่มดาวลับกำลังเคลื่อนตัวตามเสียงของหัวใจเจ้า…",
+  "แสงเรืองรองแห่งจิตวิญญาณโบราณกำลังเดินทางมาหาเจ้า",
+  "จักรวาลกำลังเขียนบทใหม่ให้เจ้าด้วยความอ่อนโยน",
+  "แม่หมอขอเรียกพลังแห่งดวงอาทิตย์มาโอบอุ้มเจ้าในวันที่เหนื่อยล้า",
+
+  // กำลังใจแบบหวานละมุน
+  "แม่หมอกำลังลูบหัวเจ้าเบา ๆ ผ่านลมคืนนี้นะ",
+  "เจ้าทำได้ดีแล้ว ไม่ว่าจะเหนื่อยแค่ไหน แม่หมอรับรู้ได้หมด",
+  "ไม่มีคำอธิษฐานไหนไร้ความหมาย ทุกความหวังคือเวทมนตร์ที่แท้จริง",
+  "บางครั้งความเงียบก็เป็นคำตอบจากจักรวาลว่า 'จงเชื่อมั่นต่อไป'",
+  "แม่หมอเห็นแววตาเจ้าในแสงดวงดาว มันสวยงามกว่าที่เจ้าคิด",
+
+  // แนวพลังบวกแอบฟรุ้งฟริ้ง
+  "แม่หมอกำลังเป่า ‘ฝุ่นดาว’ ใส่ใจเจ้าเพื่อให้มันพองฟูอีกครั้ง",
+  "คำอธิษฐานของเจ้า...กำลังลอยหมุนกลางอากาศ เหมือนผีเสื้อแห่งความหวัง",
+  "มีวิญญาณแมวน้อยกำลังนำความอบอุ่นมาส่งให้เจ้าจากอีกโลกหนึ่ง",
+  "หัวใจเจ้าสั่นสะเทือนเบา ๆ จักรวาลตอบรับแล้วล่ะ",
+  "เจ้าได้รับคาถา: ‘ใจอ่อนโยน – พลังใจ +99’",
+
+  // คำปลอบโยนอย่างลึกซึ้ง
+  "แม้เสียงของเจ้าจะเงียบงัน แต่พลังของมันดังลั่นถึงดาวไกล",
+  "แม่หมออยากให้เจ้าจำไว้นะว่า ‘อยู่ต่อ’ ก็คือความกล้ารูปแบบหนึ่ง",
+  "ไม่ต้องรีบหายดี แค่ยังอยากมีชีวิตอยู่ต่อก็นับว่ากล้าหาญ",
+  "เจ้าสวยงามแม้ในวันที่น้ำตาเปื้อนแก้ม",
+  "แค่กล้าหวังอีกครั้ง ก็คือปาฏิหาริย์หนึ่งแล้ว"
+];
+
+
+function submitWish() {
+  const wishText = document.getElementById("wishInput").value;
+  const lastWishTime = localStorage.getItem("lastWishTime");
+  const now = Date.now();
+
+  if (lastWishTime && now - lastWishTime < 86400000) {
+    const remaining = 86400000 - (now - lastWishTime);
+    const hours = Math.floor(remaining / (1000 * 60 * 60));
+    const mins = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+    document.getElementById("countdownTimer").innerText = 
+      `เจ้าสามารถอธิษฐานอีกครั้งใน ${hours} ชั่วโมง ${mins} นาที`;
+    return;
+  }
+
+  if (wishText.trim() === "") {
+    alert("เจ้าต้องพิมพ์คำอธิษฐานก่อนนะ");
+    return;
+  }
+
+  // เก็บข้อมูลลง localStorage หรือส่งไป Firebase
+  localStorage.setItem("lastWishTime", now);
+  localStorage.setItem("wishText", wishText); // ถ้าใช้ Firebase ก็ส่งแทน
+
+  
+  document.getElementById("responseMessage").innerText = response;
+  document.getElementById("wishInput").value = "";
+  document.getElementById("countdownTimer").innerText = "คำอธิษฐานของเจ้าได้ถูกส่งแล้ว";
+}
+  const targetDate = new Date("April 20, 2025 00:00:00").getTime();
+
+  const countdown = document.getElementById("countdown");
+  const interval = setInterval(function() {
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+
+    if (distance < 0) {
+      clearInterval(interval);
+      countdown.innerHTML = "ระบบกลับมาให้บริการแล้ว";
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    countdown.innerHTML = "เหลือเวลา " + days + " วัน " + hours + " ชั่วโมง " + minutes + " นาที " + seconds + " วินาที";
+  }, 1000);
+  window.addEventListener("load", () => {
+  updateTimer();
+  updateLiveStats();
+  showAdminSection();
+  calculateBookingStats();
+});
+
+  
+
+
 </script>
+
+<script>
+  window.onload = () => {
+  updateMessage?.();
+  updateTimer?.();
+  updateLiveStats?.();
+  showAdminSection?.();
+  calculateBookingStats?.();
+  const savedTime = localStorage.getItem('prophecyTime');
+  const savedText = localStorage.getItem('prophecyText');
+  const now = Date.now();
+  if (savedTime && savedText && now < parseInt(savedTime)) showProphecy();
+  updateMessage?.();
+  updateTimer?.();
+  updateLiveStats?.();
+  showAdminSection?.();
+  calculateBookingStats?.();
+  const savedTime = localStorage.getItem('prophecyTime');
+  const savedText = localStorage.getItem('prophecyText');
+  const now = Date.now();
+  if (savedTime && savedText && now < parseInt(savedTime)) showProphecy();
+  };
+</script>
+
 </body>
 </html> 
