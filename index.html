@@ -11,20 +11,19 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyD0o88iBVuKsj-2qgEFlP-V3FwArPHCrkY",
-  authDomain: "horoscopequeue.firebaseapp.com",
-  projectId: "horoscopequeue",
-  storageBucket: "horoscopequeue.appspot.com",
-  messagingSenderId: "30274669281",
-  appId: "1:30274669281:web:45b08e0c48e58680d3b351",
-  measurementId: "G-48X2FPNBYZ"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-
+  const firebaseConfig = {
+    apiKey: "AIzaSyASsOEUsECZHN5Bf-Be4TD_MXwJwh9gE68",
+    authDomain: "horoscopequeue.firebaseapp.com",
+    projectId: "horoscopequeue",
+    storageBucket: "horoscopequeue.firebasestorage.app",
+    messagingSenderId: "276093348293",
+    appId: "1:276093348293:web:ac75808f868eaf29b943ac",
+    measurementId: "G-ENN31BYZGS"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 </script>
+
 <style>
   
   .row-details {
@@ -1212,251 +1211,59 @@ button:hover {
 </thead>
 <tbody id="adminTableBody">
 <script>
-  // โหลดข้อมูลใบคิวในตารางแอดมิน
-async function showAdminSection() {
-  const adminTableBody = document.getElementById("adminTableBody");
-  adminTableBody.innerHTML = "";
-
-  try {
-    const snapshot = await db.collection("queues").orderBy("date", "desc").get();
-    snapshot.forEach((doc) => {
-      const ticket = doc.data();
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${ticket.name}</td>
-        <td>${ticket.age}</td>
-        <td>${ticket.category}</td>
-        <td>${ticket.date}</td>
-        <td>${ticket.queueNumber}</td>
-        <td>${ticket.referenceId}</td>
-        <td>${ticket.igUsername || '-'}</td>
-      `;
-      adminTableBody.appendChild(row);
-    });
-  } catch (error) {
-    alert("เกิดข้อผิดพลาดในการโหลดข้อมูล: " + error.message);
-  }
-}
-
-
-  // ฟังก์ชันแสดงแดชบอร์ด
-  async function showDashboard() {
-    const dashboard = document.getElementById("dashboardSection");
-    dashboard.style.display = "block";
-
-    const snapshot = await db.collection("queues").get();
-    const data = snapshot.docs.map(doc => doc.data());
-
-    const dateMap = {};
-    const categoryMap = {};
-
-    data.forEach(item => {
-      dateMap[item.date] = (dateMap[item.date] || 0) + 1;
-      categoryMap[item.category] = (categoryMap[item.category] || 0) + 1;
-    });
-
-    const dateLabels = Object.keys(dateMap).sort();
-    const queueCounts = dateLabels.map(date => dateMap[date]);
-
-    if (window.lineChart) window.lineChart.destroy();
-    window.lineChart = new Chart(document.getElementById("lineChart"), {
-      type: 'line',
-      data: {
-        labels: dateLabels,
-        datasets: [{
-          label: 'จำนวนคิวแต่ละวัน',
-          data: queueCounts,
-          borderColor: '#ff66ff',
-          backgroundColor: 'rgba(255,102,255,0.3)',
-          tension: 0.3
-        }]
-      },
-      options: {
-        plugins: { legend: { labels: { color: "#fff" } } },
-        scales: {
-          x: { ticks: { color: "#fff" } },
-          y: { ticks: { color: "#fff" } }
-        }
-      }
-    });
-
-    const categoryLabels = Object.keys(categoryMap);
-    const categoryCounts = categoryLabels.map(cat => categoryMap[cat]);
-
-    if (window.pieChart) window.pieChart.destroy();
-    window.pieChart = new Chart(document.getElementById("pieChart"), {
-      type: 'pie',
-      data: {
-        labels: categoryLabels,
-        datasets: [{
-          label: 'หมวดหมู่',
-          data: categoryCounts,
-          backgroundColor: [
-            '#ff66cc', '#ff99cc', '#cc99ff', '#9966cc', '#6600cc',
-            '#ff66ff', '#cc33ff', '#9933cc', '#660066'
-          ]
-        }]
-      },
-      options: {
-        plugins: {
-          legend: {
-            labels: {
-              color: '#fff'
-            }
-          }
-        }
-      }
-    });
-  }
-
-  // ปิดแดชบอร์ด
-  function closeDashboard() {
-    document.getElementById("dashboardSection").style.display = "none";
-  }
-
-  // อัปเดตยอดจองแบบเรียลไทม์
-  async function updateLiveStats() {
-    const snapshot = await db.collection("queues").get();
-    const queueCount = snapshot.size;
-    document.getElementById("queueCount").innerText = `ยอดผู้จองคิวทั้งหมด: ${queueCount} คน`;
-
-    const currentTime = new Date().toLocaleString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    document.getElementById("currentTime").innerText = `เวลาปัจจุบัน: ${currentTime}`;
-  }
-
-  setInterval(updateLiveStats, 1000);
-
-  // โหลดข้อมูลอัตโนมัติเมื่อเปิดหน้า
-  window.addEventListener("load", () => {
-    updateLiveStats();
-    showAdminSection();
-  });
-</script>
-</tbody>
-</table>
-</div>
-
-</div><script>
-document.getElementById("searchQueue").addEventListener("input", function () {
-  const filter = this.value.toLowerCase();
-  const rows = document.querySelectorAll("#adminTable tbody tr");
-  rows.forEach(row => {
-    const text = row.innerText.toLowerCase();
-    row.style.display = text.includes(filter) ? "" : "none";
-  });
-});
-</script>
-<script>
-function downloadPDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-
-  const content = document.getElementById("ticketData").innerText;
-  const lines = doc.splitTextToSize(content, 180); // ให้ข้อความตัดบรรทัดอัตโนมัติ
-  doc.text(lines, 10, 10);
-  doc.save("ใบคิวดูดวง.pdf");
-}
-</script>
-<script>
-window.onload = function () {
-  async function hasBookedWithin24Hours(name) {
-  const snapshot = await db.collection("queues")
-    .where("name", "==", name)
-    .orderBy("timestamp", "desc")
-    .limit(1)
-    .get();
-
-  if (!snapshot.empty) {
-    const lastBooking = snapshot.docs[0].data();
-    const now = new Date();
-    const lastTime = lastBooking.timestamp.toDate();
-    const diff = (now - lastTime) / (1000 * 60 * 60); // ชั่วโมง
-    return diff < 24 ? lastTime : null;
-  }
-  return null;
-}
 document.getElementById("bookingForm").addEventListener("submit", async function (e) {
   e.preventDefault();
-
   const name = document.getElementById("name").value.trim();
   const age = document.getElementById("age").value.trim();
   const category = document.getElementById("category").value;
   const rawDate = document.getElementById("date").value;
   const formattedDate = new Date(rawDate).toISOString().split('T')[0];
   const igUsername = document.getElementById("igUsername").value.trim();
-
-  // ✅ ใส่ log หลังประกาศทั้งหมด
   const timestamp = new Date();
   const referenceId = 'REF-' + Math.random().toString(36).substr(2, 9).toUpperCase();
 
-  const lastBooked = await hasBookedWithin24Hours(name);
-  if (lastBooked) {
-    alert("คุณสามารถจองได้อีกครั้งหลังจาก 24 ชั่วโมงเท่านั้น");
-    showCountdownToNextBooking(new Date(lastBooked));
-    return;
-  }
-
   try {
-    const snapshot = await db.collection("queues")
-  .where("date", "==", formattedDate)
-  .get()
-  .catch(err => {
-    throw err;
-  });
-
+    const snapshot = await db.collection("queues").where("date", "==", formattedDate).get();
     const queueNumber = snapshot.size + 1;
-
-await db.collection("queues").add({
-  name,
-  age,
-  category,
-  date: formattedDate,
-  igUsername,
-  referenceId,
-  timestamp,
-  queueNumber
-});
-
-    alert("จองคิวสำเร็จ! หมายเลขคิวของคุณคือ " + queueNumber + " (Ref: " + referenceId + ")");
-
-// สร้าง HTML สำหรับใบคิว
-document.getElementById("ticketData").innerHTML = `
-  <h3>ใบคิวของคุณ</h3>
-  <p><strong>ชื่อ:</strong> ${name}</p>
-  <p><strong>อายุ:</strong> ${age}</p>
-  <p><strong>หมวดหมู่:</strong> ${category}</p>
-  <p><strong>วันที่:</strong> ${formattedDate}</p>
-  <p><strong>เลขคิว:</strong> ${queueNumber}</p>
-  <p><strong>เลขอ้างอิง:</strong> ${referenceId}</p>
-  <p><strong>IG:</strong> ${igUsername || '-'}</p>
-  <button onclick="downloadPDF()">ดาวน์โหลด PDF</button>
-  <button onclick="document.getElementById('popupTicket').classList.remove('show')">ปิด</button>
-`;
-
-// แสดง popup
-document.getElementById("popupTicket").classList.add("show");
-
+    await db.collection("queues").add({
+      name,
+      age,
+      category,
+      date: formattedDate,
+      igUsername,
+      referenceId,
+      timestamp,
+      queueNumber
+    });
+    alert("จองคิวสำเร็จ! หมายเลขคิวของคุณคือ " + queueNumber);
     document.getElementById("bookingForm").reset();
-    updateLiveStats();
-    showAdminSection();
-
+    loadQueueData();
   } catch (error) {
-    console.error("เกิดข้อผิดพลาดในการจอง:", error);
-    alert("เกิดข้อผิดพลาดในการจองคิว กรุณาลองใหม่อีกครั้ง");
+    alert("เกิดข้อผิดพลาดในการจองคิว: " + error.message);
   }
 });
-});
-</script>
-<!-- Debug Panel -->
 
-<script>
-  function logDebug(msg) {
-    const logEl = document.getElementById('debugLog');
-    const time = new Date().toLocaleTimeString();
-    const entry = document.createElement('div');
-    entry.textContent = `[${time}] ${msg}`;
-    logEl.appendChild(entry);
-  }
+async function loadQueueData() {
+  const adminTableBody = document.getElementById("adminTableBody");
+  adminTableBody.innerHTML = "";
+  const snapshot = await db.collection("queues").orderBy("date", "desc").get();
+  snapshot.forEach((doc) => {
+    const ticket = doc.data();
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${ticket.name}</td>
+      <td>${ticket.age}</td>
+      <td>${ticket.category}</td>
+      <td>${ticket.date}</td>
+      <td>${ticket.queueNumber}</td>
+      <td>${ticket.referenceId}</td>
+      <td>${ticket.igUsername || '-'}</td>
+    `;
+    adminTableBody.appendChild(row);
+  });
+}
+
+window.onload = loadQueueData;
 </script>
 </body>
 </html> 
