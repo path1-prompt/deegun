@@ -1218,10 +1218,6 @@ async function showAdminSection() {
   adminTableBody.innerHTML = "";
 
   try {
-    logDebug("Starting queue submission...");
-    logDebug("Raw date: " + rawDate);
-logDebug("Formatted date: " + formattedDate);
-logDebug("Checking queue count for date...");
     const snapshot = await db.collection("queues").orderBy("date", "desc").get();
     snapshot.forEach((doc) => {
       const ticket = doc.data();
@@ -1363,8 +1359,6 @@ function downloadPDF() {
 </script>
 <script>
 window.onload = function () {
-  logDebug("Page loaded.");
-  
   async function hasBookedWithin24Hours(name) {
   const snapshot = await db.collection("queues")
     .where("name", "==", name)
@@ -1392,10 +1386,6 @@ document.getElementById("bookingForm").addEventListener("submit", async function
   const igUsername = document.getElementById("igUsername").value.trim();
 
   // ✅ ใส่ log หลังประกาศทั้งหมด
-  logDebug("Raw date: " + rawDate);
-  logDebug("Formatted date: " + formattedDate);
-  logDebug("Category: " + category);
-  logDebug("IG: " + igUsername);
   const timestamp = new Date();
   const referenceId = 'REF-' + Math.random().toString(36).substr(2, 9).toUpperCase();
 
@@ -1407,19 +1397,16 @@ document.getElementById("bookingForm").addEventListener("submit", async function
   }
 
   try {
-    logDebug("Starting queue submission...");
-const snapshot = await db.collection("queues")
+    const snapshot = await db.collection("queues")
   .where("date", "==", formattedDate)
   .get()
   .catch(err => {
-    logDebug("Error fetching queue: " + err.message);
     throw err;
   });
 
     const queueNumber = snapshot.size + 1;
 
-logDebug("Writing to Firestore...");
-      await db.collection("queues").add({
+await db.collection("queues").add({
   name,
   age,
   category,
@@ -1430,8 +1417,7 @@ logDebug("Writing to Firestore...");
   queueNumber
 });
 
-    logDebug("Booking success. Queue: " + queueNumber);
-      alert("จองคิวสำเร็จ! หมายเลขคิวของคุณคือ " + queueNumber + " (Ref: " + referenceId + ")");
+    alert("จองคิวสำเร็จ! หมายเลขคิวของคุณคือ " + queueNumber + " (Ref: " + referenceId + ")");
 
 // สร้าง HTML สำหรับใบคิว
 document.getElementById("ticketData").innerHTML = `
@@ -1456,7 +1442,6 @@ document.getElementById("popupTicket").classList.add("show");
 
   } catch (error) {
     console.error("เกิดข้อผิดพลาดในการจอง:", error);
-    logDebug("Booking failed: " + error.message);
     alert("เกิดข้อผิดพลาดในการจองคิว กรุณาลองใหม่อีกครั้ง");
   }
 });
