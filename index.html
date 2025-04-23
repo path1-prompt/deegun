@@ -1316,6 +1316,7 @@ async function showAdminSection() {
   adminTableBody.innerHTML = "";
 
   try {
+    logDebug("Starting queue submission...");
     const snapshot = await db.collection("queues").orderBy("date", "desc").get();
     snapshot.forEach((doc) => {
       const ticket = doc.data();
@@ -1459,7 +1460,8 @@ function downloadPDF() {
 
 
 <script>
-window.addEventListener("DOMContentLoaded", () => {
+window.onload = function () {
+  logDebug("Page loaded.");
   
   async function hasBookedWithin24Hours(name) {
   const snapshot = await db.collection("queues")
@@ -1497,10 +1499,12 @@ const formattedDate = new Date(rawDate).toISOString().split('T')[0];
   }
 
   try {
+    logDebug("Starting queue submission...");
 const snapshot = await db.collection("queues").where("date", "==", formattedDate).get();
     const queueNumber = snapshot.size + 1;
 
-await db.collection("queues").add({
+logDebug("Writing to Firestore...");
+      await db.collection("queues").add({
   name,
   age,
   category,
@@ -1511,7 +1515,8 @@ await db.collection("queues").add({
   queueNumber
 });
 
-    alert("จองคิวสำเร็จ! หมายเลขคิวของคุณคือ " + queueNumber + " (Ref: " + referenceId + ")");
+    logDebug("Booking success. Queue: " + queueNumber);
+      alert("จองคิวสำเร็จ! หมายเลขคิวของคุณคือ " + queueNumber + " (Ref: " + referenceId + ")");
 
 // สร้าง HTML สำหรับใบคิว
 document.getElementById("ticketData").innerHTML = `
@@ -1536,10 +1541,27 @@ document.getElementById("popupTicket").classList.add("show");
 
   } catch (error) {
     console.error("เกิดข้อผิดพลาดในการจอง:", error);
+    logDebug("Booking failed: " + error.message);
     alert("เกิดข้อผิดพลาดในการจองคิว กรุณาลองใหม่อีกครั้ง");
   }
 });
 });
+</script>
+
+
+<!-- Debug Panel -->
+<div id="debugPanel" style="position:fixed; bottom:0; left:0; width:100%; background:#1a001f; color:#ffccff; font-family:monospace; font-size:12px; padding:10px; box-shadow:0 -2px 10px #ff00cc; z-index:9999; max-height:150px; overflow-y:auto;">
+  <strong>DEBUG LOG:</strong>
+  <div id="debugLog"></div>
+</div>
+<script>
+  function logDebug(msg) {
+    const logEl = document.getElementById('debugLog');
+    const time = new Date().toLocaleTimeString();
+    const entry = document.createElement('div');
+    entry.textContent = `[${time}] ${msg}`;
+    logEl.appendChild(entry);
+  }
 </script>
 
 </body>
