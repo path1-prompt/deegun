@@ -1302,6 +1302,8 @@ async function showAdminSection() {
 
   try {
     logDebug("Starting queue submission...");
+    logDebug("Raw date: " + rawDate);
+logDebug("Formatted date: " + formattedDate);
 logDebug("Checking queue count for date...");
     const snapshot = await db.collection("queues").orderBy("date", "desc").get();
     snapshot.forEach((doc) => {
@@ -1466,20 +1468,17 @@ window.onload = function () {
   return null;
 }
 document.getElementById("bookingForm").addEventListener("submit", async function (e) {
-  
   e.preventDefault();
-  logDebug("Form submission intercepted. Starting validation...");
-
 
   const name = document.getElementById("name").value.trim();
   const age = document.getElementById("age").value.trim();
   const category = document.getElementById("category").value;
   const rawDate = document.getElementById("date").value;
-const formattedDate = new Date(rawDate).toISOString().split('T')[0];
+  const formattedDate = new Date(rawDate).toISOString().split('T')[0];
   const igUsername = document.getElementById("igUsername").value.trim();
 
   // ✅ ใส่ log หลังประกาศทั้งหมด
-  // logDebug("Raw date: " + rawDate); // FIXED: rawDate not defined here
+  logDebug("Raw date: " + rawDate);
   logDebug("Formatted date: " + formattedDate);
   logDebug("Category: " + category);
   logDebug("IG: " + igUsername);
@@ -1495,18 +1494,36 @@ const formattedDate = new Date(rawDate).toISOString().split('T')[0];
 
   try {
     logDebug("Starting queue submission...");
-const snapshot = await db.collection("queues")
-  .where("date", "==", formattedDate)
-  .get()
-  .catch(err => {
-    logDebug("Error fetching queue: " + err.message);
+
+logDebug("Querying Firebase ด้วยวันที่: " + formattedDate);
+
+// ตั้ง timeout 5 วินาที ถ้า Firebase ไม่ตอบสนอง
+const timeout = setTimeout(() => {
+  logDebug("คำสั่ง Firebase ค้างเกิน 5 วินาที");
+  alert("ระบบ Firebase อาจขัดข้อง ลองใหม่อีกครั้งในภายหลัง");
+}, 5000);
+
+let snapshot;
+try {
+  snapshot = await db.collection("queues")
+    .where("date", "==", formattedDate)
+    .get();
+  clearTimeout(timeout); // ถ้าทำงานเสร็จทันเวลาให้ clear timeout
+  logDebug("Firebase ตอบกลับแล้ว จำนวนคิว: " + snapshot.size);
+} catch (err) {
+  clearTimeout(timeout);
+  logDebug("เกิดข้อผิดพลาดในการอ่าน Firestore: " + err.message);
+  alert("ไม่สามารถเชื่อมต่อ Firebase ได้ กรุณาลองใหม่");
+  return;
+}
+
     throw err;
   });
 
     const queueNumber = snapshot.size + 1;
 
-logDebug("เขียนข้อมูลลง Firestore...");
-await db.collection("queues").add({
+logDebug("Writing to Firestore...");
+      await db.collection("queues").add({
   name,
   age,
   category,
@@ -1516,9 +1533,6 @@ await db.collection("queues").add({
   timestamp,
   queueNumber
 });
-logDebug("เขียนข้อมูลสำเร็จ");
-
-
 
     logDebug("Booking success. Queue: " + queueNumber);
       alert("จองคิวสำเร็จ! หมายเลขคิวของคุณคือ " + queueNumber + " (Ref: " + referenceId + ")");
