@@ -1473,14 +1473,15 @@ document.getElementById("bookingForm").addEventListener("submit", async function
   const name = document.getElementById("name").value.trim();
   const age = document.getElementById("age").value.trim();
   const category = document.getElementById("category").value;
-const rawDate = document.getElementById("date").value;
-const formattedDate = new Date(rawDate).toISOString().split('T')[0];
-
-logDebug("Raw date: " + rawDate);
-logDebug("Formatted date: " + formattedDate);
-logDebug("Checking queue count for date...");
-
+  const rawDate = document.getElementById("date").value;
+  const formattedDate = new Date(rawDate).toISOString().split('T')[0];
   const igUsername = document.getElementById("igUsername").value.trim();
+
+  // ✅ ใส่ log หลังประกาศทั้งหมด
+  logDebug("Raw date: " + rawDate);
+  logDebug("Formatted date: " + formattedDate);
+  logDebug("Category: " + category);
+  logDebug("IG: " + igUsername);
   const timestamp = new Date();
   const referenceId = 'REF-' + Math.random().toString(36).substr(2, 9).toUpperCase();
 
