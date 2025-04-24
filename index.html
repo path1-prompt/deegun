@@ -1,10 +1,802 @@
- <html>
+<!DOCTYPE html>
+<html lang="th">
 <head>
-    <title>blocked</title>
+  <meta charset="UTF-8">
+  <title>ระบบจองคิวดูดวง & หน้าแอดมิน</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- jsPDF Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- Firebase App (core) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyD0o88iBVuKsj-2qgEFlP-V3FwArPHCrkY",
+    authDomain: "horoscopequeue.firebaseapp.com",
+    projectId: "horoscopequeue",
+    storageBucket: "horoscopequeue.appspot.com",
+    messagingSenderId: "30274669281",
+    appId: "1:30274669281:web:45b08e0c48e58680d3b351",
+    measurementId: "G-48X2FPNBYZ"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+  <style>
+   button:active {
+  box-shadow: 0 0 25px #ff66ff, 0 0 50px #aa00ff;
+  transition: 0.1s;
+}
+    @import url('https://fonts.googleapis.com/css2?family=Sarabun&display=swap');
+
+    /* Animated Background Gradient */
+    @keyframes bgAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    /* Glowing Animation for Popup */
+    @keyframes glowPulse {
+      0% { box-shadow: 0 0 10px #ff66ff, 0 0 20px #ff66ff; }
+      50% { box-shadow: 0 0 20px #ff99ff, 0 0 30px #ff99ff; }
+      100% { box-shadow: 0 0 10px #ff66ff, 0 0 20px #ff66ff; }
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Sarabun', sans-serif;
+      background: linear-gradient(270deg, #2d0036, #000000, #2d0036);
+      background-size: 600% 600%;
+      animation: bgAnimation 20s ease infinite;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 420px;
+      margin: 80px auto 0;
+      padding: 20px;
+      background: rgba(40, 0, 50, 0.85);
+      box-shadow: 0 0 20px #aa00ff;
+      border-radius: 15px;
+      transform: translateY(20px);
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+      position: relative;
+    }
+    @keyframes fadeIn {
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
+    h2 {
+      text-align: center;
+      color: #ffccff;
+      margin-bottom: 10px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      color: #ffd6ff;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    input:focus, select:focus {
+      outline: none;
+      box-shadow: 0 0 8px #ff77ff;
+    }
+    input, select {
+      background-color: #fff;
+      color: #000;
+    }
+    button {
+      background: #9900cc;
+      color: #fff;
+      margin-top: 15px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #aa00ff;
+      transform: scale(1.02);
+    }
+    
+    /* Popup Modal with Magical Glow */
+    .popup, .admin-popup {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      background: rgba(45, 0, 54, 0.95);
+      width: 90%;
+      max-width: 400px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      border-radius: 10px;
+      padding: 20px;
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+    .popup.show, .admin-popup.show {
+      display: block;
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+      animation: glowPulse 2s infinite;
+    }
+    .popup h3, .admin-popup h3 {
+      text-align: center;
+      color: #ffd6ff;
+      margin-top: 0;
+    }
+    .popup p, .admin-popup p {
+      margin: 8px 0;
+    }
+    .popup .note, .admin-popup .note {
+      font-size: 14px;
+      color: #ffccff;
+      margin-top: 10px;
+      text-align: center;
+    }
+    .popup button, .admin-popup button {
+      background: #8800cc;
+      margin-top: 10px;
+      border: none;
+      border-radius: 6px;
+      width: 100%;
+      padding: 10px;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .popup button:hover, .admin-popup button:hover {
+      background: #aa00ff;
+    }
+    
+    /* Admin Section */
+.admin-section table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 13px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 15px #ff99ff;
+}
+
+.admin-section th, .admin-section td {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px 6px;
+  text-align: center;
+  word-break: break-word;
+  color: #fff;
+}
+
+.admin-section th {
+  background: linear-gradient(90deg, #9900cc, #cc33ff);
+  color: #ffccff;
+  font-weight: bold;
+  text-shadow: 0 0 6px #fff;
+}
+
+.admin-section tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.07);
+  transition: background-color 0.3s;
+}
+
+/* Responsive - จอเล็กไม่ต้อง scroll */
+@media screen and (max-width: 768px) {
+  .admin-section table {
+    font-size: 11px;
+  }
+
+  .admin-section th, .admin-section td {
+    padding: 6px 4px;
+  }
+}
+
+    /* Magical Animal Animation */
+    .magic-animal {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 80px;
+      height: 80px;
+      z-index: 1000;
+      animation: floatAnimal 3s ease-in-out infinite, pulsate 2s ease-in-out infinite;
+    }
+    .magic-animal::before, .magic-animal::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, #ff77ff 0%, #6e00aa 70%, #2d0036 100%);
+    }
+    .magic-animal::before {
+      width: 60px;
+      height: 60px;
+      top: 10px;
+      left: 10px;
+      box-shadow: 0 0 15px #ff55ff;
+    }
+    .magic-animal::after {
+      width: 30px;
+      height: 30px;
+      bottom: 0;
+      right: 0;
+      box-shadow: 0 0 10px #ff55ff;
+    }
+    @keyframes floatAnimal {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(-10px, 10px) rotate(10deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+    @keyframes pulsate {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    @media screen and (max-width: 480px) {
+      .container {
+        margin-top: 100px;
+      }
+    }
+    .logo-glow {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  box-shadow:
+    0 0 15px #ff66ff,
+    0 0 30px #aa00ff,
+    0 10px 20px rgba(0, 0, 0, 0.4);
+  border: 3px solid #ffccff;
+  background-color: #fff;
+  padding: 4px;
+  z-index: 10000;
+  animation: glowPulse 2.5s infinite;
+  object-fit: cover;
+}
+#dashboardSection {
+  display: none;
+}
+/* สไตล์สำหรับแสดงข้อมูลยอดผู้จองคิวและเวลาปัจจุบัน */
+.live-stats {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px #ff66ff;
+  z-index: 9999;
+  font-size: 16px;
+  font-family: 'Sarabun', sans-serif;
+  animation: fadeIn 2s ease-out;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.live-stats div {
+  margin: 5px 0;
+}
+.stats-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffccff;
+  text-shadow: 0 0 6px #ff66ff;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.stats-item {
+  background: linear-gradient(90deg, #660066, #330033);
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  box-shadow: 0 0 6px #ff66ff;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+}
+.contact-section {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.ig-link {
+  display: inline-block;
+  background: linear-gradient(90deg, #ff66cc, #cc00ff);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: bold;
+  box-shadow: 0 0 6px #ff99ff;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ig-link:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #ffccff;
+}
+
+.click-hint {
+  font-size: 11px;
+  color: #ffe6ff;
+  margin-left: 5px;
+  font-style: italic;
+}
+  #preloader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+
+  .spell-circle {
+    width: 120px;
+    height: 120px;
+    border: 8px solid transparent;
+    border-top: 8px solid #ff00aa;
+    border-right: 8px solid #00fff2;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    box-shadow: 0 0 20px #ff00aa, 0 0 40px #00fff2;
+    margin-bottom: 20px;
+  }
+
+  .loading-text {
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 24px;
+    text-shadow: 0 0 10px #fff;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+    .magic-stats-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 30px;
+    background: radial-gradient(circle at top left, #1a001a, #0a001a);
+    border-radius: 15px;
+    box-shadow: 0 0 40px rgba(138, 43, 226, 0.3);
+  }
+
+  .magic-card {
+    background: rgba(20, 0, 30, 0.8);
+    border: 2px solid #b84eff;
+    border-radius: 15px;
+    padding: 20px 30px;
+    text-align: center;
+    color: #fff;
+    font-family: 'Cinzel', serif;
+    box-shadow: 0 0 20px #b84eff55;
+    transition: transform 0.3s ease;
+  }
+
+  .magic-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px #ff6fff88;
+  }
+
+  .magic-card h2 {
+    font-size: 18px;
+    color: #ffccff;
+    margin-bottom: 10px;
+    text-shadow: 0 0 8px #ff99ff;
+  }
+
+  .magic-card span {
+    font-size: 32px;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 0 0 10px #ff66ff;
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap');
+</style>
 </head>
 <body>
-    <center>
-<img src="IMG_1577.png" alt="ข้อความอธิบายภาพ" width="740" height="650">
-    </center>
+  <div id="preloader">
+  <div class="spell-circle"></div>
+  <div class="loading-text">กรุณารอสักครู่... <span id="loading-percent">0%</span></div>
+</div>
+
+<!-- CSS -->
+  <!-- ส่วนแสดงยอดผู้จองคิวและเวลาปัจจุบัน -->
+<!-- ส่วนแสดงยอดผู้จองคิวและเวลาปัจจุบัน -->
+<div class="live-stats" id="liveStats">
+  <div class="stats-title">สถานะพลังจองคิว</div>
+  <div class="stats-item" id="queueCount">ยอดผู้จองคิวทั้งหมด: 0 คน</div>
+  <div class="stats-item" id="currentTime">เวลาปัจจุบัน: --:--</div>
+</div>
+  <img src="IMG_0920.JPG" alt="โลโก้" class="logo-glow">
+  <!-- Magical Animal -->
+  <div class="magic-animal"></div>
+
+  <!-- Main Booking Container -->
+  <div class="container" id="mainContainer">
+    <h2>จองคิวดูดวงอัตโนมัติ</h2>
+    <form id="bookingForm">
+      <label>ชื่อเล่น:</label>
+      <input type="text" id="name" required>
+      <label>อายุ:</label>
+      <input type="number" id="age" required min="1">
+      <label>หมวดหมู่:</label>
+      <select id="category">
+        <option>ดูดวงส่วนตัว</option>
+        <option>โชคชะตา</option>
+        <option>ความฝัน</option>
+        <option>อดีตและอนาคต</option>
+        <option>ความรัก</option>
+        <option>การงาน</option>
+        <option>การเงิน</option>
+        <option>การเรียน</option>
+        <option>สุขภาพ</option>
+      </select>
+      <label>เลือกวัน:</label>
+      <input type="date" id="date" required>
+        <label>Instagram (@username):</label>
+<input type="text" id="igUsername" placeholder="@yourusername">
+
+      <button type="submit">จองคิว</button>
+    </form>
+          <div class="container">
+  <h2>ตรวจสอบใบคิว</h2>
+  <input type="text" id="refInput" placeholder="ใส่เลขอ้างอิง">
+  <button onclick="checkReference()">ตรวจสอบ</button>
+  <div id="refResult"></div>
+</div>
+  </div>
+  <!-- ช่องทางการติดต่อ Instagram -->
+<div class="contact-section">
+  <a href="https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx" target="_blank" class="ig-link">
+    ติดต่อแม่หมอผ่าน IG: @horoscope_1308 <span class="click-hint">(หรือคลิกที่นี่)</span>
+  </a>
+</div>
+  <!-- Popup for the ticket -->
+  <div class="popup" id="popup">
+    <div id="ticketData"></div>
+    <p class="note">หมายเหตุ: กรุณาแคปหน้าจอใบคิวนี้ไว้และดาวน์โหลด PDF เพื่อเก็บเลขอ้างอิง</p>
+  </div>
+
+<button onclick="showDashboard()">ดูแดชบอร์ด</button>
+<div class="admin-section" id="dashboardSection">
+  <h2>แดชบอร์ดการจองคิว</h2>
+  <canvas id="lineChart" style="max-width:100%; margin-bottom:30px;"></canvas>
+  <canvas id="pieChart" style="max-width:100%;"></canvas>
+  <button onclick="closeDashboard()">ปิดแดชบอร์ด</button>
+</div>
+
+  <!-- Admin Section -->
+<div class="admin-section" id="adminSection" style="display: block;">
+    <h2>ข้อมูลใบคิวทั้งหมด</h2>
+<div style="overflow-x: auto;">
+  <table id="adminTable">
+    <thead>
+      <tr>
+        <th>ชื่อ</th>
+        <th>อายุ</th>
+        <th>หมวดหมู่</th>
+        <th>วันที่</th>
+        <th>คิว</th>
+        <th>เลขอ้างอิง</th>
+        <th>IG</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- ข้อมูลจะถูกเติมโดย JavaScript -->
+    </tbody>
+  </table>
+</div>
+<div style="text-align: center; margin-top: 20px;">
+  <button onclick="closeAdmin()" style="
+    padding: 10px 20px;
+    border-radius: 10px;
+    background: #cc00ff;
+    color: #fff;
+    font-weight: bold;
+    box-shadow: 0 0 12px #ff99ff;
+    border: none;
+    cursor: pointer;
+  ">ปิดหน้าดูข้อมูล</button>
+</div>
+
+  <script>
+    const queueDB = {}; // เก็บข้อมูลคิวใน session นี้
+    let currentTicket = null; // เก็บใบคิวล่าสุด
+
+document.getElementById("bookingForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  const name = document.getElementById("name").value.trim();
+  const age = document.getElementById("age").value.trim();
+  const category = document.getElementById("category").value;
+  let date = document.getElementById("date").value;
+  if (!name || !age || !category || !date) return;
+
+  // โหลดจำนวนคิวจาก Firestore
+  const snapshot = await db.collection("queues")
+    .where("date", "==", date)
+    .get();
+
+  if (snapshot.size >= 5) {
+    alert("เต็มแล้วสำหรับวันนี้ กรุณาเลือกวันอื่น");
+    return;
+  }
+
+  const queueNumber = snapshot.size + 1;
+  const referenceId = Math.random().toString(36).substring(2, 10).toUpperCase();
+const igUsername = document.getElementById("igUsername").value.trim();
+const ticket = {
+  name, age, category, date, queueNumber,
+  referenceId, timestamp: new Date(),
+  igUsername: igUsername || null
+};
+
+  await db.collection("queues").add(ticket);
+  currentTicket = ticket;
+
+  const ticketHTML = `
+    <h3>ใบคิวดูดวง</h3>
+    <p><b>ชื่อ:</b> ${ticket.name}</p>
+    <p><b>อายุ:</b> ${ticket.age}</p>
+    <p><b>หมวดหมู่:</b> ${ticket.category}</p>
+    <p><b>ลำดับคิว:</b> ${ticket.queueNumber}</p>
+    <p><b>วันที่ดูดวง:</b> ${ticket.date}</p>
+    <p><b>เลขอ้างอิง:</b> ${ticket.referenceId}</p>
+    <button onclick="downloadPDF()">ดาวน์โหลด PDF</button>
+    <button onclick="goInstagram()">ส่งผลทาง IG</button>
+  `;
+  document.getElementById("ticketData").innerHTML = ticketHTML;
+  document.getElementById("popup").classList.add("show");
+});
+
+    function downloadPDF() {
+      if (!currentTicket) return;
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const englishText = 
+`Ticket for Fortune Telling
+Name: ${currentTicket.name}
+Age: ${currentTicket.age}
+Category: ${currentTicket.category}
+Queue No: ${currentTicket.queueNumber}
+Appointment Date: ${currentTicket.date}
+Reference No: ${currentTicket.referenceId}`;
+      const lines = englishText.split("\n");
+      let y = 20;
+      lines.forEach(line => {
+        doc.text(line, 10, y);
+        y += 10;
+      });
+      doc.save("Ticket.pdf");
+    }
+
+    function goInstagram() {
+      window.open("https://www.instagram.com/horoscope_1308?igsh=c3JkdDJxYzE4cXUx", "_blank");
+    }
+
+    // Admin Link - เปิด Admin Login Popup
+
+
+    // ตรวจสอบรหัสผ่านแอดมิน
+   
+
+    // แสดงข้อมูลใบคิวทั้งหมดในส่วนแอดมิน
+    async function showAdminSection() {
+  const adminTableBody = document.getElementById("adminTable").querySelector("tbody");
+  adminTableBody.innerHTML = "";
+
+  try {
+    const snapshot = await db.collection("queues").orderBy("date", "desc").get();
+    snapshot.forEach(doc => {
+      const ticket = doc.data();
+      const row = document.createElement("tr");
+row.innerHTML = `
+  <td>${ticket.name}</td>
+  <td>${ticket.age}</td>
+  <td>${ticket.category}</td>
+  <td>${ticket.date}</td>
+  <td>${ticket.queueNumber}</td>
+  <td>${ticket.referenceId ? ticket.referenceId.slice(0, 6) + '...' : '-'}</td>
+  <td>
+    ${ticket.igUsername
+      ? (ticket.igUsername.length > 10 ? ticket.igUsername.slice(0, 10) + "..." : ticket.igUsername)
+      : `<span style="color:#ccc;">ไม่แสดงข้อมูล</span>
+         <span 
+          onclick="alert('หมายเหตุ : ระบบพึ่งอัปเดตขึ้นสำหรับลูกดวงที่เข้าระบบจองคิวหลังจากวันที่ 17 เมษายน 2568')"
+          style="cursor:pointer; color:#ff99ff; text-decoration: underline; margin-left:4px;"
+         >(ดู)</span>`}
+  </td>
+`;
+      adminTableBody.appendChild(row);
+    });
+    document.getElementById("adminSection").style.display = "block";
+  } catch (error) {
+    alert("เกิดข้อผิดพลาดในการโหลดข้อมูล: " + error.message);
+  }
+}
+
+    function closeAdmin() {
+      document.getElementById("adminSection").style.display = "none";
+    }
+    window.addEventListener("load", showAdminSection);
+    async function checkReference() {
+  const ref = document.getElementById("refInput").value.trim().toUpperCase();
+  const snapshot = await db.collection("queues").where("referenceId", "==", ref).get();
+  if (!snapshot.empty) {
+    const data = snapshot.docs[0].data();
+    document.getElementById("refResult").innerHTML = `
+      <p>ชื่อ: ${data.name}</p>
+      <p>วันที่จอง: ${data.date}</p>
+      <p>ลำดับคิว: ${data.queueNumber}</p>
+      <p>หมวดหมู่: ${data.category}</p>
+            <p>อายุ: ${data.age}</p>
+            <p>IG: ${data.igUsername}</p>
+            
+    `;
+  } else {
+    document.getElementById("refResult").innerText = "ไม่พบข้อมูล";
+  }
+}
+async function showDashboard() {
+  const dashboard = document.getElementById("dashboardSection");
+  dashboard.style.display = "block";
+
+  const snapshot = await db.collection("queues").get();
+  const data = snapshot.docs.map(doc => doc.data());
+
+  // สร้างข้อมูลนับตามวันที่
+  const dateMap = {};
+  const categoryMap = {};
+  data.forEach(item => {
+    dateMap[item.date] = (dateMap[item.date] || 0) + 1;
+    categoryMap[item.category] = (categoryMap[item.category] || 0) + 1;
+  });
+
+  // กราฟเส้น - จำนวนคิวต่อวัน
+  const dateLabels = Object.keys(dateMap).sort();
+  const queueCounts = dateLabels.map(date => dateMap[date]);
+
+  new Chart(document.getElementById("lineChart"), {
+    type: 'line',
+    data: {
+      labels: dateLabels,
+      datasets: [{
+        label: 'จำนวนคิวแต่ละวัน',
+        data: queueCounts,
+        borderColor: '#ff66ff',
+        backgroundColor: 'rgba(255,102,255,0.3)',
+        tension: 0.3
+      }]
+    },
+    options: {
+      plugins: { legend: { labels: { color: "#fff" } } },
+      scales: {
+        x: { ticks: { color: "#fff" } },
+        y: { ticks: { color: "#fff" } }
+      }
+    }
+  });
+
+  // กราฟวงกลม - หมวดหมู่ยอดนิยม
+  const categoryLabels = Object.keys(categoryMap);
+  const categoryCounts = categoryLabels.map(cat => categoryMap[cat]);
+
+  new Chart(document.getElementById("pieChart"), {
+    type: 'pie',
+    data: {
+      labels: categoryLabels,
+      datasets: [{
+        label: 'หมวดหมู่',
+        data: categoryCounts,
+        backgroundColor: [
+          '#ff66cc', '#ff99cc', '#cc99ff', '#9966cc', '#6600cc',
+          '#ff66ff', '#cc33ff', '#9933cc', '#660066'
+        ]
+      }]
+    },
+    options: {
+      plugins: {
+        legend: {
+          labels: {
+            color: '#fff'
+          }
+        }
+      }
+    }
+  });
+}
+
+function closeDashboard() {
+  document.getElementById("dashboardSection").style.display = "none";
+}
+// ฟังก์ชันสำหรับการอัพเดตยอดผู้จองและเวลาปัจจุบัน
+async function updateLiveStats() {
+  const snapshot = await db.collection("queues").get();
+  const queueCount = snapshot.size; // จำนวนผู้จองคิวทั้งหมด
+
+  // แสดงยอดผู้จอง
+  document.getElementById("queueCount").innerText = `ยอดรวมผู้จองคิวทั้งหมด: ${queueCount} คน`;
+
+  // อัพเดตเวลาปัจจุบัน
+  const currentTime = new Date().toLocaleString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  document.getElementById("currentTime").innerText = `เวลาปัจจุบัน(🇹🇭): ${currentTime}`;
+}
+
+// เรียกใช้งานฟังก์ชันทุก 1 วินาที
+setInterval(updateLiveStats, 1000);
+
+// เมื่อโหลดหน้าเว็บ ให้เรียกฟังก์ชันทันที
+window.addEventListener("load", updateLiveStats);
+async function calculateBookingStats() {
+    const querySnapshot = await db.collection("horoscopeBookings").get();
+    const now = new Date();
+
+    let totalBookings = 0;
+    let notYetBooked = 0;
+    let completedBookings = 0;
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      totalBookings++;
+
+      const bookingDateStr = data.date; // เช่น "2025-04-17"
+      const [year, month, day] = bookingDateStr.split("-");
+      const bookingEndTime = new Date(year, month - 1, day, 19, 0, 0); // 19:00 ของวันนั้น
+
+      if (now < bookingEndTime) {
+        notYetBooked++;
+      } else {
+        completedBookings++;
+      }
+    });
+
+    document.getElementById("total-bookings").textContent = totalBookings;
+    document.getElementById("not-yet-booked").textContent = notYetBooked;
+    document.getElementById("completed-bookings").textContent = completedBookings;
+  }
+
+  window.onload = calculateBookingStats;
+  </script>
+  <script>
+  let percent = 0;
+  const loadingText = document.getElementById("loading-percent");
+
+  const loadingInterval = setInterval(() => {
+    percent++;
+    loadingText.textContent = percent + "%";
+
+    if (percent >= 100) {
+      clearInterval(loadingInterval);
+      document.getElementById("preloader").style.display = "none";
+    }
+  }, 2); // โหลดเร็วขึ้นหรือลดความเร็วได้ตรงนี้
+</script>
 </body>
-</html>
+</html> 
